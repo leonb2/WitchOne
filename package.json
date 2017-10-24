@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
     "ejs": "^2.5.7",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
+    "nodemon": "^1.12.1",
     "tingodb": "^0.5.1"
   }
 }
