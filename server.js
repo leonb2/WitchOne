@@ -49,6 +49,7 @@ app.get('/', (request, response) => {
     }
     else {
         response.render('home');
+        
     }
 });
 
@@ -80,5 +81,61 @@ app.post('/loginPost', (request, response) => {
                 'usernameValue' : username
             });  
         } 
+    });
+});
+
+app.get('/register', (request, response) => {
+    response.render('register', {
+        'info' : "",
+        'usernameValue' : ""
+    });
+});
+
+app.post('/registerPost', (request, response) => {
+    let username = request.body.username;
+    let password = request.body.password;
+    let confirmPassword = request.body.confPassword;
+    let email = request.body.email;
+
+    database.collection(DB_COLLECTION).findOne({
+        'username' : username
+    }, (err, result) => {   
+        // If the username is still free
+        if (!result) {   
+            if (password == confirmPassword) {  
+                // Hash password
+                let hash = passwordHash.generate(password);
+
+                // Add user to database
+                let user = {'username': username, 'password': hash, 'email': email };
+                database.collection(DB_COLLECTION).save(user, (err, result) => {
+                    if (err) {
+                        return console.log("Error while saving the user!"); 
+                    }
+                    console.log("User was saved & logged in!");
+                });
+
+                request.session['username'] = username;
+                request.session['authenticated'] = true;     
+
+                response.redirect('/');
+            }
+            // If both passwords were not equal
+            else {
+                response.render('register', {
+                    'info' : "Passwörter stimme nicht überein!",
+                    'usernameValue' : username
+                }); 
+                console.log("Passwords did not match!");
+            }          
+        }
+        // If the username is already used
+        else {
+            response.render('register', {
+                'info' : "Nutzername ist bereits vorhanden!",
+                'usernameValue' : ""
+            }); 
+            console.log("Username already used!");  
+        }
     });
 });

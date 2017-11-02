@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Registrierung</title>
+        
+        <link rel="stylesheet" type="text/css" href="main.css">
+    </head>
+    
+    <body>
+        <div><%= info %></div>
+        <form action="/registerPost" method="post">
+            <input type="text" value="<%= usernameValue %>" name="username" placeholder="Nutzername" required/>
+            <input type="password" name="password" placeholder="Passwort" required/>
+            <input type="password" name="confPassword" placeholder="Passwort bestätigen" required/>
+            <input type="email" name="email" placeholder="Email" required/>
+            <button type="submit">Registrieren</button>
+        </form>
+    </body>
+</html>
