@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Home</title>
+        
+        <link rel="stylesheet" type="text/css" href="main.css">
+    </head>
+    
+    <body>
+        <div><%= info %></div>
+        <form action="/loginPost" method="post">
+            <input type="text" value="<%= usernameValue %>" name="username" placeholder="Username" required/>
+            <input type="password" name="password" placeholder="Passwort" required/>
+            <button type="submit">Anmelden</button>
+        </form>
+    </body>
+</html>
