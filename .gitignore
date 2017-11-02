@@ -57,3 +57,6 @@ typings/
 # dotenv environment variables file
 .env
 
+#OS junk files
+*.DS_Store
+
