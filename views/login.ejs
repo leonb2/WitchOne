@@ -10,9 +10,12 @@
     <body>
         <div><%= info %></div>
         <form action="/loginPost" method="post">
-            <input type="text" value="<%= usernameValue %>" name="username" placeholder="Username" required/>
+            <input type="text" value="<%= usernameValue %>" name="username" placeholder="Nutzername" required/>
             <input type="password" name="password" placeholder="Passwort" required/>
             <button type="submit">Anmelden</button>
+        </form>
+        <form action="/register" method="get">
+            <button type="submit">Registrieren</button>
         </form>
     </body>
 </html>
