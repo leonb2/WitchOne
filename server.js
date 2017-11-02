@@ -40,7 +40,6 @@ const server = app.listen(port, () => {
 /// ---
 
 app.get('/', (request, response) => {
-    
     if (!request.session.authenticated) {
         response.render('login', {
             'info' : "",
@@ -85,10 +84,15 @@ app.post('/loginPost', (request, response) => {
 });
 
 app.get('/register', (request, response) => {
-    response.render('register', {
-        'info' : "",
-        'usernameValue' : ""
-    });
+    if (!request.session.authenticated) {
+        response.render('register', {
+            'info' : "",
+            'usernameValue' : ""
+        });
+    }
+    else {
+        response.redirect('/');
+    }
 });
 
 app.post('/registerPost', (request, response) => {
@@ -115,6 +119,7 @@ app.post('/registerPost', (request, response) => {
                     console.log("User was saved & logged in!");
                 });
 
+                // Login user as well
                 request.session['username'] = username;
                 request.session['authenticated'] = true;     
 
@@ -123,7 +128,7 @@ app.post('/registerPost', (request, response) => {
             // If both passwords were not equal
             else {
                 response.render('register', {
-                    'info' : "Passwörter stimme nicht überein!",
+                    'info' : "Passwörter stimmen nicht überein!",
                     'usernameValue' : username
                 }); 
                 console.log("Passwords did not match!");
@@ -139,3 +144,20 @@ app.post('/registerPost', (request, response) => {
         }
     });
 });
+
+app.get('/createLobby', (request, response) => {
+    if (request.session.authenticated) {
+        response.render('createLobby');
+    } 
+    else {
+        response.redirect('/');
+    }
+});
+
+app.post('/createLobbyPost', (request, response) => {
+    let lobbyPassword = request.body.lobbyPassword;
+    let gameLengthMin = request.body.gameLengthMin;
+    
+    // socket.emit ? :D
+});
+
