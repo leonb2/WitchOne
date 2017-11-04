@@ -10,8 +10,10 @@
     <body>
         <form action="/createLobbyPost" method="post">
             <input type="text" name="lobbyPassword" maxlength="4" placeholder="Passwort für Lobby" required/>
-            <input type="range" name="gameLengthMin" min="8" max="20" value="8">
+            <input class="js-game-length-slider" type="range" name="gameLengthMin" min="8" max="20" value="8">
+            <div class="js-game-length" style="display: inline-block;">8</div>
             <button type="submit">Lobby erstellen</button>
         </form>
+        <script src="createLobby.js"></script>
     </body>
 </html>

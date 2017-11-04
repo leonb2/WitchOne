@@ -162,11 +162,48 @@ app.post('/createLobbyPost', (request, response) => {
     let lobbyPassword = request.body.lobbyPassword;
     let gameLengthMin = request.body.gameLengthMin;
     let gameLengthSec = gameLengthMin*60;
-    room = {'password' : lobbyPassword, 'gameLength' : gameLengthSec};
+    
+    // Look if lobby password is already in use
+    for (let i = 0; i < rooms.length; i++) {
+        if (rooms[i].password === lobbyPassword) {
+            response.redirect("/createLobby");
+            console.log("Lobby password already in use.");
+            return;
+        }
+    }
+    
+    room = {
+        'password' : lobbyPassword,
+        'gameLength' : gameLengthSec,
+        'users' : []
+    };
     rooms.push(room);
+    console.log("Lobby was created.")
     
     request.session.room = lobbyPassword;
     response.redirect('/lobby');
+});
+
+app.post('/joinLobbyPost', (request, response) => {
+    let lobbyPassword = request.body.lobbyPassword;
+    
+    // Look for the requested room
+    for (let i = 0; i < rooms.length; i++) {
+        if (rooms[i].password === lobbyPassword) {
+            request.session.room = lobbyPassword;
+            console.log("Requested lobby was found.");
+            break;
+        }
+    }
+    
+    // = If the room was found
+    if (request.session.room) {
+        response.redirect("/lobby");
+    }
+    else {
+        response.redirect("/");
+    }
+    
 });
 
 app.get('/lobby', (request, response) => {
@@ -188,6 +225,14 @@ io.on('connection', (socket) => {
     socket.on('joinLobby', (password) => {
         socket.join(password); 
         console.log("Socket joined the room " + password); 
+        
+        // Add user to room object
+        /*for (let i = 0; i < rooms.length; i++) {
+            if (rooms[i].password === password) {
+                rooms[i].users.push("user");
+                break;
+            }
+        }*/
     });
     
     socket.on('disconnect', (data) => {
