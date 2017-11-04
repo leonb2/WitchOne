@@ -5,8 +5,9 @@ const port = 8000;
 const express = require('express');
 const app = express();
 
-// enable path for stylings
+// enable path for stylings & js
 app.use(express.static(__dirname + "/stylings"));
+app.use(express.static(__dirname + "/js"));
 
 const session = require('express-session');
 app.use(session({
@@ -15,13 +16,14 @@ app.use(session({
     saveUninitialized: true
 }));
 
+const socketio = require('socket.io');
+
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended:true}));
 
 const passwordHash = require('password-hash');
 
 app.set('view engine', 'ejs');
-
 
 // --- Set up TingoDB ---
 const DB_COLLECTION = "users";
@@ -31,13 +33,16 @@ require('fs').mkdir(__dirname + '/tingodb', (err) => {});
 const db = require('tingodb')().Db;
 const database = new db(__dirname + '/tingodb', {});
 const ObjectID = require('tingodb')().ObjectID;
-// ---
+//
 
 const server = app.listen(port, () => {
    console.log(`Server started and is listening to ${port}`);
 });
 
-/// ---
+const io = socketio(server);
+const rooms = [];
+
+/// --- Website Logic ---
 
 app.get('/', (request, response) => {
     if (!request.session.authenticated) {
@@ -48,7 +53,6 @@ app.get('/', (request, response) => {
     }
     else {
         response.render('home');
-        
     }
 });
 
@@ -157,7 +161,59 @@ app.get('/createLobby', (request, response) => {
 app.post('/createLobbyPost', (request, response) => {
     let lobbyPassword = request.body.lobbyPassword;
     let gameLengthMin = request.body.gameLengthMin;
+    let gameLengthSec = gameLengthMin*60;
+    room = {'password' : lobbyPassword, 'gameLength' : gameLengthSec};
+    rooms.push(room);
     
-    // socket.emit ? :D
+    request.session.room = lobbyPassword;
+    response.redirect('/lobby');
 });
+
+app.get('/lobby', (request, response) => {
+    if (request.session.room) {
+        response.render('lobby', {
+            'lobbyPassword' : request.session.room
+        });
+    }
+    else {
+        response.redirect('/');
+    }
+});
+
+// --- SocketIO ---
+
+io.on('connection', (socket) => {
+    console.log("Socket connected.");
+        
+    socket.on('joinLobby', (password) => {
+        socket.join(password); 
+        console.log("Socket joined the room " + password); 
+    });
+    
+    socket.on('disconnect', (data) => {
+        console.log("Socket disconnected.");
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
