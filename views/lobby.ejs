@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Lobby</title>
+        
+        <link rel="stylesheet" type="text/css" href="main.css">
+        
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            let socket = io();
+        </script>
+    </head>
+    
+    <body>
+        <div class="js-lobby-password"><%= lobbyPassword %></div>
+        <script src="lobby.js"></script>
+    </body>
+</html>
