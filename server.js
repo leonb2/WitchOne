@@ -110,7 +110,7 @@ app.post('/registerPost', (request, response) => {
     }, (err, result) => {   
         // If the username is still free
         if (!result) {   
-            if (password == confirmPassword) {  
+            if (password === confirmPassword) {  
                 // Hash password
                 let hash = passwordHash.generate(password);
 
@@ -226,13 +226,30 @@ io.on('connection', (socket) => {
         socket.join(password); 
         console.log("Socket joined the room " + password); 
         
-        // Add user to room object
-        /*for (let i = 0; i < rooms.length; i++) {
+        users = [];
+        for (let i = 0; i < rooms.length; i++) {
             if (rooms[i].password === password) {
-                rooms[i].users.push("user");
+                users = rooms[i].users;
                 break;
             }
-        }*/
+        }
+        socket.emit('joinLobbySuccessful', users);
+    });
+    
+    socket.on('changeNickname', (data) => {
+        for (let i = 0; i < rooms.length; i++) {
+            if (rooms[i].password === data.password) {
+                let users = rooms[i].users;
+                let index = users.indexOf(data.oldNickName);
+                if (index > -1) {
+                    users.splice(index, 1);
+                }
+                users.push(data.nickname);
+                rooms[i].users = users;
+                break;
+            }
+        }
+        io.to(data.password).emit('refreshNicknames', users);
     });
     
     socket.on('disconnect', (data) => {
