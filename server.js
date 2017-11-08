@@ -129,7 +129,7 @@ app.post('/registerPost', (request, response) => {
 
                 response.redirect('/');
             }
-            // If both passwords were not equal
+            // = If both passwords were not equal
             else {
                 response.render('register', {
                     'info' : "Passwörter stimmen nicht überein!",
@@ -138,7 +138,7 @@ app.post('/registerPost', (request, response) => {
                 console.log("Passwords did not match!");
             }          
         }
-        // If the username is already used
+        // = If the username is already used
         else {
             response.render('register', {
                 'info' : "Nutzername ist bereits vorhanden!",
@@ -172,6 +172,7 @@ app.post('/createLobbyPost', (request, response) => {
         }
     }
     
+    // Create new room object and add it to the array
     room = {
         'password' : lobbyPassword,
         'gameLength' : gameLengthSec,
@@ -197,7 +198,7 @@ app.post('/joinLobbyPost', (request, response) => {
         }
     }
     
-    // = If the room was found
+    // If the room was found
     if (request.session.room) {
         response.redirect("/lobby");
     }
@@ -239,6 +240,11 @@ io.on('connection', (socket) => {
         socket.emit('joinLobbySuccessful', users);
     });
     
+    /*
+    Look for the room in which a player has changed it nickname.
+    Then remove the old nickname and add the new one
+    Also removes and adds the socket id so the nicknames and ids are always in the same place in their arrays.
+    */
     socket.on('changeNickname', (data) => {
         let users;
         let userIDs;
@@ -264,6 +270,10 @@ io.on('connection', (socket) => {
     });
     
     socket.on('disconnect', () => {
+        
+        /*
+        Look if the player that disconnected was in a room and if so remove the player from that room
+        */
         for (let i = 0; i < rooms.length; i++) {
             for (let j = 0; j < rooms[i].userIDs.length; j++) {
                 if (rooms[i].userIDs[j] === socket.id) {
