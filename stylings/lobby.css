@@ -1,0 +1,13 @@
+.lobby-button {
+    background-color: white;
+    border: 1px solid black;
+    transition: background-color 0.2s ease;
+}
+
+.lobby-button:active {
+    color: black;
+}
+
+.lobby-button-ready {
+    background-color: #7f74af;
+}
