@@ -175,7 +175,8 @@ app.post('/createLobbyPost', (request, response) => {
     room = {
         'password' : lobbyPassword,
         'gameLength' : gameLengthSec,
-        'users' : []
+        'users' : [],
+        'userIDs' : []
     };
     rooms.push(room);
     console.log("Lobby was created.")
@@ -220,7 +221,9 @@ app.get('/lobby', (request, response) => {
 // --- SocketIO ---
 
 io.on('connection', (socket) => {
-    console.log("Socket connected.");
+    console.log("Socket " + socket.id + " connected.");
+    
+    socket.emit('pushID', socket.id);
         
     socket.on('joinLobby', (password) => {
         socket.join(password); 
@@ -237,23 +240,49 @@ io.on('connection', (socket) => {
     });
     
     socket.on('changeNickname', (data) => {
+        let users;
+        let userIDs;
         for (let i = 0; i < rooms.length; i++) {
             if (rooms[i].password === data.password) {
-                let users = rooms[i].users;
+                users = rooms[i].users;
+                userIDs = rooms[i].userIDs;
+                
                 let index = users.indexOf(data.oldNickName);
                 if (index > -1) {
                     users.splice(index, 1);
+                    userIDs.splice(index, 1);
                 }
+                
                 users.push(data.nickname);
+                userIDs.push(socket.id);
                 rooms[i].users = users;
+                rooms[i].userIDs = userIDs;
                 break;
             }
         }
         io.to(data.password).emit('refreshNicknames', users);
     });
     
-    socket.on('disconnect', (data) => {
-        console.log("Socket disconnected.");
+    socket.on('disconnect', () => {
+        for (let i = 0; i < rooms.length; i++) {
+            for (let j = 0; j < rooms[i].userIDs.length; j++) {
+                if (rooms[i].userIDs[j] === socket.id) {
+                    
+                    let users = rooms[i].users;
+                    let userIDs = rooms[i].userIDs;
+                    
+                    users.splice(j, 1);
+                    userIDs.splice(j, 1);
+                    
+                    rooms[i].users = users;
+                    rooms[i].userIDs = userIDs;
+                    
+                    io.to(rooms[j].password).emit('refreshNicknames', users);
+                    break;          
+                }
+            }
+        }
+        console.log("Socket " + socket.id + " disconnected.");
     });
 });
 
