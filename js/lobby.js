@@ -1,3 +1,9 @@
+
+let id;
+socket.on('pushID', (id) => {
+    this.id = id;
+});
+
 let password = document.querySelector(".js-lobby-password").innerHTML;
 socket.emit('joinLobby', password);
 
@@ -25,7 +31,18 @@ nicknameField.addEventListener("blur", () => {
 });
 
 let readyButton = document.querySelector(".js-button-ready");
+let ready = false;
 readyButton.disabled = true;
+readyButton.addEventListener('click', () => {
+    if (ready) {
+        readyButton.classList.add("lobby-button-ready");
+        ready = false;   
+    } 
+    else {
+        ready = true;
+        readyButton.classList.remove("lobby-button-ready");
+    }
+});
 
 socket.on('refreshNicknames', (nicknames) => {
     refreshNicknames(nicknames);
