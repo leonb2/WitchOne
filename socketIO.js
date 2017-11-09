@@ -5,30 +5,44 @@ exports.initialize = function (server, deleteRoomCallback) {
     const io = socketio(server);
 
     io.on('connection', (socket) => {
-        console.log("Socket " + socket.id + " connected.");
+        console.log(`Socket ${socket.id} connected.`);
 
         socket.emit('pushID', socket.id);
 
         socket.on('joinLobby', (password) => {
             socket.join(password); 
-            console.log("Socket joined the room " + password); 
+            console.log(`${socket.id} joined the room ${password}`); 
 
-            let name;
+            let index = -1;
+            let name = null;
             let users = [];
             let readyCount = 0;
             for (let i = 0; i < rooms.length; i++) {
                 if (rooms[i].password === password) {
+                    index = i;
                     users = rooms[i].users;
                     name = "Spieler " + (users.length+1);
                     users.push(name);
                     rooms[i].userIDs.push(socket.id);
                     readyCount = rooms[i].usersReady;
+                    
+                    // Assign lobby leader
+                    if (users.length == 1) {
+                        rooms[i].adminID = socket.id;
+                        socket.emit('admin');
+                    }
                     break;
                 }
             }
-            data = {'thisName': name, 'users': users, 'readyCount': readyCount};
-            socket.emit('joinLobbySuccessful', data);
-            io.to(password).emit('refresh', data);
+            
+            if (index != -1) {
+                data = {'lobbyIndex': index, 'thisName': name, 'users': users, 'readyCount': readyCount};
+                socket.emit('joinLobbySuccessful', data);
+                io.to(password).emit('refresh', data);
+            }
+            else {
+                socket.emit('joinLobbyFail');
+            }
         });
 
         /*
@@ -39,47 +53,52 @@ exports.initialize = function (server, deleteRoomCallback) {
         socket.on('changeNickname', (data) => {
             let users;
             let userIDs;
-            for (let i = 0; i < rooms.length; i++) {
-                if (rooms[i].password === data.password) {
-                    users = rooms[i].users;
-                    userIDs = rooms[i].userIDs;
+            
+            let room = rooms[data.lobbyIndex];
+            users = room.users;
+            userIDs = room.userIDs;
 
-                    let index = users.indexOf(data.oldNickName);
-                    if (index > -1) {
-                        users.splice(index, 1);
-                        userIDs.splice(index, 1);
-                    }
-
-                    users.push(data.nickname);
-                    userIDs.push(socket.id);
-                    rooms[i].users = users;
-                    rooms[i].userIDs = userIDs;
-                    break;
-                }
+            let index = users.indexOf(data.oldNickName);
+            if (index > -1) {
+                users.splice(index, 1);
+                userIDs.splice(index, 1);
             }
-            io.to(data.password).emit('refreshNicknames', users);
+
+            users.push(data.nickname);
+            userIDs.push(socket.id);
+            rooms[data.lobbyIndex].users = users;
+            rooms[data.lobbyIndex].userIDs = userIDs;
+            
+            io.to(room.password).emit('refreshNicknames', users);
         });
 
         socket.on('playerReady', (data) => {
-            let readyCount;
-            for (let i = 0; i < rooms.length; i++) {
-                if (rooms[i].password === data.password) {
-                    if (data.ready) {
-                        rooms[i].usersReady++;
-                    }
-                    else {
-                        rooms[i].usersReady--;
-                    }
-                    readyCount = rooms[i].usersReady;
-                    break;
-                }
+                  
+            let room = rooms[data.lobbyIndex];
+            let readyCount = room.usersReady;
+            let maxReady = room.users.length;
+            
+            if (data.ready) {
+                readyCount++;
             }
-            io.to(data.password).emit('refreshReady', readyCount);
+            else {
+                readyCount--;
+            }
+            
+            rooms[data.lobbyIndex].usersReady = readyCount;
+
+            io.to(room.password).emit('refreshReady', readyCount);
+            
+            if (readyCount == maxReady) {
+                io.to(room.password).emit('everyoneReady');
+            }
         });
         
         socket.on('disconnect', () => {
             /*
             Look if the player that disconnected was in a room and if so remove the player from that room.
+            
+            TODO: Check if admin just left and if so, assign new one
             */
             for (let i = 0; i < rooms.length; i++) {
                 for (let j = 0; j < rooms[i].userIDs.length; j++) {
@@ -93,6 +112,8 @@ exports.initialize = function (server, deleteRoomCallback) {
                         users.splice(j, 1);
                         userIDs.splice(j, 1);
                         
+                        rooms[i].usersReady--;
+                        
                         if (users.length > 0) {
                             rooms[i].users = users;
                             rooms[i].userIDs = userIDs;
@@ -101,14 +122,13 @@ exports.initialize = function (server, deleteRoomCallback) {
                         }
                         else {
                             rooms.splice(i, 1);
-                            console.log("Room " + password + " was empty and got deleted!");
                             deleteRoomCallback(i);
                         }
                         break;          
                     }
                 }
             }
-            console.log("Socket " + socket.id + " disconnected.");
+            console.log(`Socket ${socket.id} disconnected.`);
         });
     });
 }

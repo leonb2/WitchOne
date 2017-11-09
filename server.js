@@ -9,7 +9,7 @@ app.use(express.static(__dirname + "/js"));
 
 const session = require('express-session');
 app.use(session({
-    secret: 'example', //replace with hardcore hash or so
+    secret: 'H4WM5W1TCH0N3',
     resave: false,
     saveUninitialized: true
 }));
@@ -23,9 +23,7 @@ app.set('view engine', 'ejs');
 
 // --- Set up TingoDB ---
 const DB_COLLECTION = "users";
-
 require('fs').mkdir(__dirname + '/tingodb', (err) => {});
-
 const db = require('tingodb')().Db;
 const database = new db(__dirname + '/tingodb', {});
 const ObjectID = require('tingodb')().ObjectID;
@@ -41,8 +39,7 @@ function ioRoomDeleteCallback(i) {
 socketScript.initialize(server, ioRoomDeleteCallback);
 const rooms = [];
 
-/// --- Website Logic ---
-
+// Called when the user comes to the website
 app.get('/', (request, response) => {
     if (!request.session.authenticated) {
         response.render('login', {
@@ -52,13 +49,10 @@ app.get('/', (request, response) => {
     }
     else {
         response.render('home');
-        
-        if (request.session.room) {
-            delete request.session.room;
-        }
     }
 });
 
+// Called when the user clicks the button to login
 app.post('/loginPost', (request, response) => {
     let username = request.body.username;
     let password = request.body.password;
@@ -72,7 +66,6 @@ app.post('/loginPost', (request, response) => {
                 request.session['username'] = username;
 
                 response.redirect('/');
-                console.log("Login successful!");
             }
             else {
                 response.render('login', {
@@ -90,6 +83,7 @@ app.post('/loginPost', (request, response) => {
     });
 });
 
+// Called when the user clicks the button to register
 app.get('/register', (request, response) => {
     if (!request.session.authenticated) {
         response.render('register', {
@@ -102,6 +96,7 @@ app.get('/register', (request, response) => {
     }
 });
 
+// Called when the user clicks the button to finally register
 app.post('/registerPost', (request, response) => {
     let username = request.body.username;
     let password = request.body.password;
@@ -123,7 +118,6 @@ app.post('/registerPost', (request, response) => {
                     if (err) {
                         return console.log("Error while saving the user!"); 
                     }
-                    console.log("User was saved & logged in!");
                 });
 
                 // Login user as well
@@ -138,7 +132,6 @@ app.post('/registerPost', (request, response) => {
                     'info' : "Passwörter stimmen nicht überein!",
                     'usernameValue' : username
                 }); 
-                console.log("Passwords did not match!");
             }          
         }
         // = If the username is already used
@@ -147,11 +140,11 @@ app.post('/registerPost', (request, response) => {
                 'info' : "Nutzername ist bereits vorhanden!",
                 'usernameValue' : ""
             }); 
-            console.log("Username already used!");  
         }
     });
 });
 
+// Called when the user clicks the button to create a lobby
 app.get('/createLobby', (request, response) => {
     if (request.session.authenticated) {
         response.render('createLobby');
@@ -161,6 +154,7 @@ app.get('/createLobby', (request, response) => {
     }
 });
 
+// Called when the user clicks the button to finish the lobby creation
 app.post('/createLobbyPost', (request, response) => {
     let lobbyPassword = request.body.lobbyPassword;
     let gameLengthMin = request.body.gameLengthMin;
@@ -181,6 +175,7 @@ app.post('/createLobbyPost', (request, response) => {
         'gameLength' : gameLengthSec,
         'users' : [],
         'userIDs' : [],
+        'adminID' : null,
         'usersReady': 0
     };
     rooms.push(room);
@@ -191,6 +186,7 @@ app.post('/createLobbyPost', (request, response) => {
     response.redirect('/lobby');
 });
 
+// Called when the user clicked the button to join a lobby
 app.post('/joinLobbyPost', (request, response) => {
     let lobbyPassword = request.body.lobbyPassword;
     
@@ -198,30 +194,32 @@ app.post('/joinLobbyPost', (request, response) => {
     for (let i = 0; i < rooms.length; i++) {
         if (rooms[i].password === lobbyPassword) {
             request.session.room = lobbyPassword;
-            console.log("Requested lobby was found.");
-            break;
+            response.redirect('/lobby');
+            return;
         }
     }
     
-    // If the room was found
-    if (request.session.room) {
-        response.redirect("/lobby");
-    }
-    else {
-        response.redirect("/");
-    }
-    
+    // If the room was not found
+    response.redirect('/');
 });
 
+// Called after the user wanted to join a lobby and if the lobby was found
 app.get('/lobby', (request, response) => {
-    if (request.session.room) {
+    if (request.session.authenticated && request.session.room) {
         response.render('lobby', {
             'lobbyPassword' : request.session.room
         });
+        request.session.room = null;
     }
     else {
         response.redirect('/');
     }
+});
+
+// Called after the user clicked the button to leave the lobby
+app.get('/leaveLobby', (request, response) => {
+    request.session.room = null;
+    response.redirect('/');
 });
 
 

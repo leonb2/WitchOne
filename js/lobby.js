@@ -1,17 +1,33 @@
-
-let id;
+let ownId;
 socket.on('pushID', (id) => {
-    this.id = id;
+    ownId = id;
 });
 
 let password = document.querySelector(".js-lobby-password").innerHTML;
 socket.emit('joinLobby', password);
 
+let lobbyIndex;
 let nicknameList = document.querySelector(".js-nickname-list");
 socket.on('joinLobbySuccessful', (data) => {
+    lobbyIndex = data.lobbyIndex;
     lastName = data.thisName;
     refreshNicknames(data.users);
     readyCounter.innerHTML = data.readyCount + "/" + data.users.length;
+});
+
+socket.on('joinLobbyFail', () => {
+    window.location.replace('/');
+});
+
+let startButton = document.querySelector(".js-button-start");
+startButton.addEventListener('click', () => {
+    alert("Game started.");
+});
+
+let admin = false;
+socket.on('admin', () => {
+    admin = true;
+    startButton.classList.remove("not-displayed");
 });
 
 let nicknameField = document.querySelector(".js-nickname");
@@ -25,7 +41,7 @@ let lastName;
 nicknameField.addEventListener("blur", () => {
     if (nicknameField.value != "") {
         let name = nicknameField.value;
-        data = {'password': password, 'nickname': name, 'oldNickName' : lastName};
+        data = {'lobbyIndex': lobbyIndex, 'nickname': name, 'oldNickName' : lastName};
         lastName = nicknameField.value;
         
         socket.emit('changeNickname', data);
@@ -44,7 +60,7 @@ readyButton.addEventListener('click', () => {
         ready = true;
         readyButton.classList.add("lobby-button-ready");
     }
-    data = {'password' : password, 'ready' : ready};
+    data = {'lobbyIndex': lobbyIndex, 'ready' : ready};
     socket.emit('playerReady', data);
 });
 
@@ -64,9 +80,20 @@ function refreshNicknames(nicknames) {
 let readyCounter = document.querySelector(".js-ready-counter");
 socket.on('refreshReady', (readyCount) => {
     readyCounter.innerHTML = readyCount + "/" + playerCount;
+    startButton.disabled = true;
 });
 
 socket.on('refresh', (data) => {
     playerCount = refreshNicknames(data.users);
     readyCounter.innerHTML = data.readyCount + "/" + playerCount;
+});
+
+socket.on('everyoneReady', () => {
+    if (admin) {
+        startButton.disabled = false;
+    }
+});
+
+window.addEventListener('beforeunload', (event) => {
+    return event.returnValue = "Die Lobby wird nicht mehr funktionieren, wenn du rausgehst.";
 });
