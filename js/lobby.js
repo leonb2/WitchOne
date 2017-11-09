@@ -8,12 +8,14 @@ let password = document.querySelector(".js-lobby-password").innerHTML;
 socket.emit('joinLobby', password);
 
 let nicknameList = document.querySelector(".js-nickname-list");
-socket.on('joinLobbySuccessful', (users) => {
-    refreshNicknames(users);
+socket.on('joinLobbySuccessful', (data) => {
+    lastName = data.thisName;
+    refreshNicknames(data.users);
+    readyCounter.innerHTML = data.readyCount + "/" + data.users.length;
 });
 
 let nicknameField = document.querySelector(".js-nickname");
-nicknameField.addEventListener("input", () => {
+nicknameField.addEventListener('input', () => {
     if (nicknameField.value != "") {
         readyButton.disabled = false;
     }
@@ -35,22 +37,36 @@ let ready = false;
 readyButton.disabled = true;
 readyButton.addEventListener('click', () => {
     if (ready) {
-        readyButton.classList.add("lobby-button-ready");
-        ready = false;   
+        ready = false;
+        readyButton.classList.remove("lobby-button-ready");
     } 
     else {
         ready = true;
-        readyButton.classList.remove("lobby-button-ready");
+        readyButton.classList.add("lobby-button-ready");
     }
+    data = {'password' : password, 'ready' : ready};
+    socket.emit('playerReady', data);
 });
 
+let playerCount;
 socket.on('refreshNicknames', (nicknames) => {
-    refreshNicknames(nicknames);
+    playerCount = refreshNicknames(nicknames);
 });
 
- function refreshNicknames(nicknames) {
-    nicknameList.innerHTML = "";
-    for (let i = 0; i < nicknames.length; i++) {
-        nicknameList.innerHTML += "<div>" + nicknames[i] + "</div>";
-    }
+function refreshNicknames(nicknames) {
+     nicknameList.innerHTML = "";
+     for (let i = 0; i < nicknames.length; i++) {
+         nicknameList.innerHTML += "<div>" + nicknames[i] + "</div>";
+     }
+     return nicknames.length;
 }
+
+let readyCounter = document.querySelector(".js-ready-counter");
+socket.on('refreshReady', (readyCount) => {
+    readyCounter.innerHTML = readyCount + "/" + playerCount;
+});
+
+socket.on('refresh', (data) => {
+    playerCount = refreshNicknames(data.users);
+    readyCounter.innerHTML = data.readyCount + "/" + playerCount;
+});

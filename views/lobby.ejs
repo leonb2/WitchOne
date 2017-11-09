@@ -6,7 +6,7 @@
         
         <link rel="stylesheet" type="text/css" href="lobby.css">
         
-        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
         <script>
             let socket = io();
         </script>
@@ -17,6 +17,7 @@
         <div class="js-nickname-list"></div>
         <input class="js-nickname" type="text" name="username" placeholder="Nickname">
         <button class="js-button-ready lobby-button" type="button">Bereit!</button>
+        <div class="js-ready-counter">0/0</div>
         <script src="lobby.js"></script>
     </body>
 </html>
