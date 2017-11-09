@@ -20,7 +20,7 @@ socket.on('joinLobbyFail', () => {
 });
 
 let startButton = document.querySelector(".js-button-start");
-startButton.addEventListener('click', () => {
+startButton.addEventListener('click', () => { 
     alert("Game started.");
 });
 
@@ -54,11 +54,11 @@ readyButton.disabled = true;
 readyButton.addEventListener('click', () => {
     if (ready) {
         ready = false;
-        readyButton.classList.remove("lobby-button-ready");
+        readyButton.classList.remove("lobby-button-ready-active");
     } 
     else {
         ready = true;
-        readyButton.classList.add("lobby-button-ready");
+        readyButton.classList.add("lobby-button-ready-active");
     }
     data = {'lobbyIndex': lobbyIndex, 'ready' : ready};
     socket.emit('playerReady', data);
@@ -81,6 +81,7 @@ let readyCounter = document.querySelector(".js-ready-counter");
 socket.on('refreshReady', (readyCount) => {
     readyCounter.innerHTML = readyCount + "/" + playerCount;
     startButton.disabled = true;
+    startButton.classList.add("lobby-button-start-disabled");
 });
 
 socket.on('refresh', (data) => {
@@ -91,6 +92,7 @@ socket.on('refresh', (data) => {
 socket.on('everyoneReady', () => {
     if (admin) {
         startButton.disabled = false;
+        startButton.classList.remove("lobby-button-start-disabled");
     }
 });
 
