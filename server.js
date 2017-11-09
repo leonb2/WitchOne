@@ -1,5 +1,3 @@
-// --- SETUP ---
-
 const port = 8000;
 
 const express = require('express');
@@ -31,14 +29,16 @@ require('fs').mkdir(__dirname + '/tingodb', (err) => {});
 const db = require('tingodb')().Db;
 const database = new db(__dirname + '/tingodb', {});
 const ObjectID = require('tingodb')().ObjectID;
-//
 
 const server = app.listen(port, () => {
    console.log(`Server started and is listening to ${port}`);
 });
 
 const socketScript = require(__dirname + '/socketIO.js');
-socketScript.initialize(server);
+function ioRoomDeleteCallback(i) {
+    rooms.splice(i, 1);
+}
+socketScript.initialize(server, ioRoomDeleteCallback);
 const rooms = [];
 
 /// --- Website Logic ---
@@ -52,6 +52,10 @@ app.get('/', (request, response) => {
     }
     else {
         response.render('home');
+        
+        if (request.session.room) {
+            delete request.session.room;
+        }
     }
 });
 

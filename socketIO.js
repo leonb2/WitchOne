@@ -1,6 +1,6 @@
 const rooms = [];
 
-exports.initialize = function (server) {
+exports.initialize = function (server, deleteRoomCallback) {
     const socketio = require('socket.io');
     const io = socketio(server);
 
@@ -77,8 +77,7 @@ exports.initialize = function (server) {
             io.to(data.password).emit('refreshReady', readyCount);
         });
         
-        socket.on('disconnect', (password) => {
-
+        socket.on('disconnect', () => {
             /*
             Look if the player that disconnected was in a room and if so remove the player from that room.
             */
@@ -86,16 +85,25 @@ exports.initialize = function (server) {
                 for (let j = 0; j < rooms[i].userIDs.length; j++) {
                     if (rooms[i].userIDs[j] === socket.id) {
 
+                        let index = i;
+                        let password = rooms[i].password;
                         let users = rooms[i].users;
                         let userIDs = rooms[i].userIDs;
 
                         users.splice(j, 1);
                         userIDs.splice(j, 1);
+                        
+                        if (users.length > 0) {
+                            rooms[i].users = users;
+                            rooms[i].userIDs = userIDs;
 
-                        rooms[i].users = users;
-                        rooms[i].userIDs = userIDs;
-
-                        io.to(rooms[i].password).emit('refreshNicknames', users);
+                            io.to(rooms[i].password).emit('refreshNicknames', users);
+                        }
+                        else {
+                            rooms.splice(i, 1);
+                            console.log("Room " + password + " was empty and got deleted!");
+                            deleteRoomCallback(i);
+                        }
                         break;          
                     }
                 }
