@@ -4,7 +4,7 @@
     transition: background-color 0.2s ease;
 }
 
-.lobby-button:active {
+.lobby-button:active:enabled {
     color: black;
 }
 
