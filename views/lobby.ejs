@@ -4,6 +4,7 @@
     <head>
         <title>Lobby</title>
         
+        <link rel="stylesheet" type="text/css" href="main.css">
         <link rel="stylesheet" type="text/css" href="lobby.css">
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
@@ -17,8 +18,9 @@
         <div class="js-nickname-list"></div>
         <input class="js-nickname" type="text" name="username" placeholder="Nickname">
         <button class="js-button-ready lobby-button" type="button">Bereit!</button>
+        <button class="js-button-start lobby-button lobby-button-start not-displayed" disabled>Start!</button>
         <div class="js-ready-counter">0/0</div>
-        <form action="/" method="get">
+        <form action="/leaveLobby" method="get">
             <button type="submit">Lobby verlassen</button>
         </form>
         <script src="lobby.js"></script>
