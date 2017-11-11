@@ -72,8 +72,7 @@ exports.initialize = function (server, deleteRoomCallback) {
             io.to(room.password).emit('refreshNicknames', users);
         });
 
-        socket.on('playerReady', (data) => {
-                  
+        socket.on('playerReady', (data) => {              
             let room = rooms[data.lobbyIndex];
             let readyCount = room.usersReady;
             let maxReady = room.users.length;
@@ -92,6 +91,13 @@ exports.initialize = function (server, deleteRoomCallback) {
             if (readyCount == maxReady) {
                 io.to(room.password).emit('everyoneReady');
             }
+        });
+        
+        socket.on('startGame', (data) => {
+            let room = rooms[data.lobbyIndex];
+            
+            data = {'gameLength' : room.gameLength};
+            io.to(room.password).emit('gameStarted', data);
         });
         
         socket.on('disconnect', () => {

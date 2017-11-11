@@ -1,3 +1,5 @@
+let lobbyContentDiv = document.querySelector(".js-lobby-content");
+
 let ownId;
 socket.on('pushID', (id) => {
     ownId = id;
@@ -13,21 +15,11 @@ socket.on('joinLobbySuccessful', (data) => {
     lastName = data.thisName;
     refreshNicknames(data.users);
     readyCounter.innerHTML = data.readyCount + "/" + data.users.length;
+    nicknameField.value = data.thisName;
 });
 
 socket.on('joinLobbyFail', () => {
     window.location.replace('/');
-});
-
-let startButton = document.querySelector(".js-button-start");
-startButton.addEventListener('click', () => { 
-    alert("Game started.");
-});
-
-let admin = false;
-socket.on('admin', () => {
-    admin = true;
-    startButton.classList.remove("not-displayed");
 });
 
 let nicknameField = document.querySelector(".js-nickname");
@@ -64,6 +56,18 @@ readyButton.addEventListener('click', () => {
     socket.emit('playerReady', data);
 });
 
+let startButton = document.querySelector(".js-button-start");
+startButton.addEventListener('click', () => { 
+    data = {'lobbyIndex': lobbyIndex};
+    socket.emit('startGame', data);
+});
+
+let admin = false;
+socket.on('admin', () => {
+    admin = true;
+    startButton.classList.remove("not-displayed");
+});
+
 let playerCount;
 socket.on('refreshNicknames', (nicknames) => {
     playerCount = refreshNicknames(nicknames);
@@ -95,6 +99,29 @@ socket.on('everyoneReady', () => {
         startButton.classList.remove("lobby-button-start-disabled");
     }
 });
+
+let timerDiv;
+socket.on('gameStarted', (data) => {    
+    let minutes = minTwoDigits(Math.floor(data.gameLength/60));
+    let seconds = minTwoDigits(data.gameLength % 60);
+    lobbyContentDiv.innerHTML =
+        "<div class='js-lobby-timer'>"+minutes+":"+seconds+"</div>";
+    timerDiv = document.querySelector(".js-lobby-timer");
+    timer(data.gameLength);
+});
+
+function timer (timeSec) {
+    setInterval( () => {
+        timeSec--;
+        let minutes = minTwoDigits(Math.floor(timeSec/60));
+        let seconds = minTwoDigits(timeSec % 60);
+        timerDiv.innerHTML = minutes + ":" + seconds;
+    }, 1000);
+}
+
+function minTwoDigits (number) {
+    return number < 10 ? number = "0" + number : number;
+}
 
 window.addEventListener('beforeunload', (event) => {
     return event.returnValue = "Die Lobby wird nicht mehr funktionieren, wenn du rausgehst.";
