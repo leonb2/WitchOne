@@ -67,6 +67,12 @@ socket.on('admin', () => {
     admin = true;
     startButton.classList.remove("not-displayed");
 });
+socket.on('assignNewAdmin', (adminId) => {
+    if (ownId === adminId) {
+        admin = true;
+        startButton.classList.remove("not-displayed");
+    }
+});
 
 let playerCount;
 socket.on('refreshNicknames', (nicknames) => {

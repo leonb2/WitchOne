@@ -124,7 +124,11 @@ exports.initialize = function (server, deleteRoomCallback) {
                             rooms[i].users = users;
                             rooms[i].userIDs = userIDs;
 
-                            io.to(rooms[i].password).emit('refreshNicknames', users);
+                            io.to(password).emit('refreshNicknames', users);
+                            
+                            let adminId = userIDs[0];
+                            io.to(password).emit('assignNewAdmin', adminId);
+                            
                         }
                         else {
                             rooms.splice(i, 1);

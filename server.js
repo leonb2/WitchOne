@@ -57,30 +57,49 @@ app.post('/loginPost', (request, response) => {
     let username = request.body.username;
     let password = request.body.password;
     
-    database.collection(DB_COLLECTION).findOne({
-        'username' : username
-    }, (err, result) => {
-        if (result) {      
-            if (passwordHash.verify(password, result.password)) {        
-                request.session.authenticated = true;
-                request.session.username = username;
+    function verifyPassword(result) {
+        if (passwordHash.verify(password, result.password)) 
+        {        
+            request.session.authenticated = true;
+            request.session.username = username;
 
-                response.redirect('/');
-            }
-            else {
-                response.render('login', {
-                    'info': "Daten nicht korrekt!",
-                    'usernameValue' : username
-                });  
-            } 
+            response.redirect('/');
         }
         else {
             response.render('login', {
                 'info': "Daten nicht korrekt!",
                 'usernameValue' : username
             });  
+        }
+    }
+    
+    database.collection(DB_COLLECTION).findOne({
+        'username' : username
+    }, (err, result) => {
+        if (result) {      
+            verifyPassword(result); 
+        }
+        else {
+            database.collection(DB_COLLECTION).findOne({
+                'email' : username
+            }, (err, result) => {
+                if (result) {
+                    verifyPassword(result);
+                }
+                else {
+                    response.render('login', {
+                        'info': "Daten nicht korrekt!",
+                        'usernameValue' : username
+                    });  
+                }
+            }); 
         } 
     });
+});
+
+app.post('/logoutPost', (request, response) => {
+    request.session.destroy();
+    response.redirect('/');
 });
 
 // Called when the user clicks the button to register
