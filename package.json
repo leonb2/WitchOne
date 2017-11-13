@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/leonb2/WitchOne.git"
   },
-  "author": "Melanie Mischlisch, Pascal Rutkowski, Lennart Krug, Leon Bantin",
+  "author": "Melanie Mischlisch, Pascal Robert Rutkowski, Lennart Krug, Leon Bantin",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/leonb2/WitchOne/issues"
@@ -24,6 +24,7 @@
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "nodemon": "^1.12.1",
+    "password-hash": "^1.2.2",
     "socket.io": "^2.0.4",
     "tingodb": "^0.5.1"
   }
