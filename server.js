@@ -62,8 +62,8 @@ app.post('/loginPost', (request, response) => {
     }, (err, result) => {
         if (result) {      
             if (passwordHash.verify(password, result.password)) {        
-                request.session['authenticated'] = true;
-                request.session['username'] = username;
+                request.session.authenticated = true;
+                request.session.username = username;
 
                 response.redirect('/');
             }
@@ -121,8 +121,8 @@ app.post('/registerPost', (request, response) => {
                 });
 
                 // Login user as well
-                request.session['username'] = username;
-                request.session['authenticated'] = true;     
+                request.session.username = username;
+                request.session.authenticated = true;     
 
                 response.redirect('/');
             }
