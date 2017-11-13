@@ -24,6 +24,7 @@
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "nodemon": "^1.12.1",
+    "password-hash": "^1.2.2",
     "tingodb": "^0.5.1"
   }
 }
