@@ -1,0 +1,29 @@
+.lobby-button {
+    color: black;
+    border: 1px solid black;
+    transition: background-color 0.2s ease;
+}
+
+.lobby-button:active:enabled {
+    color: black;
+}
+
+.lobby-button-ready {
+    background-color: white;
+}
+
+.lobby-button-ready-active {
+    background-color: #7f74af;
+}
+
+.lobby-button-start {
+    background-color: #7f74af;
+}
+
+.lobby-button-start-disabled {
+    background-color: white;
+}
+
+.lobby-button-start:active:enabled {
+    background-color: #3C2F77; /*#c478a9;*/
+}
