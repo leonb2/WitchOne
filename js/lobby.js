@@ -1,4 +1,7 @@
+// TO-DO: let timer stop if 0
+
 let lobbyContentDiv = document.querySelector(".js-lobby-content");
+let gameContentDiv = document.querySelector(".js-game-content");
 
 let ownId;
 socket.on('pushID', (id) => {
@@ -106,21 +109,25 @@ socket.on('everyoneReady', () => {
     }
 });
 
-let timerDiv;
+let timerDiv = document.querySelector(".js-lobby-timer");
 socket.on('gameStarted', (data) => {    
+    lobbyContentDiv.innerHTML = "";
+    gameContentDiv.classList.remove("not-displayed");
     let minutes = minTwoDigits(Math.floor(data.gameLength/60));
     let seconds = minTwoDigits(data.gameLength % 60);
-    lobbyContentDiv.innerHTML =
-        "<div class='js-lobby-timer'>"+minutes+":"+seconds+"</div>";
-    timerDiv = document.querySelector(".js-lobby-timer");
+    timerDiv.innerHTML = minutes + ":" + seconds;
     timer(data.gameLength);
 });
 
 function timer (timeSec) {
-    setInterval( () => {
+    let interval = setInterval( () => {
         timeSec--;
         let minutes = minTwoDigits(Math.floor(timeSec/60));
         let seconds = minTwoDigits(timeSec % 60);
+        if (minutes === "00" && seconds === "00") {
+            clearInterval(interval);
+            socket.emit('gameFinishedTime');
+        }
         timerDiv.innerHTML = minutes + ":" + seconds;
     }, 1000);
 }

@@ -1,6 +1,8 @@
+// TO-DO: if a new user joins the room the start button has to be disabled
+
 const rooms = [];
 
-exports.initialize = function (server, deleteRoomCallback) {
+exports.initialize = function (server, roomDeleteCallback) {
     const socketio = require('socket.io');
     const io = socketio(server);
 
@@ -132,7 +134,7 @@ exports.initialize = function (server, deleteRoomCallback) {
                         }
                         else {
                             rooms.splice(i, 1);
-                            deleteRoomCallback(i);
+                            roomDeleteCallback(i);
                         }
                         break;          
                     }
