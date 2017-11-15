@@ -19,6 +19,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 const passwordHash = require('password-hash');
 
+const ejs = require('ejs');
 app.set('view engine', 'ejs');
 
 // --- Set up TingoDB ---
@@ -36,6 +37,7 @@ const socketScript = require(__dirname + '/socketIO.js');
 function ioRoomDeleteCallback(i) {
     rooms.splice(i, 1);
 }
+
 socketScript.initialize(server, ioRoomDeleteCallback);
 const rooms = [];
 
@@ -57,6 +59,7 @@ app.post('/loginPost', (request, response) => {
     let username = request.body.username;
     let password = request.body.password;
     
+    // Verify password from the result that was found
     function verifyPassword(result) {
         if (passwordHash.verify(password, result.password)) 
         {        
