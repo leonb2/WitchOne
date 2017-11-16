@@ -156,7 +156,7 @@ app.post('/registerPost', (request, response) => {
                         return console.log("Error while saving the user!"); 
                     }
                 });
-
+                
                 // Login user as well
                 request.session.user = user;
                 request.session.authenticated = true;     
@@ -213,7 +213,8 @@ app.post('/createLobbyPost', (request, response) => {
         'users' : [],
         'userIDs' : [],
         'adminID' : null,
-        'usersReady': 0
+        'usersReady': 0,
+        'witchID' : null
     };
     rooms.push(room);
     socketScript.addRoom(room);

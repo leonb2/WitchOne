@@ -98,7 +98,29 @@ exports.initialize = function (server, roomDeleteCallback) {
         socket.on('startGame', (data) => {
             let room = rooms[data.lobbyIndex];
             
-            data = {'gameLength' : room.gameLength};
+            // Determine who is the witch
+            let witchIndex = Math.floor(Math.random() * room.users.length);
+            let witchID = room.userIDs[witchIndex];
+            rooms[data.lobbyIndex].witchID = witchID;
+            
+            // Generate random order
+            let order = [];
+            let random;
+            for (let i = 0; i < room.users.length; i++) {
+                let index = 0;
+                while (index != -1) {
+                    random = Math.floor(Math.random() * room.users.length);
+                    index = order.indexOf(random);
+                }
+                order.push(random);
+            }
+            
+            data = { 
+                'users': room.users,
+                'gameLength' : room.gameLength,
+                'witchID': witchID,
+                'order': order
+            };
             io.to(room.password).emit('gameStarted', data);
         });
         

@@ -1,5 +1,3 @@
-// TO-DO: let timer stop if 0
-
 let lobbyContentDiv = document.querySelector(".js-lobby-content");
 let gameContentDiv = document.querySelector(".js-game-content");
 
@@ -109,10 +107,49 @@ socket.on('everyoneReady', () => {
     }
 });
 
-let timerDiv = document.querySelector(".js-lobby-timer");
-socket.on('gameStarted', (data) => {    
+// ----- Game logic -----
+let isWitch = false;
+let nameDiv = document.querySelector(".js-game-name");
+let roleDiv = document.querySelector(".js-game-role");
+let timerDiv = document.querySelector(".js-game-timer");
+let orderDiv = document.querySelector(".js-game-order");
+let checklistUsersDiv = document.querySelector(".js-game-checklist-users");
+
+socket.on('gameStarted', (data) => {
+    
+    let roleString = "nicht die Hexe.";
+    // Am I the witch?
+    if (ownId === data.witchID) {
+        isWitch = true;
+        roleString = "die Hexe!"
+    }
+    
+    // Change content
     lobbyContentDiv.innerHTML = "";
     gameContentDiv.classList.remove("not-displayed");
+    
+    // Fill fields
+    nameDiv.innerHTML = lastName;
+    roleDiv.innerHTML += roleString;
+    
+    // Fill in order
+    for (let i = 0; i < data.users.length; i++) {
+        orderDiv.innerHTML += data.users[data.order[i]] + " ";
+        if (i < data.users.length-1) {
+            orderDiv.innerHTML += "- ";
+        }
+    }
+    
+    // Fill user checklist
+    if (!isWitch) {
+        for (let i = 0; i < data.users.length; i++) {
+            if (data.users[i] != lastName) {
+                checklistUsersDiv.innerHTML += "<button type='button'>"+data.users[i]+"</button>"
+            }
+        }
+    }
+    
+    // Enable timer
     let minutes = minTwoDigits(Math.floor(data.gameLength/60));
     let seconds = minTwoDigits(data.gameLength % 60);
     timerDiv.innerHTML = minutes + ":" + seconds;
