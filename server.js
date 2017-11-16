@@ -50,7 +50,13 @@ app.get('/', (request, response) => {
         });
     }
     else {
-        response.render('home');
+        response.render('home', {
+            'lastThreeNames': request.session.user.lastThreeNames,
+            'gameCount': request.session.user.gameCount,
+            'correctGuesses': request.session.user.correctGuesses,
+            'winLoseRatio': request.session.user.winLoseRatio,
+            'witchCount': request.session.user.witchCount
+        });
     }
 });
 
@@ -64,7 +70,7 @@ app.post('/loginPost', (request, response) => {
         if (passwordHash.verify(password, result.password)) 
         {        
             request.session.authenticated = true;
-            request.session.username = username;
+            request.session.user = result;
 
             response.redirect('/');
         }
@@ -135,7 +141,16 @@ app.post('/registerPost', (request, response) => {
                 let hash = passwordHash.generate(password);
 
                 // Add user to database
-                let user = {'username': username, 'password': hash, 'email': email };
+                let user = {
+                    'username': username,
+                    'password': hash,
+                    'email': email,
+                    'lastThreeNames': [],
+                    'gameCount': 0,
+                    'correctGuesses': 0,
+                    'winLoseRatio': 0,
+                    'witchCount': 0
+                };
                 database.collection(DB_COLLECTION).save(user, (err, result) => {
                     if (err) {
                         return console.log("Error while saving the user!"); 
@@ -143,7 +158,7 @@ app.post('/registerPost', (request, response) => {
                 });
 
                 // Login user as well
-                request.session.username = username;
+                request.session.user = user;
                 request.session.authenticated = true;     
 
                 response.redirect('/');
