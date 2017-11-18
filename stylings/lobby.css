@@ -1,29 +1,107 @@
+/* STYLING DER LOBBY-SEITE GESAMT */
+.js-lobby-content {
+    font-family: Helvetica;
+    text-align: center;
+ /* Fensterbreite: */
+    width: 980px;
+    margin: 0 auto;
+}
+
+/* LOBBY-PASSWORT */
+.js-lobby-password {
+    width: 980px;
+    height: 50px;
+ /* Schrift */
+    color: #7F74AF;
+    font-weight: normal;
+    font-size: 20px;
+}
+
+/* NAMENSLISTE DER SPIELER */
+.js-nickname-list {
+    width: 980px;
+    height: 50px;
+    background-color: white;
+    
+    color: #3B3B58;
+    font-weight: lighter;
+    font-size: 25px;
+    font-style: bold;
+}
+
+/* EINGABEFELD SPIELERNAME */
+.js-nickname {
+    width: 150px;
+    height: 25px;
+    
+    padding-top: 10px;
+    padding-bottom: 10px;
+    
+    border-style: dotted;
+    
+    text-align: center;
+    color: #3B3B58;
+    font-style: italic;
+}
+
+/* BEREIT + START BUTTONS */
 .lobby-button {
-    color: black;
-    border: 1px solid black;
+    /* Bereit + Start-Button ungeklickt: Schrift */
+    color: white;
+    border: 1px solid balck;
     transition: background-color 0.2s ease;
 }
-
+/* Bereit + Start-Button geklickt: Schrift */
 .lobby-button:active:enabled {
-    color: black;
+    color: white;
 }
-
+/* Bereit-Button ungeklickt: Hintergrund */
 .lobby-button-ready {
-    background-color: white;
+    background-color: #228CDB;
 }
-
+/* Bereit-Button geklickt: Hintergrund */
 .lobby-button-ready-active {
-    background-color: #7f74af;
+    background-color: #3B3B58;
 }
-
+/* Start-Button, wenn Bereit-Button geklickt wurde */
 .lobby-button-start {
-    background-color: #7f74af;
+    background-color: #3B3B58;
 }
-
+/* Start-Button ungeklickt: Hintergrund */
 .lobby-button-start-disabled {
-    background-color: white;
+    background-color: #228CDB;
 }
-
+/* Start-Button geklickt: Hintergrund */
 .lobby-button-start:active:enabled {
     background-color: #3B3B58;
 }
+
+/* BEREIT-ZAEHLER */
+.js-ready-counter {
+    background-color: white;
+    height: 25px;
+    color: #3B3B58;
+    
+    padding-top: 10px;
+    padding-bottom: 10px;
+    
+}
+
+/* LOBBY-VERLASSEN-BUTTON */
+.lobby-button-leave {
+    color: white;
+    background-color: #7F74AF;
+}
+
+/*
+main: #7F74AF
+another shade: #7980C6
+blue: #228CDB
+blue gray: #3B3B58
+bordeaux: #82204A
+*/
+
+/* Wenn man seinen Spielernamen eingibt und ENTER drückt,
+   passiert nichts.
+   "Spieler 1" als Lückenfüller löschen? Sonst ist es verwirrend!
+*/
