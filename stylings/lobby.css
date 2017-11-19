@@ -1,7 +1,7 @@
 .lobby-button {
     color: black;
     border: 1px solid black;
-    transition: background-color 0.2s ease;
+    transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .lobby-button:active:enabled {
@@ -10,6 +10,10 @@
 
 .lobby-button-ready {
     background-color: white;
+}
+
+.lobby-button-ready-disabled {
+    color: gray;
 }
 
 .lobby-button-ready-active {
@@ -21,6 +25,7 @@
 }
 
 .lobby-button-start-disabled {
+    color: gray;
     background-color: white;
 }
 

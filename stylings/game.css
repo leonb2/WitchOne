@@ -1,0 +1,42 @@
+.not-displayed {
+    display: none;
+}
+
+.game-button {
+    border: 1px solid black;
+    background-color: white; 
+    transition: background-color 0.2s ease;
+}
+
+.game-button:active:enabled {
+    color: black;
+}
+
+.game-button-checklist {
+    font-size: 2rem;
+}
+
+.game-button-checklist-active {
+    background-color: rebeccapurple;
+}
+
+.game-button-vote {
+    
+}
+
+.game-button-vote-disabled {
+    color: gray;
+}
+
+.game-button-vote-active {
+    color: white;
+    background-color: rebeccapurple;
+}
+
+.game-button-vote-active:active {
+    color: white;
+}
+
+
+
+
