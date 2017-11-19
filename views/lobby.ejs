@@ -3,9 +3,8 @@
 <html>
     <head>
         <title>Lobby</title>
-        
-        <link rel="stylesheet" type="text/css" href="main.css">
         <link rel="stylesheet" type="text/css" href="lobby.css">
+        <link rel="stylesheet" type="text/css" href="game.css">
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
         <script>
@@ -16,11 +15,11 @@
     <body>
         <div class="js-lobby-content">
             <div class="js-lobby-password"><%= lobbyPassword %></div>
-            <div class="js-nickname-list"></div>
-            <input class="js-nickname" type="text" name="username" placeholder="Nickname">
-            <button class="js-button-ready lobby-button lobby-button-ready" type="button">Bereit!</button>
-            <button class="js-button-start lobby-button lobby-button-start lobby-button-start-disabled not-displayed" disabled>Start!</button>
-            <div class="js-ready-counter">0/0</div>
+            <div class="js-lobby-nickname-list"></div>
+            <input class="js-lobby-nickname" type="text" name="username" placeholder="Nickname">
+            <button class="js-lobby-button-ready lobby-button lobby-button-ready lobby-button-ready-disabled" type="button">Bereit!</button>
+            <button class="js-lobby-button-start lobby-button lobby-button-start lobby-button-start-disabled not-displayed" disabled>Start!</button>
+            <div class="js-lobby-ready-counter">0/0</div>
             <form action="/leaveLobby" method="get">
                 <button type="submit">Lobby verlassen</button>
             </form>
@@ -30,12 +29,12 @@
             <div class="js-game-role">Du bist </div>
             <div class='js-game-timer'></div>
             <div class="js-game-order">Fragenreihenfolge: </div>
-            <div class="js-game-checklist-users">
-                
+            <div class="js-game-checklist"></div>
+            <div><button class="js-game-button-question" type="button">Beispielfrage anfordern</button></div>
+            <div class="js-game-button-start-vote-container"><button class="js-game-button-start-vote" type="button">Abstimmung starten</button>
             </div>
-            <div><button type="submit">Bsp Frage</button></div>
-            <div><button type="submit">Lel, ich weiß es</button></div>
+            <div><button class="js-game-button-vote game-button game-button-vote game-button-vote-disabled" type="button" disabled>Stimme abgeben</button></div>
         </div>
-        <script src="lobby.js"></script>
+        <script defer src="lobby.js"></script>
     </body>
 </html>

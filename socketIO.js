@@ -1,11 +1,18 @@
-// TO-DO: if a new user joins the room the start button has to be disabled
-
 const rooms = [];
+let placesAndRoles;
+let exampleQuestions;
 
-exports.initialize = function (server, roomDeleteCallback) {
+exports.initialize = function (server, placesAndRoles, exampleQuestions, roomDeleteCallback) {
     const socketio = require('socket.io');
     const io = socketio(server);
+    
+    this.placesAndRoles = placesAndRoles;
+    this.exampleQuestions = exampleQuestions;
 
+    /*
+    Called when a user joins a lobby
+    Emit the socketID to the player and add the player to the room.
+    */
     io.on('connection', (socket) => {
         console.log(`Socket ${socket.id} connected.`);
 
@@ -15,6 +22,7 @@ exports.initialize = function (server, roomDeleteCallback) {
             socket.join(password); 
             console.log(`${socket.id} joined the room ${password}`); 
 
+            // Find the looby and add the player to it
             let index = -1;
             let name = null;
             let users = [];
@@ -38,19 +46,24 @@ exports.initialize = function (server, roomDeleteCallback) {
             }
             
             if (index != -1) {
-                data = {'lobbyIndex': index, 'thisName': name, 'users': users, 'readyCount': readyCount};
+                let data = {
+                    'lobbyIndex': index,
+                    'thisName': name,
+                    'users': users,
+                    'readyCount': readyCount
+                };
                 socket.emit('joinLobbySuccessful', data);
                 io.to(password).emit('refresh', data);
             }
+            // = If no lobby was found (=> some kind of error)
             else {
                 socket.emit('joinLobbyFail');
             }
         });
 
         /*
-        Look for the room in which a player has changed it nickname.
-        Then remove the old nickname and add the new one
-        Also removes and adds the socket id so the nicknames and ids are always in the same place in their arrays.
+        Called when a player changes his nickname.
+        Remove the old nickname and ID and then add the new nickname and ID again, so that nickname and ID are always at the same place
         */
         socket.on('changeNickname', (data) => {
             let users;
@@ -68,16 +81,20 @@ exports.initialize = function (server, roomDeleteCallback) {
 
             users.push(data.nickname);
             userIDs.push(socket.id);
-            rooms[data.lobbyIndex].users = users;
-            rooms[data.lobbyIndex].userIDs = userIDs;
+            room.users = users;
+            room.userIDs = userIDs;
             
             io.to(room.password).emit('refreshNicknames', users);
         });
 
+        /*
+        Called when a player clicked the ready button.
+        Check if the player is ready or not and refresh the new count for every player
+        If everyone is ready the according event is fired
+        */
         socket.on('playerReady', (data) => {              
             let room = rooms[data.lobbyIndex];
             let readyCount = room.usersReady;
-            let maxReady = room.users.length;
             
             if (data.ready) {
                 readyCount++;
@@ -86,15 +103,19 @@ exports.initialize = function (server, roomDeleteCallback) {
                 readyCount--;
             }
             
-            rooms[data.lobbyIndex].usersReady = readyCount;
+            room.usersReady = readyCount;
 
             io.to(room.password).emit('refreshReady', readyCount);
             
-            if (readyCount == maxReady) {
+            if (readyCount == room.users.length) {
                 io.to(room.password).emit('everyoneReady');
             }
         });
         
+        /*
+        Called when the admin clicked the start button.
+        Select a place and distribute the roles
+        */
         socket.on('startGame', (data) => {
             let room = rooms[data.lobbyIndex];
             
@@ -115,20 +136,96 @@ exports.initialize = function (server, roomDeleteCallback) {
                 order.push(random);
             }
             
-            data = { 
+            let newData = { 
                 'users': room.users,
                 'gameLength' : room.gameLength,
                 'witchID': witchID,
                 'order': order
             };
-            io.to(room.password).emit('gameStarted', data);
+            io.to(room.password).emit('gameStarted', newData);
         });
         
+        /*
+        Called when a player clicked the button to get an example question.
+        */
+        socket.on('getExampleQuestion', () => {
+            /*let index = Math.floor(Math.random() * exampleQuestions.length);
+            
+            data = {'question': exampleQuestions[index].question};*/
+            let data = {'question': "Noch keine Datenbank eingebunden!"};
+            
+            socket.emit('sendExampleQuestion', data);     
+        });
+        
+        /*
+        Called when a player clicked the button to start the vote.
+        */
+        socket.on('startVote', (data) => {
+            io.to(data.password).emit('voteStarted');
+        });
+        
+        socket.on('voted', (data) => {
+            let room = rooms[data.lobbyIndex];
+            
+            // Track vote
+            let userID = room.userIDs[room.users.indexOf(data.vote)];
+            let index = room.votedIDs.indexOf(userID);
+            if (index == -1) {
+                room.votedIDs.push(userID);
+                room.votedIDsAmount.push(1);
+            }
+            else {
+                room.votedIDsAmount[index]++;
+            } 
+            
+            // Check if everyone voted
+            let voteCount = 0;
+            for (let i = 0; i < room.votedIDsAmount.length; i++) {
+                voteCount += room.votedIDsAmount[i];
+            }
+            
+            if (voteCount === room.users.length-1) {
+                // Bubble sort by amount - but also change id array
+                for (let i = 0; i < room.votedIDsAmount.length; i++) {
+                    for (let j = i; j > 0; j--) {
+                        if (room.votedIDsAmount[i] < room.votedIDsAmount[i - 1]) {
+                            [room.votedIDsAmount[i], room.votedIDsAmount[i - 1]] =
+                                [room.votedIDsAmount[i - 1], room.votedIDsAmount[i]];
+                            [room.votedIDs[i], room.votedIDs[i - 1]] = 
+                                [room.votedIDs[i - 1], room.votedIDs[i]];    
+                        }
+                    }
+                }
+                
+                let newData;
+                let witchName = room.users[room.userIDs.indexOf(room.witchID)];
+                if (room.votedIDsAmount.length > 1) {
+                    if (room.votedIDsAmount[room.votedIDsAmount.length-1] > room.votedIDsAmount[room.votedIDsAmount.length-2]) {
+                        newData = {'witchCaught' : true, 'witchName': witchName};
+                    }
+                    else {
+                        newData = {'witchCaught' : false, 'witchName': witchName};
+                    }
+                }
+                else {
+                    newData = {'witchCaught' : true, 'witchName': witchName};
+                }
+                
+                io.to(data.password).emit('gameFinished', newData);
+            } 
+        });
+        
+        socket.on('gameTimeOut', (data) => {
+            let room = rooms[data.lobbyIndex];
+            let witchName = room.users[room.userIDs.indexOf(room.witchID)];
+            let newData = {'witchCaught' : false, 'witchName' : witchName};
+            io.to(data.password).emit('gameFinished', newData);
+        });
+            
         socket.on('disconnect', () => {
             /*
             Look if the player that disconnected was in a room and if so remove the player from that room.
-            
-            TODO: Check if admin just left and if so, assign new one
+            Also check if the admin left and if so assign a new one.
             */
             for (let i = 0; i < rooms.length; i++) {
                 for (let j = 0; j < rooms[i].userIDs.length; j++) {
@@ -142,7 +239,7 @@ exports.initialize = function (server, roomDeleteCallback) {
                         users.splice(j, 1);
                         userIDs.splice(j, 1);
                         
-                        rooms[i].usersReady--;
+                        rooms[i].usersReady = 0;
                         
                         if (users.length > 0) {
                             rooms[i].users = users;
@@ -150,9 +247,14 @@ exports.initialize = function (server, roomDeleteCallback) {
 
                             io.to(password).emit('refreshNicknames', users);
                             
-                            let adminId = userIDs[0];
-                            io.to(password).emit('assignNewAdmin', adminId);
-                            
+                            io.to(password).emit('resetReady');
+   
+                            // = If the admin just left
+                            if (socket.id === rooms[i].adminID) {
+                                let adminID = userIDs[0];
+                                rooms[i].adminID = adminID;
+                                io.to(password).emit('assignNewAdmin', adminID);
+                            }
                         }
                         else {
                             rooms.splice(i, 1);

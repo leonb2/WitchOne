@@ -9,7 +9,7 @@ app.use(express.static(__dirname + "/js"));
 
 const session = require('express-session');
 app.use(session({
-    secret: 'H4WM5W1TCH0N3',
+    secret: 'H4WM52017W1TCH0N3',
     resave: false,
     saveUninitialized: true
 }));
@@ -23,7 +23,10 @@ const ejs = require('ejs');
 app.set('view engine', 'ejs');
 
 // --- Set up TingoDB ---
-const DB_COLLECTION = "users";
+const DB_USERS = "users";
+const DB_PLACESANDROLES = "placesAndRoles";
+const DB_EXAMPLEQUESTIONS = "exampleQuestions";
+
 require('fs').mkdir(__dirname + '/tingodb', (err) => {});
 const db = require('tingodb')().Db;
 const database = new db(__dirname + '/tingodb', {});
@@ -38,7 +41,12 @@ function ioRoomDeleteCallback(i) {
     rooms.splice(i, 1);
 }
 
-socketScript.initialize(server, ioRoomDeleteCallback);
+let placesAndRoles = database.collection(DB_PLACESANDROLES).find();
+placesAndRoles = null;
+let exampleQuestions = database.collection(DB_EXAMPLEQUESTIONS).find();
+exampleQuestions = null;
+
+socketScript.initialize(server, placesAndRoles, exampleQuestions, ioRoomDeleteCallback);
 const rooms = [];
 
 // Called when the user comes to the website
@@ -82,14 +90,17 @@ app.post('/loginPost', (request, response) => {
         }
     }
     
-    database.collection(DB_COLLECTION).findOne({
+    // Look in the database if theres an username like the given one
+    database.collection(DB_USERS).findOne({
         'username' : username
     }, (err, result) => {
+        // = If an according entry was found
         if (result) {      
             verifyPassword(result); 
         }
         else {
-            database.collection(DB_COLLECTION).findOne({
+            // Look in the database if theres an email like the given one
+            database.collection(DB_USERS).findOne({
                 'email' : username
             }, (err, result) => {
                 if (result) {
@@ -131,7 +142,7 @@ app.post('/registerPost', (request, response) => {
     let confirmPassword = request.body.confPassword;
     let email = request.body.email;
 
-    database.collection(DB_COLLECTION).findOne({
+    database.collection(DB_USERS).findOne({
         'username' : username
     }, (err, result) => {   
         // If the username is still free
@@ -151,7 +162,7 @@ app.post('/registerPost', (request, response) => {
                     'winLoseRatio': 0,
                     'witchCount': 0
                 };
-                database.collection(DB_COLLECTION).save(user, (err, result) => {
+                database.collection(DB_USERS).save(user, (err, result) => {
                     if (err) {
                         return console.log("Error while saving the user!"); 
                     }
@@ -183,8 +194,29 @@ app.post('/registerPost', (request, response) => {
 
 // Called when the user clicks the button to create a lobby
 app.get('/createLobby', (request, response) => {
-    if (request.session.authenticated) {
-        response.render('createLobby');
+    if (request.session.authenticated) {     
+        let passwordFree;
+        let password;
+        
+        // Generate a room code
+        do {
+            password = "";
+            let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+            for (let i = 0; i < 4; i++) {
+                password += possible.charAt(Math.floor(Math.random() * possible.length));
+            }
+
+            passwordFree = true;
+            for (let i = 0; i < rooms.length; i++) {
+                if (rooms[i].password === password) {
+                    passwordFree = false;
+                }
+            }
+        } while (!passwordFree);
+        
+        request.session.possibleRoom = password;
+        response.render('createLobby', {'password': password});
     } 
     else {
         response.redirect('/');
@@ -193,15 +225,16 @@ app.get('/createLobby', (request, response) => {
 
 // Called when the user clicks the button to finish the lobby creation
 app.post('/createLobbyPost', (request, response) => {
-    let lobbyPassword = request.body.lobbyPassword;
+    let lobbyPassword = request.session.possibleRoom;
+    request.session.possibleRoom = null;
     let gameLengthMin = request.body.gameLengthMin;
     let gameLengthSec = gameLengthMin*60;
     
-    // Look if lobby password is already in use
+    // Look again if lobby password is already in use
     for (let i = 0; i < rooms.length; i++) {
         if (rooms[i].password === lobbyPassword) {
             response.redirect("/createLobby");
-            console.log("Lobby password already in use.");
+            console.log("ERROR: Lobby password already in use.");
             return;
         }
     }
@@ -213,8 +246,10 @@ app.post('/createLobbyPost', (request, response) => {
         'users' : [],
         'userIDs' : [],
         'adminID' : null,
-        'usersReady': 0,
-        'witchID' : null
+        'usersReady' : 0,
+        'witchID' : null,
+        'votedIDs' : [],
+        'votedIDsAmount' : [],
     };
     rooms.push(room);
     socketScript.addRoom(room);
@@ -227,6 +262,7 @@ app.post('/createLobbyPost', (request, response) => {
 // Called when the user clicked the button to join a lobby
 app.post('/joinLobbyPost', (request, response) => {
     let lobbyPassword = request.body.lobbyPassword;
+    lobbyPassword = lobbyPassword.toUpperCase();
     
     // Look for the requested room
     for (let i = 0; i < rooms.length; i++) {
