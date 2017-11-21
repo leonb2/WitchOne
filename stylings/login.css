@@ -14,7 +14,7 @@ h1, h3 {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 50rem;
 }
 
 .login-form-container {
@@ -93,11 +93,12 @@ h1, h3 {
     
     .login-container {
         flex-direction: column;
-        height: 85vh;
+        height: 55rem;
     }
     
     .login-form-container {
         margin-bottom: 2.2rem;
+        margin-right: 0;
     }
     
     .login-explanation-container {
