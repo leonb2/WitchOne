@@ -35,6 +35,11 @@ nicknameField.addEventListener('input', () => {
         readyButton.classList.add("lobby-button-ready-disabled");   
     }
 });
+nicknameField.addEventListener('keyup', (event) => {
+    if (event.keyCode === 13) {
+        nicknameField.blur();
+    }
+});
 
 let lastName;
 nicknameField.addEventListener("blur", () => {
