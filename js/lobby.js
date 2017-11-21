@@ -135,6 +135,7 @@ socket.on('everyoneReady', () => {
 // ----- Game logic -----
 let isWitch = false;
 let nameDiv = document.querySelector(".js-game-name");
+let placeDiv = document.querySelector(".js-game-place");
 let roleDiv = document.querySelector(".js-game-role");
 let timerDiv = document.querySelector(".js-game-timer");
 let orderDiv = document.querySelector(".js-game-order");
@@ -160,17 +161,23 @@ startVoteButton.addEventListener('click', () => {
 let voteButton = document.querySelector(".js-game-button-vote");
 let voted = false;
 voteButton.addEventListener('click', () => {
-    if (activeChecklistButtons.length == 1) {    
-        if (!isWitch) {
-            voteButton.classList.add("game-button-vote-active");
-            voteButton.innerHTML = "Abgestimmt!";
-            voteButton.disabled = true;
-            voted = true;
-            let data = {'password': password, 'lobbyIndex': lobbyIndex, 'vote': activeChecklistButtons[0]};
+    if (activeChecklistButtons.length == 1) {   
+        voteButton.classList.add("game-button-vote-active");
+        voteButton.disabled = true;
+        voted = true;
+        let data = {
+                'password': password,
+                'lobbyIndex': lobbyIndex,
+                'vote': activeChecklistButtons[0]
+            };
+        
+        if (!isWitch) {      
+            voteButton.innerHTML = "Abgestimmt!";         
             socket.emit('voted', data);
         }
         else {
-            
+            voteButton.innerHTML = "Abgeschickt!";
+            socket.emit('witchVoted', data);
         }
     }
     else {
@@ -185,11 +192,17 @@ voteButton.addEventListener('click', () => {
 
 socket.on('gameStarted', (data) => {
     
-    let roleString = "nicht die Hexe.";
+    let newData = {'lobbyIndex': lobbyIndex};
     // Am I the witch?
     if (ownId === data.witchID) {
         isWitch = true;
-        roleString = "die Hexe!"
+        roleDiv.innerHTML += "die Hexe!";
+        placeDiv.parentNode.removeChild(placeDiv);
+        socket.emit('getPossiblePlaces', newData);
+    }
+    else {     
+        socket.emit('getRole', newData);
+        placeDiv.innerHTML = data.place;
     }
     
     // Change content
@@ -198,7 +211,7 @@ socket.on('gameStarted', (data) => {
     
     // Fill fields
     nameDiv.innerHTML = lastName;
-    roleDiv.innerHTML += roleString;
+    
     if (isWitch) {
         voteButton.innerHTML = "Schätzung abgeben";
         voteButton.classList.remove("game-button-vote-disabled");
@@ -221,35 +234,29 @@ socket.on('gameStarted', (data) => {
             if (data.users[i] != lastName) {
                 checklistDiv.innerHTML += "<button class='js-game-button-checklist game-button game-button-checklist' buttontype='button'>"+data.users[i]+"</button>";
             }
-        }  
+        }
+
+         checklistButtons = document.querySelectorAll(".js-game-button-checklist");
+        setupChecklistButtons();
     }
-    else {
-        // Fill in all possible places
-    }
-    checklistButtons = document.querySelectorAll(".js-game-button-checklist");
-    
-    for (let i = 0; i < checklistButtons.length; i++) {
-        checklistButtons[i].addEventListener('click', () => {
-            if (!voted) {
-                if (!checklistButtons[i].classList.contains("game-button-checklist-active")) {
-                    checklistButtons[i].classList.add("game-button-checklist-active");
-                    activeChecklistButtons.push(checklistButtons[i].innerHTML);
-                }
-                else {
-                    checklistButtons[i].classList.remove("game-button-checklist-active");
-                    
-                    let index = activeChecklistButtons.indexOf(checklistButtons[i].innerHTML);                  
-                    activeChecklistButtons.splice(index, 1);
-                }
-            }
-        });
-    }
-    
+        
     // Enable timer
     let minutes = minTwoDigits(Math.floor(data.gameLength/60));
     let seconds = minTwoDigits(data.gameLength % 60);
     timerDiv.innerHTML = minutes + ":" + seconds;
     timer(data.gameLength);
+});
+
+socket.on('sendPossiblePlaces', (data) => {
+    for (let i = 0; i < data.places.length; i++) {
+            checklistDiv.innerHTML += "<button class='js-game-button-checklist game-button game-button-checklist' buttontype='button'>"+data.places[i]+"</button>";        
+    }
+    checklistButtons = document.querySelectorAll(".js-game-button-checklist");
+    setupChecklistButtons();
+});
+
+socket.on('assignRole', (data) => {
+    roleDiv.innerHTML += data.role;
 });
 
 socket.on('voteStarted', () => {
@@ -265,6 +272,25 @@ socket.on('voteStarted', () => {
 socket.on('gameFinished', (data) => {
     alert(data.witchCaught + "  " + data.witchName);
 });
+
+function setupChecklistButtons () {
+    for (let i = 0; i < checklistButtons.length; i++) {
+        checklistButtons[i].addEventListener('click', () => {
+            if (!voted) {
+                if (!checklistButtons[i].classList.contains("game-button-checklist-active")) {
+                    checklistButtons[i].classList.add("game-button-checklist-active");
+                    activeChecklistButtons.push(checklistButtons[i].innerHTML);
+                }
+                else {
+                    checklistButtons[i].classList.remove("game-button-checklist-active");
+
+                    let index = activeChecklistButtons.indexOf(checklistButtons[i].innerHTML);                  
+                    activeChecklistButtons.splice(index, 1);
+                }
+            }
+        });
+    }
+}
 
 let interval;
 let intervalValue;

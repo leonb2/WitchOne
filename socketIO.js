@@ -2,13 +2,10 @@ const rooms = [];
 let placesAndRoles;
 let exampleQuestions;
 
-exports.initialize = function (server, placesAndRoles, exampleQuestions, roomDeleteCallback) {
+exports.initialize = function (server, roomDeleteCallback) {
     const socketio = require('socket.io');
     const io = socketio(server);
-    
-    this.placesAndRoles = placesAndRoles;
-    this.exampleQuestions = exampleQuestions;
-
+        
     /*
     Called when a user joins a lobby
     Emit the socketID to the player and add the player to the room.
@@ -124,6 +121,9 @@ exports.initialize = function (server, placesAndRoles, exampleQuestions, roomDel
             let witchID = room.userIDs[witchIndex];
             rooms[data.lobbyIndex].witchID = witchID;
             
+            // Determin place index
+            room.placeIndex = Math.floor(Math.random() * placesAndRoles.length);
+            
             // Generate random order
             let order = [];
             let random;
@@ -139,22 +139,69 @@ exports.initialize = function (server, placesAndRoles, exampleQuestions, roomDel
             let newData = { 
                 'users': room.users,
                 'gameLength' : room.gameLength,
+                'place' : placesAndRoles[room.placeIndex].name,
                 'witchID': witchID,
                 'order': order
             };
             io.to(room.password).emit('gameStarted', newData);
         });
         
+        socket.on('getPossiblePlaces', data => {
+            let room = rooms[data.lobbyIndex];
+            
+            let places = [];
+            
+            for (let i = 0; i < placesAndRoles.length; i++) {
+                places.push(placesAndRoles[i].name);
+            }
+            
+            let newData = {'places': places}
+            
+            socket.emit('sendPossiblePlaces', newData);
+        });
+        
+        socket.on('getRole', (data) => {
+            let room = rooms[data.lobbyIndex];
+            
+            let index = 0;
+            let random;
+            let role;
+            while (index != -1) {
+                random = Math.floor(Math.random() * placesAndRoles[room.placeIndex].roles.length);
+                
+                index = room.usedRoleIndices.indexOf(random);
+            }
+            room.usedRoleIndices.push(random);
+            role = placesAndRoles[room.placeIndex].roles[random];
+            
+            let newData = {'role' : role};
+            socket.emit('assignRole', newData);
+        });
+            
         /*
         Called when a player clicked the button to get an example question.
         */
         socket.on('getExampleQuestion', () => {
-            /*let index = Math.floor(Math.random() * exampleQuestions.length);
-            
-            data = {'question': exampleQuestions[index].question};*/
-            let data = {'question': "Noch keine Datenbank eingebunden!"};
+            let index = Math.floor(Math.random() * exampleQuestions.length);
+            let data = {'question': exampleQuestions[index].question};
             
             socket.emit('sendExampleQuestion', data);     
+        });
+        
+        socket.on('witchVoted', (data) => {
+            let room = rooms[data.lobbyIndex];
+            
+            let place = placesAndRoles[room.placeIndex].name;
+            
+            let witchWon = false;
+            if (place === data.vote) {
+                witchWon = true;
+            }
+            
+            let witchName = room.users[room.userIDs.indexOf(room.witchID)];
+            let newData = {'witchCaught' : !witchWon, 'witchName': witchName};
+            
+            io.to(data.password).emit('gameFinished', newData);
         });
         
         /*
@@ -271,4 +318,12 @@ exports.initialize = function (server, placesAndRoles, exampleQuestions, roomDel
 
 exports.addRoom = function (room) {
     rooms.push(room);
+}
+
+exports.pushPlaces = function (places) {
+    placesAndRoles = places;
+}
+
+exports.pushQuestions = function (questions) {
+    exampleQuestions = questions;
 }

@@ -40,14 +40,54 @@ const socketScript = require(__dirname + '/socketIO.js');
 function ioRoomDeleteCallback(i) {
     rooms.splice(i, 1);
 }
-
-let placesAndRoles = database.collection(DB_PLACESANDROLES).find();
-placesAndRoles = null;
-let exampleQuestions = database.collection(DB_EXAMPLEQUESTIONS).find();
-exampleQuestions = null;
-
-socketScript.initialize(server, placesAndRoles, exampleQuestions, ioRoomDeleteCallback);
+socketScript.initialize(server, ioRoomDeleteCallback);
 const rooms = [];
+
+let placesAndRoles;
+database.collection(DB_PLACESANDROLES).find().toArray((err, result) => {
+    if (result) {
+        placesAndRoles = result;
+        socketScript.pushPlaces(placesAndRoles);
+    }
+});
+
+let exampleQuestions;
+database.collection(DB_EXAMPLEQUESTIONS).find().toArray((err, result) => {
+    if (result) {
+        exampleQuestions = result;
+        socketScript.pushQuestions(exampleQuestions);
+    }
+});
+
+app.get('/databases', (request, response) => {
+   response.render('databases'); 
+});
+
+app.post('/placePost', (request, response) => {
+    let place = request.body.place;
+    let rawRoles = request.body.roles;
+    let roles = rawRoles.split(/\r?\n/);
+    
+    let placeObj = {'name' : place, 'roles' : roles};
+    database.collection(DB_PLACESANDROLES).save(placeObj, (err, result) => {
+        if (err) {
+            return console.log("Error while saving the new place!");
+        }
+    });
+    response.redirect('/databases');
+});
+
+app.post('/questionPost', (request, response) => {
+    let question = request.body.question;
+    let questionObj = {'question' : question};
+    
+    database.collection(DB_EXAMPLEQUESTIONS).save(questionObj, (err, result) => {
+        if (err) {
+            return console.log("Error while saving the new question!");
+        }
+    });
+    response.redirect('/databases');
+});
 
 // Called when the user comes to the website
 app.get('/', (request, response) => {
@@ -247,6 +287,8 @@ app.post('/createLobbyPost', (request, response) => {
         'userIDs' : [],
         'adminID' : null,
         'usersReady' : 0,
+        'placeIndex' : 0,
+        'usedRoleIndices' : [],
         'witchID' : null,
         'votedIDs' : [],
         'votedIDsAmount' : [],
