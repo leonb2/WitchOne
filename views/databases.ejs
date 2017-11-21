@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Datenbanken ändern</title>
+        
+        <style>
+            .form-container form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 3rem 0;
+            }
+        
+        </style>
+    </head>
+    
+    <body>
+     
+        <div class="form-container">
+            <form action='/placePost' method="post">
+                <input type="text" name="place" placeholder="Neuer Ort"/>
+                <textarea type="text" name="roles">Rollen mit Enter trennen</textarea>
+                <button type="submit">Speichern</button>
+            </form> 
+        </div>
+        
+        <div class="form-container">
+            <form action='/questionPost' method="post">
+                <input type="text" name="question" placeholder="Neue Beispielfrage"/>
+                <button type="submit">Speichern</button>
+            </form>
+        </div>
+        
+    </body>
+</html>
