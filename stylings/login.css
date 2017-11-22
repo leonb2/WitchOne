@@ -9,6 +9,15 @@ h1, h3 {
     margin: 0;
 }
 
+
+.logo {
+    margin: -8rem 0 -5rem 0;
+}
+.logo img {
+    width: 30rem;
+    height: auto;
+}
+
 .login-container, .login-container-register {
     display: flex;
     flex-direction: row;

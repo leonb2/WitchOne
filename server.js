@@ -3,9 +3,10 @@ const port = 8000;
 const express = require('express');
 const app = express();
 
-// enable path for stylings & js
+// enable path for stylings, js & images
 app.use(express.static(__dirname + "/stylings"));
 app.use(express.static(__dirname + "/js"));
+app.use(express.static(__dirname + "/img"));
 
 const session = require('express-session');
 app.use(session({
