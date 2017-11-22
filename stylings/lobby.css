@@ -1,3 +1,7 @@
+body {
+    font-family: Helvetica;
+}
+
 .lobby-button {
     color: black;
     border: 1px solid black;
@@ -7,33 +11,25 @@
 
 /* STYLING DER LOBBY-SEITE GESAMT */
 .lobby-content {
-    font-family: Helvetica;
     text-align: center;
- /* Fensterbreite: */
-    width: 980px;
-    margin: 0 auto;
 }
 
 /* LOBBY-PASSWORT */
-.js-lobby-password {
-    width: 980px;
-    height: 50px;
+.lobby-password {
  /* Schrift */
     color: #7F74AF;
-    font-weight: normal;
-    font-size: 20px;
+    font-weight: bold;
+    font-size: 3rem;
+    margin: 3rem;
 }
 
 /* NAMENSLISTE DER SPIELER */
-.js-lobby-nickname-list {
-    width: 980px;
-    height: 50px;
-    background-color: white;
-    
+.lobby-nickname-list {    
     color: #3B3B58;
     font-weight: lighter;
-    font-size: 25px;
+    font-size: 2rem;
     font-style: bold;
+    margin: 3rem;
 }
 
 .lobby-button-ready-disabled {
@@ -44,14 +40,10 @@
     background-color: #7f74af;
 }
 /* EINGABEFELD SPIELERNAME */
-.js-nickname {
-    width: 150px;
-    height: 25px;
+.lobby-nickname {
     
-    padding-top: 10px;
-    padding-bottom: 10px;
-    
-    border-style: dotted;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
     
     text-align: center;
     color: #3B3B58;
@@ -64,6 +56,7 @@
     color: white;
     border: 1px solid balck;
     transition: background-color 0.2s ease;
+    text-align: center;
 }
 /* Bereit + Start-Button geklickt: Schrift */
 .lobby-button:active:enabled {
@@ -71,7 +64,11 @@
 }
 /* Bereit-Button ungeklickt: Hintergrund */
 .lobby-button-ready {
-    background-color: #228CDB;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 2rem;
 }
 /* Bereit-Button geklickt: Hintergrund */
 .lobby-button-ready-active {
@@ -83,8 +80,11 @@
 }
 /* Start-Button ungeklickt: Hintergrund */
 .lobby-button-start-disabled {
-    color: gray;
-    background-color: #228CDB;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 2rem;
 }
 /* Start-Button geklickt: Hintergrund */
 .lobby-button-start:active:enabled {
@@ -92,13 +92,12 @@
 }
 
 /* BEREIT-ZAEHLER */
-.js-ready-counter {
-    background-color: white;
-    height: 25px;
-    color: #3B3B58;
+.lobby-ready-counter {
+    color: white;
+    margin: 2rem;
     
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
     
 }
 
