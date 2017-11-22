@@ -9,7 +9,7 @@ h1, h3 {
     margin: 0;
 }
 
-.login-container {
+.login-container, .login-container-register {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -103,12 +103,12 @@ h1, h3 {
 
 @media only screen and (max-device-width: 360px) {
     html {
-        font-size: 150%;
+        font-size: 175%;
     }
     
     .login-container {
         flex-direction: column;
-        height: 55rem;
+        height: 75rem;
         margin-top: 5rem;
     }
     
