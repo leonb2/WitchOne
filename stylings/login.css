@@ -1,3 +1,134 @@
-.login-info {
+body {
+    font-family: Helvetica;
+    background-color: #3B3B58;
+    color: #9999E4;
+    white-space: nowrap;
+}
+
+h1, h3 {
+    margin: 0;
+}
+
+.logo {
+    margin: -8rem 0 -5rem 0;
+    pointer-events: none;
+}
+.logo img {
+    width: 30rem;
+    height: auto;
+}
+
+.login-container, .login-container-register {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 50rem;
+}
+
+.login-form-container {
+    margin-right: 2.2rem;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;   
+}
+
+.login-form input, button {
+    font-size: 1.5rem;
+    width: 20rem;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    color: #9999E4;
+    background: none;
+    border-color: #EEEEFE;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;    
+}
+
+.login-form button {
+    color: #9595B1;
+    box-sizing: content-box;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.login-form button:hover {
+    color: #9999E4;
+    border-color: #9999E4;
+}
+
+.login-form input::placeholder {
+    color: #9595B1;
+}
+
+.login-form input::-webkit-input-placeholder {
+    color: #9595B1;
+}
+
+.login-form input::-moz-placeholder {
+    color: #9595B1;
+}
+
+.login-form input::-ms-input-placeholder {
+    color: #9595B1;
+}
+
+.login-form input:-moz-placeholder {
+    color: #9595B1;
+}
+
+.login-form button:active {
+    color: #EEEEFE;
+}
+
+.login-form-register {
+    margin-top: 1.5rem;
+}
+
+.login-explanation-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 2rem;
+    font-size: 1rem;
+    border-left: 1px solid #EEEEFE;
+}
+
+.login-explanation-container h1 {
+    margin-bottom: 1rem;
+}
+
+.login-explanation-container h3, h4 {
+    margin: 0.5rem 0;
+    color: #EEEEFE;
+}
+
+.login-explanation-list {
+    margin-left: 1rem;
+}
+
+@media only screen and (max-device-width: 360px) {
+    html {
+        font-size: 175%;
+    }
     
+    .login-container {
+        flex-direction: column;
+        height: 75rem;
+        margin-top: 5rem;
+    }
+    
+    .login-form-container {
+        margin-bottom: 2.2rem;
+        margin-right: 0;
+    }
+    
+    .login-explanation-container {
+        border-left: none;
+        border-top: 1px solid #EEEEFE;
+        padding-top: 2rem;
+    }
 }

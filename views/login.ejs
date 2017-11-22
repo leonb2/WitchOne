@@ -8,41 +8,63 @@
     </head>
     
     <body>
-        <div class="login-info"><%= info %></div>
-        <form action="/loginPost" method="post">
-            <input type="text" value="<%= usernameValue %>" name="username" placeholder="Nutzername" required/>
-            <input type="password" name="password" placeholder="Passwort" required/>
-            <button type="submit">Anmelden</button>
-        </form>
-        <form action="/register" method="get">
-            <button type="submit">Registrieren</button>
-        </form>
-        <div>
-        <div>Vorbereitung:
--Ihr benötigt mindestens 3 Spieler.
- -Setzt euch in einer Runde zusammen. 
--Jeder Spieler benötigt einen Computer oder ein Smartphone mit Internetzugang.
+        <div class="login-container">
+            <div class="login-form-container">
+                 <div class="logo">
+                <img src="logo.png">
             </div>
-            <div>Der Ablauf:
--Alle Spieler bekommen eine Rolle zugeteilt.
--Ein Spieler bekommt die Rolle der Hexe zugeteilt und erhält keine weiteren Informationen.
--Alle anderen Spieler bekommen eine Location und eine zu dieser passenden Rolle zugeteilt.
--Ziel der Hexe: Finde heraus, an welchem Ort sich deine Freunde Befinden und versuche dabei nicht aufzufallen.
--Ziel der anderen Spieler: Findet heraus, wer von euch die Hexe ist!
--Jeder Spieler ist nach der Reihe dran und darf einem beliebigen Spieler seiner Wahl eine Frage stellen. 
- -Die Fragen sollten am besten zur Location oder der Rolle des Spielers gestellt werden. Wenn ihr Schwierigkeiten dabei habt die richtigen Fragen zu finden, nutzt unseren Fragen Generator.
+                <div class="login-info"><%= info %></div>
+                <form class="login-form" action="/loginPost" method="post">
+                    <input type="text" value="<%= usernameValue %>" name="username" placeholder="Nutzername" required/>
+                    <input type="password" name="password" placeholder="Passwort" required/>
+                    <button type="submit">Anmelden</button>
+                </form>
+                <form class="login-form login-form-register" action="/register" method="get">
+                    <button type="submit">Registrieren</button>
+                </form>
+            </div>
+            <div class="login-explanation-container">
+                <h1>WitchOne - Wer ist die Hexe?</h1>
+                <div>
+                    <h3>Vorbereitungen:</h3>
+                    <div class="login-explanation-list">
+                        - mindestens 3 Spieler<br>
+                        - in einer Runde zusammensetzten<br>
+                        - Computer oder Smartphone für jeden Spieler<br>
+                    </div>
+                </div>
+                <div>
+                    <h3>Der Ablauf:</h3>
+                    <div class="login-explanation-list">
+                        - alle Spieler bekommen eine Rolle<br>
+                        - ein Spieler bekommt die Rolle Hexe und keine weiteren Informationen<br>
+                        - alle anderen Spieler bekommen Location und passende Rollen<br>
+                        - jeder Spieler nacheinander, darf einem Spieler eine Frage stellen<br>
+                        - Fragen zur Location oder der Rolle der Spieler stellen<br>
+                        - bei Schwierigkeiten nutzt Beispielfragen<br>
+                        <h4>Ziel der Hexe:</h4>
+                        <div class="login-explanation-list">
+                            - herausfinden, an welchem Ort man sich befindet, ohne aufzufallen<br>
+                            - wenn die Hexe sich sicher ist, kann sie ihre Vermutung abschicken<br>
+                        </div>
 
--Wenn die Hexe sich sicher ist, in welcher Location sich die Spieler befinden, kann sie diese abschicken.
-
--Wenn die anderen Spieler sich sicher sind, wer die Hexe ist, kann von jedem Spieler eine Abstimmung gestartet werden. Diese kann jederzeit gestartet werden, ist aber endgültig. Am Ende entscheidet die Mehrheit.
-</div>
-            <div>Das Spiel endet wenn: 
--Die Hexe herausgefunden hat, an welchem Ort sich die Spieler befinden.
--Die anderen Spieler herausfinden, wer die Hexe ist.
--Die Hexe nach Ablauf einer vordefinierten Zeit nicht entlarvt wurde
--Die Spieler die falsche Person als Hexe beschuldigen.
-</div>
-
+                        <h4>Ziel der anderen Spieler:</h4>
+                        <div class="login-explanation-list">
+                            - herausfinden, wer die Hexe ist<br>
+                            - jeder Spieler kann die endültige Abstimmung starten<br>
+                            - stimmt die Mehrheit hier für die Hexe, wird diese entlarvt<br>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3>Ende wenn:</h3>
+                    <div class="login-explanation-list">
+                        - die Hexe herausgefunden hat, an welchem Ort man sich befindet<br>
+                        - die Abstimmung beendet ist<br>
+                        - die Hexe nach Ablauf der vordefinierten Zeit nicht entlarvt wurde<br>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>
