@@ -6,7 +6,8 @@ const app = express();
 // enable path for stylings, js & images
 app.use(express.static(__dirname + "/stylings"));
 app.use(express.static(__dirname + "/js"));
-app.use(express.static(__dirname + "/img"));
+//app.use(express.static(__dirname + "/img"));
+app.use("/img", express.static(__dirname + '/img'));
 
 const session = require('express-session');
 app.use(session({
