@@ -29,36 +29,50 @@ h1, h3 {
 
 .login-form input, button {
     font-size: 1.5rem;
+    width: 20rem;
     margin: 0.5rem;
     padding: 0.5rem;
     color: #9999E4;
     background: none;
-    border: 1px solid black;
-    border-radius: 5px;
+    border-color: #EEEEFE;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;    
+}
+
+.login-form button {
+    color: #9595B1;
+    box-sizing: content-box;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.login-form button:hover {
+    color: #9999E4;
+    border-color: #9999E4;
 }
 
 .login-form input::placeholder {
-    color: #7980C6;
+    color: #9595B1;
 }
 
 .login-form input::-webkit-input-placeholder {
-    color: #7980C6;
+    color: #9595B1;
 }
 
 .login-form input::-moz-placeholder {
-    color: #7980C6;
+    color: #9595B1;
 }
 
 .login-form input::-ms-input-placeholder {
-    color: #7980C6;
+    color: #9595B1;
 }
 
 .login-form input:-moz-placeholder {
-    color: #7980C6;
+    color: #9595B1;
 }
 
 .login-form button:active {
-    color: black;
+    color: #EEEEFE;
 }
 
 .login-form-register {
@@ -71,7 +85,7 @@ h1, h3 {
     align-items: flex-start;
     padding-left: 2rem;
     font-size: 1rem;
-    border-left: 1px solid black;
+    border-left: 1px solid #EEEEFE;
 }
 
 .login-explanation-container h1 {
@@ -80,6 +94,7 @@ h1, h3 {
 
 .login-explanation-container h3, h4 {
     margin: 0.5rem 0;
+    color: #EEEEFE;
 }
 
 .login-explanation-list {
@@ -94,6 +109,7 @@ h1, h3 {
     .login-container {
         flex-direction: column;
         height: 55rem;
+        margin-top: 5rem;
     }
     
     .login-form-container {
@@ -103,7 +119,7 @@ h1, h3 {
     
     .login-explanation-container {
         border-left: none;
-        border-top: 1px solid black;
+        border-top: 1px solid #EEEEFE;
         padding-top: 2rem;
     }
 }
