@@ -4,11 +4,9 @@ body {
     white-space: nowrap;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4 {
     margin: 0;
 }
-
-
 
 .logo {
     margin: -8rem 0 -5rem 0;
@@ -24,7 +22,7 @@ h1, h2, h3 {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    height: 50rem;
+    height: 100vh;
 }
 
 .login-form-container {
@@ -42,7 +40,6 @@ h1, h2, h3 {
     width: 20rem;
     margin: 0.5rem;
     padding: 0.5rem;
-    color: #9999E4;
     background: none;
     border-color: #EEEEFE;
     border-width: 1px;
@@ -92,20 +89,12 @@ h1, h2, h3 {
 }
 
 .login-explanation-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
     padding-left: 6rem;
-    font-size: 1rem;
     border-left: 1px solid #EEEEFE;
 }
 
-.login-explanation-container h1 {
-    margin-bottom: 3rem;
-}
-
-.login-explanation-container h2 {
-    margin-bottom: 3rem;
+.login-explanation-container h1, h2 {
+    margin-bottom: 1.5rem;
 }
 
 .login-explanation-container h3, h4 {
@@ -117,15 +106,15 @@ h1, h2, h3 {
     margin-left: 1rem;
 }
 
-@media only screen and (max-device-width: 360px) {
+@media only screen and (max-device-width: 420px) {
     html {
         font-size: 175%;
     }
     
     .login-container {
         flex-direction: column;
-        height: 75rem;
-        margin-top: 5rem;
+        height: auto;
+        margin: 5rem 0;
     }
     
     .login-form-container {
@@ -134,8 +123,9 @@ h1, h2, h3 {
     }
     
     .login-explanation-container {
+        padding-left: 0;
+        padding-top: 2.2rem;
         border-left: none;
         border-top: 1px solid #EEEEFE;
-        padding-top: 6rem;
     }
 }
