@@ -126,10 +126,13 @@ app.get('/', (request, response) => {
         });
     }
     else {
+        let gameCount = request.session.user.gameCount;
+        let correctGuesses = request.session.user.correctGuesses;
+        let correctPercentage = Math.round(correctGuesses/gameCount*100).toFixed(2);
         response.render('home', {
             'lastThreeNames': request.session.user.lastThreeNames,
-            'gameCount': request.session.user.gameCount,
-            'correctGuesses': request.session.user.correctGuesses,
+            'gameCount': gameCount,
+            'correctGuesses': correctPercentage,
             'winCount': request.session.user.winCount,
             'witchCount': request.session.user.witchCount
         });
