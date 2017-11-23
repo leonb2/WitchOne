@@ -1,5 +1,6 @@
 let lobbyContentDiv = document.querySelector(".js-lobby-content");
 let gameContentDiv = document.querySelector(".js-game-content");
+let endScreenDiv = document.querySelector(".js-end-screen");
 
 let password = document.querySelector(".js-lobby-password").innerHTML;
 socket.emit('joinLobby', password);
@@ -43,13 +44,17 @@ nicknameField.addEventListener('keyup', (event) => {
 
 let lastName;
 nicknameField.addEventListener("blur", () => {
-    if (nicknameField.value != "") {
+    if (nicknameField.value != "" && nicknameField.value != lastName) {
         let name = nicknameField.value;
         let data = {'lobbyIndex': lobbyIndex, 'nickname': name, 'oldNickName' : lastName};
         lastName = nicknameField.value;
         
         socket.emit('changeNickname', data);
     }
+});
+socket.on('nameIsUsed', (data) => {
+    lastName = data.name;
+    nicknameField.value = lastName;
 });
 
 let readyButton = document.querySelector(".js-lobby-button-ready");
@@ -107,8 +112,8 @@ function refreshNicknames(nicknames) {
 }
 
 let playerCount;
-socket.on('refreshNicknames', (nicknames) => {
-    playerCount = refreshNicknames(nicknames);
+socket.on('refreshNicknames', (data) => {
+    playerCount = refreshNicknames(data.users);
 });
 
 // Refreshes the counter for how many players are ready
@@ -158,13 +163,17 @@ socket.on('sendExampleQuestion', (data) => {
 
 let startVoteButtonContainer = document.querySelector(".js-game-button-start-vote-container");
 let startVoteButton = document.querySelector(".js-game-button-start-vote");
+let gameDuration;
 startVoteButton.addEventListener('click', () => {
     data = {'password': password};
     socket.emit('startVote', data);
+    let minutesAndSeconds = timerDiv.innerHTML.split(":");
+    gameDuration = gameLength - ((minutesAndSeconds[0] * 60) + minutesAndSeconds[1]);
 });
 
 let voteButton = document.querySelector(".js-game-button-vote");
 let voted = false;
+let rightVote;
 voteButton.addEventListener('click', () => {
     if (activeChecklistButtons.length == 1) {   
         voteButton.classList.add("game-button-vote-active");
@@ -194,7 +203,11 @@ voteButton.addEventListener('click', () => {
         }
     }
 });
+socket.on('rightVote', (data) => {
+   rightVote = data.rightVote; 
+});
 
+let gameLength;
 socket.on('gameStarted', (data) => {
     
     let newData = {'lobbyIndex': lobbyIndex};
@@ -250,6 +263,7 @@ socket.on('gameStarted', (data) => {
     let seconds = minTwoDigits(data.gameLength % 60);
     timerDiv.innerHTML = minutes + ":" + seconds;
     timer(data.gameLength);
+    gameLength = data.gameLength;
 });
 
 socket.on('sendPossiblePlaces', (data) => {
@@ -274,8 +288,52 @@ socket.on('voteStarted', () => {
     }
 });
 
+let resultDiv = document.querySelector(".js-end-screen-result");
+let witchDiv = document.querySelector(".js-end-screen-witch");
+let guessDiv = document.querySelector(".js-end-screen-right-guess");
+let voteStartDiv = document.querySelector(".js-end-screen-vote-time");
 socket.on('gameFinished', (data) => {
-    alert(data.witchCaught + "  " + data.witchName);
+    clearInterval(interval);
+    
+    endScreenDiv.classList.remove("not-visible");
+    
+    if (data.witchCaught) {
+        resultDiv.innerHTML = "Die Hexe wurde gefangen!";
+    }
+    else {
+        resultDiv.innerHTML = "Die Hexe ist entkommen!";
+    }
+    
+    witchDiv.innerHTML = "Die Hexe war " + data.witchName;
+    if (rightVote == true) {
+        guessDiv.innerHTML = "Du hast richtig getippt!";
+    }
+    else if (rightVote == false) {
+        guessDiv.innerHTML = "Du hast falsch getippt!";
+    }
+      
+    if (gameDuration) {   
+        let minutes = minTwoDigits(Math.floor(gameDuration/60));
+        let seconds = minTwoDigits(gameDuration % 60);
+        voteStartDiv.innerHTML = "Abstimmung gestartet nach " + minutes + ":" + seconds + ".";
+    } 
+    else {
+        voteStartDiv.innerHTML = "Es wurde keine Abstimmung gestartet!";
+    }
+    
+    let won = false;
+    if (isWitch) {
+        rightVote = true;
+        if (!data.witchCaught) {
+            won = true;
+        }
+    }
+    else if (data.witchCaught) {
+        won = true;
+    }
+    let newData = {'name': lastName, 'rightVote': rightVote, 'won': won, 'isWitch': isWitch};
+    
+    socket.emit('updateStatistics', newData);
 });
 
 function setupChecklistButtons () {
@@ -303,9 +361,10 @@ function timer (timeSec) {
     if (interval) {
         clearInterval(interval);
     }
-    
+
     intervalValue = timeSec;
     interval = setInterval( () => {
+        
         intervalValue--;
         let minutes = minTwoDigits(Math.floor(intervalValue/60));
         let seconds = minTwoDigits(intervalValue % 60);

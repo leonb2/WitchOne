@@ -42,7 +42,33 @@ const socketScript = require(__dirname + '/socketIO.js');
 function ioRoomDeleteCallback(i) {
     rooms.splice(i, 1);
 }
-socketScript.initialize(server, ioRoomDeleteCallback);
+function updateUserStatisticCallback(request, data) {
+    let user = request.session.user;
+    
+    if (user.lastThreeNames.length < 3) {
+        user.lastThreeNames.push(data.name);
+    }
+    else {
+        if (user.lastThreeNames.indexOf(data.name) == -1) {
+            user.lastThreeNames[2] = user.lastThreeNames[1];
+            user.lastThreeNames[1] = user.lastThreeNames[0]; 
+            user.lastThreeNames[0] = data.name;
+        }
+    }
+    user.gameCount++;
+    if (data.rightVote) {
+        user.correctGuesses++;
+    }
+    if (data.won) {
+        user.winCount++;
+    }
+    if (data.isWitch) {
+        user.witchCount++;
+    }
+    
+    database.collection(DB_USERS).update({'username': user.username}, user);   
+}
+socketScript.initialize(server, ioRoomDeleteCallback, updateUserStatisticCallback);
 const rooms = [];
 
 let placesAndRoles;
@@ -104,10 +130,23 @@ app.get('/', (request, response) => {
             'lastThreeNames': request.session.user.lastThreeNames,
             'gameCount': request.session.user.gameCount,
             'correctGuesses': request.session.user.correctGuesses,
-            'winLoseRatio': request.session.user.winLoseRatio,
+            'winCount': request.session.user.winCount,
             'witchCount': request.session.user.witchCount
         });
     }
+});
+
+// Called when the user comes from a game
+app.post('/', (request, response) => {
+    database.collection(DB_USERS).findOne({'username': request.session.user.username}, (err, result) => {
+        response.render('home', {
+            'lastThreeNames': result.lastThreeNames,
+            'gameCount': result.gameCount,
+            'correctGuesses': result.correctGuesses,
+            'winCount': result.winCount,
+            'witchCount': result.witchCount
+        });
+    });
 });
 
 // Called when the user clicks the button to login
@@ -201,7 +240,7 @@ app.post('/registerPost', (request, response) => {
                     'lastThreeNames': [],
                     'gameCount': 0,
                     'correctGuesses': 0,
-                    'winLoseRatio': 0,
+                    'winCount': 0,
                     'witchCount': 0
                 };
                 database.collection(DB_USERS).save(user, (err, result) => {
@@ -328,6 +367,7 @@ app.get('/lobby', (request, response) => {
             'lobbyPassword' : request.session.room
         });
         request.session.room = null;
+        socketScript.pushRequest(request);
     }
     else {
         response.redirect('/');
