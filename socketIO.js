@@ -20,7 +20,7 @@ exports.initialize = function (server, roomDeleteCallback, updateUserStatisticCa
             socket.join(password); 
             console.log(`${socket.id} joined the room ${password}`); 
 
-            // Find the looby and add the player to it
+            // Find the lobby and add the player to it
             let index = -1;
             let name = null;
             let users = [];

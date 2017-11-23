@@ -163,12 +163,11 @@ socket.on('sendExampleQuestion', (data) => {
 
 let startVoteButtonContainer = document.querySelector(".js-game-button-start-vote-container");
 let startVoteButton = document.querySelector(".js-game-button-start-vote");
-let gameDuration;
+let voteStartTime;
 startVoteButton.addEventListener('click', () => {
     data = {'password': password};
     socket.emit('startVote', data);
-    let minutesAndSeconds = timerDiv.innerHTML.split(":");
-    gameDuration = gameLength - ((minutesAndSeconds[0] * 60) + minutesAndSeconds[1]);
+    voteStartTime = gameLength - intervalValue;
 });
 
 let voteButton = document.querySelector(".js-game-button-vote");
@@ -312,10 +311,10 @@ socket.on('gameFinished', (data) => {
         guessDiv.innerHTML = "Du hast falsch getippt!";
     }
       
-    if (gameDuration) {   
-        let minutes = minTwoDigits(Math.floor(gameDuration/60));
-        let seconds = minTwoDigits(gameDuration % 60);
-        voteStartDiv.innerHTML = "Abstimmung gestartet nach " + minutes + ":" + seconds + ".";
+    if (voteStartTime) {   
+        let minutes = minTwoDigits(Math.floor(voteStartTime/60));
+        let seconds = minTwoDigits(voteStartTime % 60);
+        voteStartDiv.innerHTML = "Abstimmung gestartet nach " + minutes + " Minuten und " + seconds + " Sekunden.";
     } 
     else {
         voteStartDiv.innerHTML = "Es wurde keine Abstimmung gestartet!";
