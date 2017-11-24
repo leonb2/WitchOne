@@ -33,9 +33,95 @@ body {
     font-size: 1.5rem;
     margin-bottom: 1rem;
 }
+
 .game-length-slider {
-    
+    margin-bottom: 1rem;
 }
+
+/* SLIDER */
+
+/* Override standard stylings */
+.create-lobby-form input[type=range]  {
+    -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+    /*width: 100%; /* Specific width is required for Firefox. */
+    background: transparent; /* Otherwise white in Chrome */
+}
+
+.create-lobby-form input[type=range]::-webkit-slider-thumb {
+     -webkit-appearance: none;
+}
+
+.create-lobby-form input[type=range]:focus {
+    outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+.create-lobby-form input[type=range]::-ms-track {
+    width: 100%;
+    cursor: pointer;
+
+    /* Hides the slider so custom styles can be added */
+    background: transparent; 
+    border-color: transparent;
+    color: transparent;
+}
+
+/* Style thumb */
+/* Special styling for WebKit/Blink */
+.create-lobby-form input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 1rem;
+    width: 1rem;
+    background: #9999E4;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: -4%;
+}
+
+/* All the same stuff for Firefox */
+.create-lobby-form input[type=range]::-moz-range-thumb {
+    -webkit-appearance: none;
+    height: 1rem;
+    width: 1rem;
+    background: #9999E4;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: -4%;
+}
+
+/* All the same stuff for IE */
+.create-lobby-form input[type=range]::-ms-thumb {
+    -webkit-appearance: none;
+    height: 1rem;
+    width: 1rem;
+    background: #9999E4;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: -4%;
+}
+
+/* Style track */
+input[type=range]::-webkit-slider-runnable-track {
+  height: 0.25rem;
+  cursor: pointer;
+  background: #EEEEFE;
+  border-radius: 1px;
+}
+
+input[type=range]::-moz-range-track {
+  height: 0.25rem;
+  cursor: pointer;
+  background: #EEEEFE;
+  border-radius: 1px;
+}
+
+input[type=range]::-ms-track {
+  height: 0.25rem;
+  cursor: pointer;
+  background: #EEEEFE;
+  border-radius: 1px;
+}
+
+/* SLIDER */
 
 .game-length-number {
     color: #228CDB;
