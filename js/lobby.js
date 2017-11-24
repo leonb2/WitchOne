@@ -382,5 +382,5 @@ function minTwoDigits (number) {
 }
 
 window.addEventListener('beforeunload', (event) => {
-    return event.returnValue = "Die Lobby wird nicht mehr funktionieren, wenn du rausgehst.";
+    return event.returnValue = "Du wirst somit aus der Lobby entfernt";
 });

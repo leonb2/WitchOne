@@ -21,7 +21,6 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 const passwordHash = require('password-hash');
 
-const ejs = require('ejs');
 app.set('view engine', 'ejs');
 
 // --- Set up TingoDB ---
@@ -129,6 +128,7 @@ app.get('/', (request, response) => {
         let gameCount = request.session.user.gameCount;
         let correctGuesses = request.session.user.correctGuesses;
         let correctPercentage = Math.round(correctGuesses/gameCount*100).toFixed(2);
+        
         response.render('home', {
             'lastThreeNames': request.session.user.lastThreeNames,
             'gameCount': gameCount,
@@ -365,12 +365,16 @@ app.post('/joinLobbyPost', (request, response) => {
 
 // Called after the user wanted to join a lobby and if the lobby was found
 app.get('/lobby', (request, response) => {
+    console.log(request.session.room);
     if (request.session.authenticated && request.session.room) {
-        response.render('lobby', {
-            'lobbyPassword' : request.session.room
-        });
+        
+        let room = request.session.room;
         request.session.room = null;
         socketScript.pushRequest(request);
+        
+        response.render('lobby', {
+            'lobbyPassword' : room
+        });
     }
     else {
         response.redirect('/');
@@ -382,26 +386,3 @@ app.get('/leaveLobby', (request, response) => {
     request.session.room = null;
     response.redirect('/');
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
