@@ -1,19 +1,21 @@
-let lobbyContentDiv = document.querySelector(".js-lobby-content");
-let gameContentDiv = document.querySelector(".js-game-content");
-let endScreenDiv = document.querySelector(".js-end-screen");
+var socket = io();
 
-let password = document.querySelector(".js-lobby-password").innerHTML;
+var lobbyContentDiv = document.querySelector(".js-lobby-content");
+var gameContentDiv = document.querySelector(".js-game-content");
+var endScreenDiv = document.querySelector(".js-end-screen");
+
+var password = document.querySelector(".js-lobby-password").innerHTML;
 socket.emit('joinLobby', password);
 
-let ownId;
+var ownId;
 // Called after joining a lobby
-socket.on('pushID', (id) => {
+socket.on('pushID', function (id) {
     ownId = id;
 });
 
-let lobbyIndex;
-let nicknameList = document.querySelector(".js-lobby-nickname-list");
-socket.on('joinLobbySuccessful', (data) => {
+var lobbyIndex;
+var nicknameList = document.querySelector(".js-lobby-nickname-list");
+socket.on('joinLobbySuccessful', function (data) {
     lobbyIndex = data.lobbyIndex;
     lastName = data.thisName;
     refreshNicknames(data.users);
@@ -21,12 +23,12 @@ socket.on('joinLobbySuccessful', (data) => {
     nicknameField.placeholder = data.thisName;
 });
 
-socket.on('joinLobbyFail', () => {
+socket.on('joinLobbyFail', function () {
     window.location.replace('/');
 });
 
-let nicknameField = document.querySelector(".js-lobby-nickname");
-nicknameField.addEventListener('input', () => {
+var nicknameField = document.querySelector(".js-lobby-nickname");
+nicknameField.addEventListener('input', function () {
     if (nicknameField.value != "") {
         readyButton.disabled = false;
         readyButton.classList.remove("lobby-button-ready-disabled");
@@ -36,31 +38,31 @@ nicknameField.addEventListener('input', () => {
         readyButton.classList.add("lobby-button-ready-disabled");   
     }
 });
-nicknameField.addEventListener('keyup', (event) => {
+nicknameField.addEventListener('keyup', function (event) {
     if (event.keyCode === 13) {
         nicknameField.blur();
     }
 });
 
-let lastName;
-nicknameField.addEventListener("blur", () => {
+var lastName;
+nicknameField.addEventListener("blur", function () {
     if (nicknameField.value != "" && nicknameField.value != lastName) {
-        let name = nicknameField.value;
-        let data = {'lobbyIndex': lobbyIndex, 'nickname': name, 'oldNickName' : lastName};
+        var name = nicknameField.value;
+        var data = {'lobbyIndex': lobbyIndex, 'nickname': name, 'oldNickName' : lastName};
         lastName = nicknameField.value;
         
         socket.emit('changeNickname', data);
     }
 });
-socket.on('nameIsUsed', (data) => {
+socket.on('nameIsUsed', function (data) {
     lastName = data.name;
     nicknameField.value = lastName;
 });
 
-let readyButton = document.querySelector(".js-lobby-button-ready");
-let ready = false;
+var readyButton = document.querySelector(".js-lobby-button-ready");
+var ready = false;
 readyButton.disabled = true;
-readyButton.addEventListener('click', () => {
+readyButton.addEventListener('click', function () {
     if (ready) {
         ready = false;
         readyButton.classList.remove("lobby-button-ready-active");
@@ -69,50 +71,50 @@ readyButton.addEventListener('click', () => {
         ready = true;
         readyButton.classList.add("lobby-button-ready-active");
     }
-    let data = {'lobbyIndex': lobbyIndex, 'ready' : ready};
+    var data = {'lobbyIndex': lobbyIndex, 'ready' : ready};
     socket.emit('playerReady', data);
 });
 
 // Called when a player leaves the lobby
-socket.on('resetReady', () => {
+socket.on('resetReady', function () {
     ready = false;
     if (readyButton.classList.contains("lobby-button-ready-active")) {
        readyButton.classList.remove("lobby-button-ready-active"); 
     }
 })
 
-let startButton = document.querySelector(".js-lobby-button-start");
-startButton.addEventListener('click', () => { 
+var startButton = document.querySelector(".js-lobby-button-start");
+startButton.addEventListener('click', function () { 
     data = {'lobbyIndex': lobbyIndex};
     socket.emit('startGame', data);
 });
 
-let admin = false;
-socket.on('admin', () => {
+var admin = false;
+socket.on('admin', function () {
     admin = true;
     startButton.classList.remove("not-displayed");
 });
 
 // Called when the admin left the lobby
-socket.on('assignNewAdmin', (adminId) => {
+socket.on('assignNewAdmin', function (adminId) {
     if (ownId === adminId) {
         admin = true;
         startButton.classList.remove("not-displayed");
     }
 });
 
-// Refreshes the list of nicknames by deleting
+// Refreshes the list of nicknames by devaring
 // and adding everyone again
 function refreshNicknames(nicknames) {
      nicknameList.innerHTML = "";
-     for (let i = 0; i < nicknames.length; i++) {
+     for (var i = 0; i < nicknames.length; i++) {
          nicknameList.innerHTML += "<div>" + nicknames[i] + "</div>";
      }
      return nicknames.length;
 }
 
-let playerCount;
-socket.on('refreshNicknames', (data) => {
+var playerCount;
+socket.on('refreshNicknames', function (data) {
     playerCount = refreshNicknames(data.users);
 });
 
@@ -123,19 +125,19 @@ function refreshReady (readyCount) {
     startButton.classList.add("lobby-button-start-disabled");
 } 
 
-let readyCounter = document.querySelector(".js-lobby-ready-counter");
-socket.on('refreshReady', (readyCount) => {
+var readyCounter = document.querySelector(".js-lobby-ready-counter");
+socket.on('refreshReady', function (readyCount) {
     refreshReady(readyCount);
 });
 
 // Called when a new player joins the lobby
-socket.on('refresh', (data) => {
+socket.on('refresh', function (data) {
     playerCount = refreshNicknames(data.users);
     refreshReady(data.readyCount);
 });
 
 // Called when everyone is ready -> the game is ready to start
-socket.on('everyoneReady', () => {
+socket.on('everyoneReady', function () {
     if (admin) {
         startButton.disabled = false;
         startButton.classList.remove("lobby-button-start-disabled");
@@ -143,42 +145,42 @@ socket.on('everyoneReady', () => {
 });
 
 // ----- Game logic -----
-let isWitch = false;
-let nameDiv = document.querySelector(".js-game-name");
-let placeDiv = document.querySelector(".js-game-place");
-let roleDiv = document.querySelector(".js-game-role");
-let timerDiv = document.querySelector(".js-game-timer");
-let orderDiv = document.querySelector(".js-game-order");
-let checklistDiv = document.querySelector(".js-game-checklist");
-let checklistButtons;
-let activeChecklistButtons = [];
+var isWitch = false;
+var nameDiv = document.querySelector(".js-game-name");
+var placeDiv = document.querySelector(".js-game-place");
+var roleDiv = document.querySelector(".js-game-role");
+var timerDiv = document.querySelector(".js-game-timer");
+var orderDiv = document.querySelector(".js-game-order");
+var checklistDiv = document.querySelector(".js-game-checklist");
+var checklistButtons;
+var activeChecklistButtons = [];
 
-let questionButton = document.querySelector(".js-game-button-question");
-questionButton.addEventListener('click', () => {
+var questionButton = document.querySelector(".js-game-button-question");
+questionButton.addEventListener('click', function () {
     socket.emit('getExampleQuestion');
     });
-socket.on('sendExampleQuestion', (data) => {
+socket.on('sendExampleQuestion', function (data) {
         alert(data.question);
 });
 
-let startVoteButtonContainer = document.querySelector(".js-game-button-start-vote-container");
-let startVoteButton = document.querySelector(".js-game-button-start-vote");
-let voteStartTime;
-startVoteButton.addEventListener('click', () => {
+var startVoteButtonContainer = document.querySelector(".js-game-button-start-vote-container");
+var startVoteButton = document.querySelector(".js-game-button-start-vote");
+var voteStartTime;
+startVoteButton.addEventListener('click', function () {
     data = {'password': password};
     socket.emit('startVote', data);
     voteStartTime = gameLength - intervalValue;
 });
 
-let voteButton = document.querySelector(".js-game-button-vote");
-let voted = false;
-let rightVote;
-voteButton.addEventListener('click', () => {
+var voteButton = document.querySelector(".js-game-button-vote");
+var voted = false;
+var rightVote;
+voteButton.addEventListener('click', function () {
     if (activeChecklistButtons.length == 1) {   
         voteButton.classList.add("game-button-vote-active");
         voteButton.disabled = true;
         voted = true;
-        let data = {
+        var data = {
                 'password': password,
                 'lobbyIndex': lobbyIndex,
                 'vote': activeChecklistButtons[0]
@@ -202,14 +204,14 @@ voteButton.addEventListener('click', () => {
         }
     }
 });
-socket.on('rightVote', (data) => {
+socket.on('rightVote', function (data) {
    rightVote = data.rightVote; 
 });
 
-let gameLength;
-socket.on('gameStarted', (data) => {
+var gameLength;
+socket.on('gameStarted', function (data) {
     
-    let newData = {'lobbyIndex': lobbyIndex};
+    var newData = {'lobbyIndex': lobbyIndex};
     // Am I the witch?
     if (ownId === data.witchID) {
         isWitch = true;
@@ -238,7 +240,7 @@ socket.on('gameStarted', (data) => {
     }
     
     // Fill in order
-    for (let i = 0; i < data.users.length; i++) {
+    for (var i = 0; i < data.users.length; i++) {
         orderDiv.innerHTML += data.users[data.order[i]] + " ";
         if (i < data.users.length-1) {
             orderDiv.innerHTML += "- ";
@@ -247,7 +249,7 @@ socket.on('gameStarted', (data) => {
     
     // Fill checklist
     if (!isWitch) {
-        for (let i = 0; i < data.users.length; i++) {
+        for (var i = 0; i < data.users.length; i++) {
             if (data.users[i] != lastName) {
                 checklistDiv.innerHTML += "<button class='js-game-button-checklist game-button game-button-checklist' buttontype='button'>"+data.users[i]+"</button>";
             }
@@ -258,26 +260,26 @@ socket.on('gameStarted', (data) => {
     }
         
     // Enable timer
-    let minutes = minTwoDigits(Math.floor(data.gameLength/60));
-    let seconds = minTwoDigits(data.gameLength % 60);
+    var minutes = minTwoDigits(Math.floor(data.gameLength/60));
+    var seconds = minTwoDigits(data.gameLength % 60);
     timerDiv.innerHTML = minutes + ":" + seconds;
     timer(data.gameLength);
     gameLength = data.gameLength;
 });
 
-socket.on('sendPossiblePlaces', (data) => {
-    for (let i = 0; i < data.places.length; i++) {
+socket.on('sendPossiblePlaces', function (data) {
+    for (var i = 0; i < data.places.length; i++) {
             checklistDiv.innerHTML += "<button class='js-game-button-checklist game-button game-button-checklist' buttontype='button'>"+data.places[i]+"</button>";        
     }
     checklistButtons = document.querySelectorAll(".js-game-button-checklist");
     setupChecklistButtons();
 });
 
-socket.on('assignRole', (data) => {
+socket.on('assignRole', function (data) {
     roleDiv.innerHTML += data.role;
 });
 
-socket.on('voteStarted', () => {
+socket.on('voteStarted', function () {
     startVoteButtonContainer.innerHTML = "Abstimmung gestartet!";
     voteButton.classList.remove("game-button-vote-disabled");
     voteButton.disabled = false;
@@ -287,11 +289,11 @@ socket.on('voteStarted', () => {
     }
 });
 
-let resultDiv = document.querySelector(".js-end-screen-result");
-let witchDiv = document.querySelector(".js-end-screen-witch");
-let guessDiv = document.querySelector(".js-end-screen-right-guess");
-let voteStartDiv = document.querySelector(".js-end-screen-vote-time");
-socket.on('gameFinished', (data) => {
+var resultDiv = document.querySelector(".js-end-screen-result");
+var witchDiv = document.querySelector(".js-end-screen-witch");
+var guessDiv = document.querySelector(".js-end-screen-right-guess");
+var voteStartDiv = document.querySelector(".js-end-screen-vote-time");
+socket.on('gameFinished', function (data) {
     clearInterval(interval);
     
     endScreenDiv.classList.remove("not-visible");
@@ -312,15 +314,15 @@ socket.on('gameFinished', (data) => {
     }
       
     if (voteStartTime) {   
-        let minutes = Math.floor(voteStartTime/60);
-        let seconds = voteStartTime % 60;
+        var minutes = Math.floor(voteStartTime/60);
+        var seconds = voteStartTime % 60;
         voteStartDiv.innerHTML = "Abstimmung gestartet nach " + minutes + " Minuten und " + seconds + " Sekunden.";
     } 
     else {
         voteStartDiv.innerHTML = "Es wurde keine Abstimmung gestartet!";
     }
     
-    let won = false;
+    var won = false;
     if (isWitch) {
         rightVote = true;
         if (!data.witchCaught) {
@@ -330,14 +332,14 @@ socket.on('gameFinished', (data) => {
     else if (data.witchCaught) {
         won = true;
     }
-    let newData = {'name': lastName, 'rightVote': rightVote, 'won': won, 'isWitch': isWitch};
+    var newData = {'name': lastName, 'rightVote': rightVote, 'won': won, 'isWitch': isWitch};
     
     socket.emit('updateStatistics', newData);
 });
 
 function setupChecklistButtons () {
-    for (let i = 0; i < checklistButtons.length; i++) {
-        checklistButtons[i].addEventListener('click', () => {
+    for (var i = 0; i < checklistButtons.length; i++) {
+        checklistButtons[i].addEventListener('click', function () {
             if (!voted) {
                 if (!checklistButtons[i].classList.contains("game-button-checklist-active")) {
                     checklistButtons[i].classList.add("game-button-checklist-active");
@@ -346,7 +348,7 @@ function setupChecklistButtons () {
                 else {
                     checklistButtons[i].classList.remove("game-button-checklist-active");
 
-                    let index = activeChecklistButtons.indexOf(checklistButtons[i].innerHTML);                  
+                    var index = activeChecklistButtons.indexOf(checklistButtons[i].innerHTML);                  
                     activeChecklistButtons.splice(index, 1);
                 }
             }
@@ -354,23 +356,23 @@ function setupChecklistButtons () {
     }
 }
 
-let interval;
-let intervalValue;
+var interval;
+var intervalValue;
 function timer (timeSec) {
     if (interval) {
         clearInterval(interval);
     }
 
     intervalValue = timeSec;
-    interval = setInterval( () => {
+    interval = setInterval( function () {
         
         intervalValue--;
-        let minutes = minTwoDigits(Math.floor(intervalValue/60));
-        let seconds = minTwoDigits(intervalValue % 60);
+        var minutes = minTwoDigits(Math.floor(intervalValue/60));
+        var seconds = minTwoDigits(intervalValue % 60);
         if (minutes === "00" && seconds === "00") {
             clearInterval(interval);
             interval = null;
-            let data = {'password': password, 'lobbyIndex' : lobbyIndex};
+            var data = {'password': password, 'lobbyIndex' : lobbyIndex};
             socket.emit('gameTimeOut', data);
         }
         timerDiv.innerHTML = minutes + ":" + seconds;
@@ -381,6 +383,6 @@ function minTwoDigits (number) {
     return number < 10 ? number = "0" + number : number;
 }
 
-window.addEventListener('beforeunload', (event) => {
+window.addEventListener('beforeunload', function (event) {
     return event.returnValue = "Du wirst somit aus der Lobby entfernt";
 });

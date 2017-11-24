@@ -1,6 +1,6 @@
-let slider = document.querySelector(".js-game-length-slider");
-let valueDiv = document.querySelector(".js-game-length");
+var slider = document.querySelector(".js-game-length-slider");
+var valueDiv = document.querySelector(".js-game-length");
 
-slider.addEventListener('input', () => {
+slider.addEventListener('input', function() {
    valueDiv.innerHTML = slider.value; 
 });

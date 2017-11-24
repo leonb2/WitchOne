@@ -365,7 +365,6 @@ app.post('/joinLobbyPost', (request, response) => {
 
 // Called after the user wanted to join a lobby and if the lobby was found
 app.get('/lobby', (request, response) => {
-    console.log(request.session.room);
     if (request.session.authenticated && request.session.room) {
         
         let room = request.session.room;
