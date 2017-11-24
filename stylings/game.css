@@ -1,6 +1,14 @@
 .not-displayed {
     display: none;
+    pointer-events: none;
 }
+
+.not-visible {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Test styling, kannst du einfach ändern Meli */
 
 .game-button {
     border: 1px solid black;
@@ -13,16 +21,13 @@
 }
 
 .game-button-checklist {
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 
 .game-button-checklist-active {
-    background-color: rebeccapurple;
+    background-color: red;
 }
 
-.game-button-vote {
-    
-}
 
 .game-button-vote-disabled {
     color: gray;
@@ -30,13 +35,36 @@
 
 .game-button-vote-active {
     color: white;
-    background-color: rebeccapurple;
+    background-color: red;
 }
 
 .game-button-vote-active:active {
     color: white;
 }
 
+/* Real styling */
 
+.end-screen-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0,0,0,0.3);
+    transition: opacity 0.2s ease;
+}
 
-
+.end-screen {
+    background-color: gray;
+    width: 50rem;
+    height: 40rem;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-emphasis-style: center;
+}

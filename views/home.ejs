@@ -3,6 +3,14 @@
 <html>
     <head>
         <title>Home</title>
+        
+        <style type="text/css">
+            /* Inline minimal css for initial rendering */
+            body {
+                background: #242436;
+            }
+        </style>
+        
     </head>
     
     <body>
@@ -18,10 +26,18 @@
             <button type="submit">Abmelden</button>
         </form>
         
-        <div>Letzten 3 Spielernamen: <%= lastThreeNames %></div>
+        <div>Letzten 3 Spielernamen:
+            <% for (let i = 0; i < lastThreeNames.length; i++) {
+                if (i < lastThreeNames.length-1) { %>
+                    <%= lastThreeNames[i] %> ,
+                <% } else { %>
+                    <%= lastThreeNames[i] %>
+                <% }
+            } %>
+        </div>
         <div>Spielzähler: <%= gameCount %></div>
-        <div>Tipprichtigkeit: <%= correctGuesses %></div>
-        <div>Siege: <%= winLoseRatio %></div>
+        <div>Tipprichtigkeit: <%= correctGuesses %>%</div>
+        <div>Siege: <%= winCount %></div>
         <div>Hexenzähler: <%= witchCount %></div>
         
     </body>

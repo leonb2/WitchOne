@@ -1,8 +1,9 @@
 const rooms = [];
 let placesAndRoles;
 let exampleQuestions;
+let request;
 
-exports.initialize = function (server, roomDeleteCallback) {
+exports.initialize = function (server, roomDeleteCallback, updateUserStatisticCallback) {
     const socketio = require('socket.io');
     const io = socketio(server);
         
@@ -17,15 +18,22 @@ exports.initialize = function (server, roomDeleteCallback) {
 
         socket.on('joinLobby', (password) => {
             socket.join(password); 
-            console.log(`${socket.id} joined the room ${password}`); 
 
-            // Find the looby and add the player to it
+            // Find the lobby and add the player to it
             let index = -1;
             let name = null;
             let users = [];
             let readyCount = 0;
             for (let i = 0; i < rooms.length; i++) {
                 if (rooms[i].password === password) {
+                    
+                    // If the game has already started
+                    if (rooms[i].placeIndex != -1) {
+                        socket.emit('joinLobbyFail');
+                        return;
+                    }
+                    
+                    console.log(`${socket.id} joined the room ${password}`); 
                     index = i;
                     users = rooms[i].users;
                     name = "Spieler " + (users.length+1);
@@ -69,6 +77,14 @@ exports.initialize = function (server, roomDeleteCallback) {
             let room = rooms[data.lobbyIndex];
             users = room.users;
             userIDs = room.userIDs;
+            let newData;
+            
+            // If name is already used
+            if (users.indexOf(data.nickname) != -1) {
+                newData = {'name': data.oldNickName};
+                socket.emit('nameIsUsed', newData);
+                return;
+            }
 
             let index = users.indexOf(data.oldNickName);
             if (index > -1) {
@@ -81,7 +97,9 @@ exports.initialize = function (server, roomDeleteCallback) {
             room.users = users;
             room.userIDs = userIDs;
             
-            io.to(room.password).emit('refreshNicknames', users);
+            newData = {'users': users};
+            
+            io.to(room.password).emit('refreshNicknames', newData);
         });
 
         /*
@@ -268,6 +286,10 @@ exports.initialize = function (server, roomDeleteCallback) {
             let newData = {'witchCaught' : false, 'witchName' : witchName};
             io.to(data.password).emit('gameFinished', newData);
         });
+        
+        socket.on('updateStatistics', (data) => {
+            updateUserStatisticCallback(request, data);
+        });
             
         socket.on('disconnect', () => {
             /*
@@ -326,4 +348,8 @@ exports.pushPlaces = function (places) {
 
 exports.pushQuestions = function (questions) {
     exampleQuestions = questions;
+}
+
+exports.pushRequest = function (req) {
+    request = req;
 }

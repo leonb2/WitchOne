@@ -21,7 +21,6 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 const passwordHash = require('password-hash');
 
-const ejs = require('ejs');
 app.set('view engine', 'ejs');
 
 // --- Set up TingoDB ---
@@ -42,7 +41,33 @@ const socketScript = require(__dirname + '/socketIO.js');
 function ioRoomDeleteCallback(i) {
     rooms.splice(i, 1);
 }
-socketScript.initialize(server, ioRoomDeleteCallback);
+function updateUserStatisticCallback(request, data) {
+    let user = request.session.user;
+    
+    if (user.lastThreeNames.length < 3) {
+        user.lastThreeNames.push(data.name);
+    }
+    else {
+        if (user.lastThreeNames.indexOf(data.name) == -1) {
+            user.lastThreeNames[2] = user.lastThreeNames[1];
+            user.lastThreeNames[1] = user.lastThreeNames[0]; 
+            user.lastThreeNames[0] = data.name;
+        }
+    }
+    user.gameCount++;
+    if (data.rightVote) {
+        user.correctGuesses++;
+    }
+    if (data.won) {
+        user.winCount++;
+    }
+    if (data.isWitch) {
+        user.witchCount++;
+    }
+    
+    database.collection(DB_USERS).update({'username': user.username}, user);   
+}
+socketScript.initialize(server, ioRoomDeleteCallback, updateUserStatisticCallback);
 const rooms = [];
 
 let placesAndRoles;
@@ -100,14 +125,31 @@ app.get('/', (request, response) => {
         });
     }
     else {
+        let gameCount = request.session.user.gameCount;
+        let correctGuesses = request.session.user.correctGuesses;
+        let correctPercentage = Math.round(correctGuesses/gameCount*100).toFixed(2);
+        
         response.render('home', {
             'lastThreeNames': request.session.user.lastThreeNames,
-            'gameCount': request.session.user.gameCount,
-            'correctGuesses': request.session.user.correctGuesses,
-            'winLoseRatio': request.session.user.winLoseRatio,
+            'gameCount': gameCount,
+            'correctGuesses': correctPercentage,
+            'winCount': request.session.user.winCount,
             'witchCount': request.session.user.witchCount
         });
     }
+});
+
+// Called when the user comes from a game
+app.post('/', (request, response) => {
+    database.collection(DB_USERS).findOne({'username': request.session.user.username}, (err, result) => {
+        response.render('home', {
+            'lastThreeNames': result.lastThreeNames,
+            'gameCount': result.gameCount,
+            'correctGuesses': result.correctGuesses,
+            'winCount': result.winCount,
+            'witchCount': result.witchCount
+        });
+    });
 });
 
 // Called when the user clicks the button to login
@@ -201,7 +243,7 @@ app.post('/registerPost', (request, response) => {
                     'lastThreeNames': [],
                     'gameCount': 0,
                     'correctGuesses': 0,
-                    'winLoseRatio': 0,
+                    'winCount': 0,
                     'witchCount': 0
                 };
                 database.collection(DB_USERS).save(user, (err, result) => {
@@ -289,7 +331,7 @@ app.post('/createLobbyPost', (request, response) => {
         'userIDs' : [],
         'adminID' : null,
         'usersReady' : 0,
-        'placeIndex' : 0,
+        'placeIndex' : -1,
         'usedRoleIndices' : [],
         'witchID' : null,
         'votedIDs' : [],
@@ -323,11 +365,16 @@ app.post('/joinLobbyPost', (request, response) => {
 
 // Called after the user wanted to join a lobby and if the lobby was found
 app.get('/lobby', (request, response) => {
+    console.log(request.session.room);
     if (request.session.authenticated && request.session.room) {
-        response.render('lobby', {
-            'lobbyPassword' : request.session.room
-        });
+        
+        let room = request.session.room;
         request.session.room = null;
+        socketScript.pushRequest(request);
+        
+        response.render('lobby', {
+            'lobbyPassword' : room
+        });
     }
     else {
         response.redirect('/');
@@ -339,26 +386,3 @@ app.get('/leaveLobby', (request, response) => {
     request.session.room = null;
     response.redirect('/');
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
