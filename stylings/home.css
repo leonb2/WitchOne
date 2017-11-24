@@ -1,0 +1,113 @@
+body {
+    @import url(http://fonts.googleapis.com/css?family=Open+Sans);
+    font-family: Calibri Light, Calibri, 'Open Sans', sans-serif;
+    text-align: center;
+}
+
+.home-welcome-text {
+    margin: 4rem;
+    color: whitesmoke;
+    font-size: 2rem;
+    font-weight: bold;
+}
+.home-password-input {
+    padding: 1rem;
+    text-align: center;
+    color: #228CDB;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    width: 17.9rem;
+    
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px; 
+}
+.home-join-lobby-button {
+    background-color: #3B3B58;
+    font-size: 1rem;
+    font-weight: lighter;
+    width: 20rem;
+    margin-top: none;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    color: white;
+    background: #9999E450;
+    border-color: darkgrey;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px; 
+}
+.home-join-lobby-button:hover {
+    color: #228CDB;
+    border-color: #9999E4;
+    background-color: #3B3B58;
+    transition: color 0.1s ease, border-color 0.1s ease;
+}
+.home-create-lobby-button {
+    background-color: #3B3B58;
+    font-size: 1rem;
+    font-weight: lighter;
+    width: 20rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    color: white;
+    background: #9999E450;
+    border-color: darkgrey;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px; 
+}
+.home-create-lobby-button:hover {
+    color: #228CDB;
+    border-color: #9999E4;
+    background-color: #3B3B58;
+    transition: color 0.1s ease, border-color 0.1s ease;
+}
+.home-logout-button {
+    background-color: #3B3B58;
+    font-size: 1rem;
+    font-weight: lighter;
+    width: 20rem;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    color: white;
+    background: #2D2D44;
+    border-color: #9999E450;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px; 
+}
+.home-logout-button:hover {
+    color: #9999E4;
+    border-color: #9999E4;
+    transition: color 0.1s ease, border-color 0.1s ease;
+}
+/* STATISTIKEN */
+.home-statistics {
+    text-align: center;
+    color: whitesmoke;
+    margin: 3rem;
+    font-size: 1.5rem;
+}
+.home-statistics-last-three-names {
+    margin: 0.5rem;
+}
+.home-statistics-game-counter {
+    margin: 0.5rem;
+}
+.home-statistics-right-tip {
+    margin: 0.5rem;
+}
+/*.home-statistics-wins-text {
+    margin: 0.5rem;
+    font-size: 1rem;*/
+}
+.home-statistics-wins {
+    margin: 0.5rem;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+.home-statistics-witch-counter {
+    margin: 0.5rem;
+}
