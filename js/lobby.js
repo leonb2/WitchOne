@@ -339,16 +339,16 @@ socket.on('gameFinished', function (data) {
 
 function setupChecklistButtons () {
     for (var i = 0; i < checklistButtons.length; i++) {
-        checklistButtons[i].addEventListener('click', function () {
+        checklistButtons[i].addEventListener('click', function (event) {
             if (!voted) {
-                if (!checklistButtons[i].classList.contains("game-button-checklist-active")) {
-                    checklistButtons[i].classList.add("game-button-checklist-active");
-                    activeChecklistButtons.push(checklistButtons[i].innerHTML);
+                if (!event.target.classList.contains("game-button-checklist-active")) {
+                    event.target.classList.add("game-button-checklist-active");
+                    activeChecklistButtons.push(event.target.innerHTML);
                 }
                 else {
-                    checklistButtons[i].classList.remove("game-button-checklist-active");
+                    event.target.classList.remove("game-button-checklist-active");
 
-                    var index = activeChecklistButtons.indexOf(checklistButtons[i].innerHTML);                  
+                    var index = activeChecklistButtons.indexOf(event.target.innerHTML);                  
                     activeChecklistButtons.splice(index, 1);
                 }
             }
