@@ -1,0 +1,56 @@
+body {
+    @import url(http://fonts.googleapis.com/css?family=Open+Sans);
+    font-family: Calibri Light, Calibri, 'Open Sans', sans-serif;
+    text-align: center;
+}
+
+.password-text {
+    color: whitesmoke;
+    margin-top: 4rem;
+    font-size: 1.5rem;
+}
+
+.created-password {
+    color: #7F74AF;
+    font-weight: bold;
+    font-size: 3rem;
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+}
+.game-length-text {
+    color: whitesmoke;
+    margin: 2rem;
+    font-size: 1.5rem;
+}
+.game-length-slider {
+    margin: 0.5rem;
+    color: #228CDB
+    font-weight: bold;
+    font-size: 2rem;
+}
+.game-length-number {
+    margin-top: 1.5rem;
+    color: #228CDB;
+    font-weight: bold;
+    font-size: 2rem;
+}
+.create-lobby-button {
+    background-color: #3B3B58;
+    font-size: 1rem;
+    font-weight: lighter;
+    width: 20rem;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    color: white;
+    background: #9999E450;
+    border-color: darkgrey;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px; 
+}
+.create-lobby-button:hover {
+    color: #228CDB;
+    border-color: #9999E4;
+    background-color: #3B3B58;
+    transition: color 0.1s ease, border-color 0.1s ease;
+}
