@@ -331,7 +331,7 @@ app.post('/createLobbyPost', (request, response) => {
         'userIDs' : [],
         'adminID' : null,
         'usersReady' : 0,
-        'placeIndex' : 0,
+        'placeIndex' : -1,
         'usedRoleIndices' : [],
         'witchID' : null,
         'votedIDs' : [],

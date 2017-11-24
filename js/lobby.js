@@ -312,8 +312,8 @@ socket.on('gameFinished', (data) => {
     }
       
     if (voteStartTime) {   
-        let minutes = minTwoDigits(Math.floor(voteStartTime/60));
-        let seconds = minTwoDigits(voteStartTime % 60);
+        let minutes = Math.floor(voteStartTime/60);
+        let seconds = voteStartTime % 60;
         voteStartDiv.innerHTML = "Abstimmung gestartet nach " + minutes + " Minuten und " + seconds + " Sekunden.";
     } 
     else {

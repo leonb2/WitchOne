@@ -18,7 +18,6 @@ exports.initialize = function (server, roomDeleteCallback, updateUserStatisticCa
 
         socket.on('joinLobby', (password) => {
             socket.join(password); 
-            console.log(`${socket.id} joined the room ${password}`); 
 
             // Find the lobby and add the player to it
             let index = -1;
@@ -27,6 +26,14 @@ exports.initialize = function (server, roomDeleteCallback, updateUserStatisticCa
             let readyCount = 0;
             for (let i = 0; i < rooms.length; i++) {
                 if (rooms[i].password === password) {
+                    
+                    // If the game has already started
+                    if (rooms[i].placeIndex != -1) {
+                        socket.emit('joinLobbyFail');
+                        return;
+                    }
+                    
+                    console.log(`${socket.id} joined the room ${password}`); 
                     index = i;
                     users = rooms[i].users;
                     name = "Spieler " + (users.length+1);
