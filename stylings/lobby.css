@@ -1,22 +1,13 @@
 body {
-    font-family: Helvetica;
+    font-family: Calibri Light;
+    background: #242436;
 }
 
-.lobby-button {
-    color: black;
-    border: 1px solid black;
-    transition: color 0.2s ease, background-color 0.2s ease;
-}
-
-
-/* STYLING DER LOBBY-SEITE GESAMT */
 .lobby-content {
     text-align: center;
 }
 
-/* LOBBY-PASSWORT */
 .lobby-password {
- /* Schrift */
     color: #7F74AF;
     font-weight: bold;
     font-size: 3rem;
@@ -25,92 +16,126 @@ body {
 
 /* NAMENSLISTE DER SPIELER */
 .lobby-nickname-list {    
-    color: #3B3B58;
-    font-weight: lighter;
-    font-size: 2rem;
-    font-style: bold;
+    color: #228CDB;
+    font-weight: auto;
+    font-size: 2.5rem;
+    font-weight: bold;
     margin: 3rem;
+    padding: 0.5rem;
 }
 
-.lobby-button-ready-disabled {
-    color: gray;
-}
-
-.lobby-button-ready-active {
-    background-color: #7f74af;
-}
 /* EINGABEFELD SPIELERNAME */
 .lobby-nickname {
-    
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
-    
+    padding: 1rem;
     text-align: center;
     color: #3B3B58;
-    font-style: italic;
+    font-size: 1.5rem;
+    margin: 1.5rem;
+    width: 25rem;
+    
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px; 
 }
 
-/* BEREIT + START BUTTONS */
-.lobby-button {
-    /* Bereit + Start-Button ungeklickt: Schrift */
-    color: white;
-    border: 1px solid balck;
-    transition: background-color 0.2s ease;
-    text-align: center;
-}
-/* Bereit + Start-Button geklickt: Schrift */
-.lobby-button:active:enabled {
-    color: white;
-}
-/* Bereit-Button ungeklickt: Hintergrund */
+/* Bereit-Button */
 .lobby-button-ready {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    height: 2rem;
-}
-/* Bereit-Button geklickt: Hintergrund */
-.lobby-button-ready-active {
     background-color: #3B3B58;
+    font-size: 1rem;
+    font-weight: lighter;
+    width: 20rem;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    color: white;
+    background: #9999E450;
+    border-color: darkgray;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px; 
 }
-/* Start-Button, wenn Bereit-Button geklickt wurde */
+.lobby-button-ready:hover {
+    color: #228CDB;
+    border-color: #9999E4;
+    background-color: #3B3B58;
+    transition: color 0.1s ease, border-color 0.1s ease;
+}
+/* Bereit-Button: bereits aktiviert */
+.lobby-button-ready-active {
+    background-color: #242436; /* Hintergrundfarbe */
+    border-color: #2D2D44; /* Hintergrundfarbe etwas heller */
+    color: #2D2D44; 
+}
+/* Start-Button */
 .lobby-button-start {
     background-color: #3B3B58;
+    font-size: 1rem;
+    font-weight: lighter;
+    width: 20rem;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    color: white;
+    background: #9999E450;
+    border-color: darkgrey;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px; 
 }
-/* Start-Button ungeklickt: Hintergrund */
+/* Start-Button: noch NICHT benutzbar */
 .lobby-button-start-disabled {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    height: 2rem;
+    background-color: #242436; /* Hintergrundfarbe */ 
+    border-color: #2D2D44; /* Hintergrundfarbe etwas heller */
+    color: #2D2D44; /* Hintergrundfarbe etwas heller */
 }
-/* Start-Button geklickt: Hintergrund */
+/* Start-Button BENUTZBAR: AKTIV */
 .lobby-button-start:active:enabled {
+    color: white; /* #9999E4 */
+    background: #9999E450;
+    border-color: #EEEEFE;
+}
+.lobby-button-start:enabled:hover {
+    color: #228CDB;
+    border-color: #9999E4;
     background-color: #3B3B58;
+    transition: color 0.1s ease, border-color 0.1s ease;
 }
 
-/* BEREIT-ZAEHLER */
 .lobby-ready-counter {
-    color: white;
+    font-family: Calibri Light;
+    color: #228CDB;
     margin: 2rem;
+    font-size: 2rem;
+    font-weight: bold;
     
     padding-top: 2rem;
     padding-bottom: 2rem;
     
 }
 
-/* LOBBY-VERLASSEN-BUTTON */
 .lobby-button-leave {
+    background-color: #3B3B58;
+    font-size: 1rem;
+    font-weight: lighter;
+    width: 20rem;
+    margin: 0.5rem;
+    padding: 0.5rem;
     color: white;
-    background-color: #7F74AF;
+    background: #2D2D44;
+    border-color: #9999E450;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px; 
+}
+.lobby-button-leave:hover {
+    color: #9999E4;
+    border-color: #9999E4;
+    transition: color 0.1s ease, border-color 0.1s ease;
 }
 
 /*
 main: #7F74AF
 another shade: #7980C6
 blue: #228CDB
-blue gray: #3B3B58
+blue gray: #242436  =  Hintergrundfarbe
+lighter blue gray: #2D2D44
 bordeaux: #82204A
 */
