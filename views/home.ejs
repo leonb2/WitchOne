@@ -10,23 +10,21 @@
                 background: #242436;
             }
         </style>
-        
+        <link rel="stylesheet" type="text/css" href="home.css">
     </head>
     
     <body>
-        <div>Hallo, du bist eingeloggt</div>
-        <form action="/createLobby" method="get">
-            <button type="submit">Lobby erstellen</button>
-        </form>
+        <div class="home-welcome-text">Hallo, "NAME"!</div>
         <form action="/joinLobbyPost" method="post">
-            <input type="text" name="lobbyPassword" maxlength="4" placeholder="Passwort für Lobby" required/>
-            <button type="submit">Lobby beitreten</button>
+            <div><input class="home-password-input" type="text" name="lobbyPassword" maxlength="4" placeholder="Lobby-Code eingeben" required/></div>
+            <div><button class="home-join-lobby-button" type="submit">Lobby beitreten</button></div>
         </form>
-        <form action="/logoutPost" method="post">
-            <button type="submit">Abmelden</button>
+        <form action="/createLobby" method="get">
+            <div><button class="home-create-lobby-button" type="submit">Lobby erstellen</button></div>
         </form>
         
-        <div>Letzten 3 Spielernamen:
+        <div class="home-statistics">
+        <div class="home-statistics-last-three-names">Letzten 3 Spielernamen:
             <% for (let i = 0; i < lastThreeNames.length; i++) {
                 if (i < lastThreeNames.length-1) { %>
                     <%= lastThreeNames[i] %> ,
@@ -35,10 +33,15 @@
                 <% }
             } %>
         </div>
-        <div>Spielzähler: <%= gameCount %></div>
-        <div>Tipprichtigkeit: <%= correctGuesses %>%</div>
-        <div>Siege: <%= winCount %></div>
-        <div>Hexenzähler: <%= witchCount %></div>
+        <div class="home-statistics-game-counter">Spielzähler: <%= gameCount %></div>
+        <div class="home-statistics-right-tip">Tipprichtigkeit: <%= correctGuesses %>%</div>
+        <div class="home-statistics-wins-text">Siege: </div><div class="home-statistics-wins"><%= winCount %></div>
+        <div class="home-statistics-witch-counter">Hexenzähler: <%= witchCount %></div>
+        </div>
+        
+        <form action="/logoutPost" method="post">
+            <div><button class="home-logout-button" type="submit">Abmelden</button></div>
+        </form>
         
     </body>
 </html>
