@@ -1,8 +1,8 @@
-bordeaux: #82204A
+color: #82204A /*bordeaux*/
 
 background: #242436;
-(text) color: #9999E4;
-(second text) color: #228CDB
-(highlight) color: #EEEEFE;
-(placeholder) color: #9595B1;
-(button) background: #9999E450;
+color: #9999E4; /*text*/
+color: #228CDB /*second text*/
+color: #EEEEFE; /*highlight*/
+color: #9595B1; /*placeholder*/
+background: #9999E450; /*button*/
