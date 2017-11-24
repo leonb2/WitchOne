@@ -14,13 +14,12 @@
     </head>
     
     <body>
-        <form action="/createLobbyPost" method="post">
-            <div class="password-text">Zufalls-Lobby-Code:<br></div>
+        <form class="create-lobby-form" action="/createLobbyPost" method="post">
+            <div class="password-text">Lobby-Code:<br></div>
             <div class="created-password"><%= password %></div>
             <div class="game-length-text">Spieldauer in Minuten: </div>
             <input class="js-game-length-slider game-length-slider" type="range" name="gameLengthMin" min="5" max="20" value="8">
             <div class="js-game-length game-length-number">8</div>
-            <br>
             <div><button class="create-lobby-button" type="submit">Lobby erstellen</button></div>
         </form>
         <script src="lobbyCreationSlider.js"></script>

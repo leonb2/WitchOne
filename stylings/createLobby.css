@@ -4,49 +4,60 @@ body {
     text-align: center;
 }
 
-.password-text {
-    color: whitesmoke;
+.create-lobby-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 50vh;
     margin-top: 4rem;
+}
+
+.password-text {
+    color: #EEEEFE;
     font-size: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .created-password {
-    color: #7F74AF;
+    color: #9999E4;
     font-weight: bold;
     font-size: 3rem;
-    margin-top: 2rem;
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+    padding: 0.5rem;
 }
 .game-length-text {
-    color: whitesmoke;
-    margin: 2rem;
+    color: #EEEEFE;
     font-size: 1.5rem;
+    margin-bottom: 1rem;
 }
 .game-length-slider {
-    margin: 0.5rem;
-    color: #228CDB
-    font-weight: bold;
-    font-size: 2rem;
+    
 }
+
 .game-length-number {
-    margin-top: 1.5rem;
     color: #228CDB;
+    width: 2rem;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 0rem 3rem;
     font-weight: bold;
     font-size: 2rem;
+    margin-bottom: 2rem;
 }
 .create-lobby-button {
-    background-color: #3B3B58;
-    font-size: 1rem;
-    font-weight: lighter;
+    font-size: 1.5rem;
     width: 20rem;
     margin: 0.5rem;
     padding: 0.5rem;
-    color: white;
+    color: #EEEEFE;
     background: #9999E450;
-    border-color: darkgrey;
+    border-color: #EEEEFE;
     border-width: 1px;
     border-style: solid;
-    border-radius: 5px; 
+    border-radius: 5px;
 }
 .create-lobby-button:hover {
     color: #228CDB;
