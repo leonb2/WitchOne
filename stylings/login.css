@@ -1,5 +1,6 @@
 body {
-    font-family: Helvetica;
+    @import url(http://fonts.googleapis.com/css?family=Open+Sans);
+    font-family: Calibri Light, Calibri, 'Open Sans', sans-serif;
     color: #9999E4;
     white-space: nowrap;
 }
@@ -7,6 +8,8 @@ body {
 h1, h2, h3, h4 {
     margin: 0;
 }
+
+*:focus {outline:none !important}
 
 .logo {
     margin: -8rem 0 -5rem 0;
@@ -47,6 +50,7 @@ h1, h2, h3, h4 {
     border-style: solid;
     border-radius: 5px;    
 }
+
 
 .login-form button {
     color: white;
