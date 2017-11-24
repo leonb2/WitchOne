@@ -8,45 +8,41 @@ body {
 .lobby-content {
     text-align: center;
 }
-
 .lobby-password {
     color: #7F74AF;
     font-weight: bold;
     font-size: 3rem;
     margin: 3rem;
 }
-
 /* NAMENSLISTE DER SPIELER */
 .lobby-nickname-list {    
     color: #228CDB;
     font-weight: auto;
-    font-size: 2.5rem;
+    font-size: 1.7rem;
     font-weight: bold;
     margin: 3rem;
     padding: 0.5rem;
 }
-
 /* EINGABEFELD SPIELERNAME */
 .lobby-nickname {
     padding: 1rem;
     text-align: center;
     color: #3B3B58;
-    font-size: 1.5rem;
-    margin: 1.5rem;
-    width: 25rem;
-    
+    font-size: 1rem;
+    font-weight: bold;
+    width: 17.9rem;
     border-width: 1px;
     border-style: solid;
     border-radius: 5px; 
 }
-
 /* Bereit-Button */
 .lobby-button-ready {
     background-color: #3B3B58;
     font-size: 1rem;
     font-weight: lighter;
     width: 20rem;
-    margin: 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
     padding: 0.5rem;
     color: white;
     background: #9999E450;
@@ -104,15 +100,12 @@ body {
 .lobby-ready-counter {
     font-family: Calibri Light;
     color: #228CDB;
-    margin: 2rem;
-    font-size: 2rem;
+    margin: 1.5rem;
+    font-size: 1.7rem;
     font-weight: bold;
-    
     padding-top: 2rem;
     padding-bottom: 2rem;
-    
 }
-
 .lobby-button-leave {
     background-color: #3B3B58;
     font-size: 1rem;
