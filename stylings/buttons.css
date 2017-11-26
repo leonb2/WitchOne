@@ -1,0 +1,27 @@
+.button-click {
+    color: #EEEEFE;
+    font-size: 1.5rem;
+    width: 20rem;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    background: #9999E450;  /* ..50 = Transparenz */
+    border-color: #EEEEFE;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;   
+    box-sizing: content-box;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.button-click:hover {
+    border-color: #9999E4;
+}
+
+.button-click:active {
+    border-color: #9999E4;
+    color: #9999E4;
+}
+
+.button-toggle {
+    
+}

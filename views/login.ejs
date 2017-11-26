@@ -12,6 +12,7 @@
         </style>
         
         <link rel="stylesheet" type="text/css" href="login.css"> 
+        <link rel="stylesheet" type="text/css" href="buttons.css">
     </head>
     
     <body>
@@ -24,10 +25,10 @@
                 <form class="login-form" action="/loginPost" method="post">
                     <input type="text" value="<%= usernameValue %>" name="username" placeholder="Nutzername" required/>
                     <input type="password" name="password" placeholder="Passwort" required/>
-                    <button type="submit">Anmelden</button>
+                    <button class="button-click" type="submit">Anmelden</button>
                 </form>
                 <form class="login-form login-form-register" action="/register" method="get">
-                    <button type="submit">Registrieren</button>
+                    <button class="button-click" type="submit">Registrieren</button>
                 </form>
             </div>
             <div class="login-explanation-container">
