@@ -14,7 +14,7 @@
     </head>
     
     <body>
-        <div class="home-welcome-text">Hallo, "NAME"!</div>
+        <div class="home-welcome-text">Seid gegrüßt, <%= username %>!</div>
         <form action="/joinLobbyPost" method="post">
             <div><input class="home-password-input" type="text" name="lobbyPassword" maxlength="4" placeholder="Lobby-Code eingeben" required/></div>
             <div><button class="home-join-lobby-button" type="submit">Lobby beitreten</button></div>

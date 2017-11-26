@@ -130,6 +130,7 @@ app.get('/', (request, response) => {
         let correctPercentage = Math.round(correctGuesses/gameCount*100).toFixed(2);
         
         response.render('home', {
+            'username' : request.session.user.username,
             'lastThreeNames': request.session.user.lastThreeNames,
             'gameCount': gameCount,
             'correctGuesses': correctPercentage,
