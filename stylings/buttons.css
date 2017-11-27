@@ -5,7 +5,7 @@
 .button-click {  
     color: #EEEEFE;
     font-size: 1rem;
-    background-color: #9999E450;
+    background-color: rgba(153, 153, 228, 0.33);
     width: 16rem;
     margin: 0.5rem;
     padding: 0.5rem;
@@ -24,18 +24,18 @@
 
 .button-click:active {
     color: #5DA7CB;
-    background-color: #9999E430;
+    background-color: rgba(153, 153, 228, 0.2);
     border-color: #9595B1;
 }
 
 .button-click:disabled {
-    background-color: #9999E400;
-    border-color: #9999E450;
-    color: #9999E450;
+    background-color: rgba(153, 153, 228, 0);
+    border-color: rgba(153, 153, 228, 0.33);
+    color: rgba(153, 153, 228, 0.2);
 }
 
 .button-click-dark {
-    background-color: #9999E430 !important;
+    background-color: rgba(153, 153, 228, 0.2) !important;
     background: #2D2D44 !important;
 }
 
@@ -43,7 +43,7 @@
 .button-toggle {
     color: #EEEEFE;
     font-size: 1rem;
-    background-color: #9999E450;
+    background-color: rgba(153, 153, 228, 0.33);
     width: 16rem;
     margin: 0.5rem;
     padding: 0.5rem;
@@ -66,9 +66,9 @@
 }
 
 .button-toggle:disabled {
-    background-color: #9999E400;
-    border-color: #9999E450;
-    color: #9999E450;
+    background-color: rgba(153, 153, 228, 0);
+    border-color: rgba(153, 153, 228, 0.33);
+    color: rgba(153, 153, 228, 0.33);
 }
 
 .button-toggle-enabled {
