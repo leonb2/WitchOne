@@ -9,7 +9,9 @@ h1, h2, h3, h4 {
     margin: 0;
 }
 
-*:focus {outline:none !important}
+*:focus {
+    outline:none !important
+}
 
 .logo {
     margin: -8rem 0 -5rem 0;
@@ -36,12 +38,13 @@ h1, h2, h3, h4 {
     display: flex;
     flex-direction: column;
     align-items: center;   
+    margin-top: 2rem;
 }
 
 .login-form input {
+    font-size: 1rem;
     color: #9999E4;
-    font-size: 1.5rem;
-    width: 20rem;
+    width: 16rem;
     margin: 0.5rem;
     padding: 0.5rem;
     background: none;

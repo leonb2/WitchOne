@@ -1,25 +1,36 @@
-.button-click {
+*:focus {
+    outline:none !important;
+}
+
+.button-click {  
     color: #EEEEFE;
-    font-size: 1.5rem;
-    width: 20rem;
+    font-size: 1rem;
+    background-color: #9999E450;
+    width: 16rem;
     margin: 0.5rem;
     padding: 0.5rem;
-    background: #9999E450;  /* ..50 = Transparenz */
     border-color: #EEEEFE;
     border-width: 1px;
     border-style: solid;
-    border-radius: 5px;   
+    border-radius: 5px; 
     box-sizing: content-box;
-    transition: color 0.2s ease, border-color 0.2s ease;
+    transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .button-click:hover {
-    border-color: #9999E4;
+    color: #5DA7CB;
 }
 
 .button-click:active {
-    border-color: #9999E4;
-    color: #9999E4;
+    color: #5DA7CB;
+    background-color: #9999E430;
+    border-color: #9595B1;
+}
+
+.button-click-disabled {
+    background-color: #9999E430;
+    border-color: #9999E450;
+    color: #9999E450;
 }
 
 .button-toggle {

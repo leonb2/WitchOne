@@ -11,36 +11,51 @@
             }
         </style>
         <link rel="stylesheet" type="text/css" href="home.css">
+        <link rel="stylesheet" type="text/css" href="buttons.css">
     </head>
     
     <body>
         <div class="home-welcome-text">Seid gegrüßt, <%= username %>!</div>
         <form action="/joinLobbyPost" method="post">
-            <div><input class="home-password-input" type="text" name="lobbyPassword" maxlength="4" placeholder="Lobby-Code eingeben" required/></div>
-            <div><button class="home-join-lobby-button" type="submit">Lobby beitreten</button></div>
+            <input class="home-password-input" type="text" name="lobbyPassword" maxlength="4" placeholder="Lobby-Code eingeben" required/>
+            <button class="button-click" type="submit">Lobby beitreten</button>
         </form>
         <form action="/createLobby" method="get">
-            <div><button class="home-create-lobby-button" type="submit">Lobby erstellen</button></div>
+            <div><button class="button-click" type="submit">Lobby erstellen</button></div>
         </form>
         
-        <div class="home-statistics">
-        <div class="home-statistics-last-three-names">Letzten 3 Spielernamen:
-            <% for (let i = 0; i < lastThreeNames.length; i++) {
+        <div class="home-statistics-container">
+            <div class="home-statistics">
+                <div>Letzten 3 Spielernamen:</div>
+                <div><% for (let i = 0; i < lastThreeNames.length; i++) {
                 if (i < lastThreeNames.length-1) { %>
                     <%= lastThreeNames[i] %> ,
                 <% } else { %>
                     <%= lastThreeNames[i] %>
                 <% }
-            } %>
-        </div>
-        <div class="home-statistics-game-counter">Spielzähler: <%= gameCount %></div>
-        <div class="home-statistics-right-tip">Tipprichtigkeit: <%= correctGuesses %>%</div>
-        <div class="home-statistics-wins-text">Siege: </div><div class="home-statistics-wins"><%= winCount %></div>
-        <div class="home-statistics-witch-counter">Hexenzähler: <%= witchCount %></div>
+                } %>
+                </div>
+            </div>
+            <div class="home-statistics">
+                <div>Spielzähler:</div>
+                <div> <%= gameCount %></div>
+            </div>
+            <div class="home-statistics">
+                <div>Tipprichtigkeit:</div>
+                <div><%= correctGuesses %>%</div>
+            </div>
+            <div class="home-statistics">
+                <div>Siege: </div>
+                <div><%= winCount %></div>
+            </div>
+            <div class="home-statistics">
+                <div>Hexenzähler:</div>
+                <div><%= witchCount %></div>
+            </div>
         </div>
         
         <form action="/logoutPost" method="post">
-            <div><button class="home-logout-button" type="submit">Abmelden</button></div>
+            <button class="home-button-logout button-click" type="submit">Abmelden</button>
         </form>
         
     </body>
