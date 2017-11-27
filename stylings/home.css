@@ -84,3 +84,9 @@
 .home-statistics div:nth-child(2) {
     color: #9999E4;
 }
+
+@media only screen and (max-device-width: 420px) {
+    .home-container, .home-statistics-container {
+       justify-content: space-around; 
+    }
+}
