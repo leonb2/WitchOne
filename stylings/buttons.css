@@ -17,11 +17,8 @@
     transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
 
-.button-click:hover {
+.button-click:hover:enabled {
     color: #5DA7CB;
-}
-
-.button-click:hover:active {
     cursor: pointer;
 }
 
@@ -58,11 +55,8 @@
     transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
 
-.button-toggle:hover {
+.button-click:hover:enabled {
     color: #5DA7CB;
-}
-
-.button-click:hover:active {
     cursor: pointer;
 }
 
