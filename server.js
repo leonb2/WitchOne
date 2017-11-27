@@ -144,6 +144,7 @@ app.get('/', (request, response) => {
 app.post('/', (request, response) => {
     database.collection(DB_USERS).findOne({'username': request.session.user.username}, (err, result) => {
         response.render('home', {
+            'username' : result.username,
             'lastThreeNames': result.lastThreeNames,
             'gameCount': result.gameCount,
             'correctGuesses': result.correctGuesses,
