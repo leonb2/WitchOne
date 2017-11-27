@@ -28,7 +28,7 @@
             <div class="lobby-button-container">
                 <input class="js-lobby-nickname lobby-nickname" type="text" name="username" placeholder="Nickname">
                 <button class="js-lobby-button-ready button-toggle" type="button">Bereit</button>
-                <button class="js-lobby-button-start button-click" disabled>Spiel starten</button>
+                <button class="js-lobby-button-start button-click not-displayed" disabled>Spiel starten</button>
             </div>
             <div class="js-lobby-ready-counter lobby-ready-counter">0/0</div>
             <form action="/leaveLobby" method="get">
@@ -52,10 +52,10 @@
             <div class="end-screen">
                 <div class="js-end-screen-result"></div>
                 <div class="js-end-screen-witch"></div>
-                <div class="js-end-screen-right-guess"></div>
+                <div class="js-end-screen-right-guess not-displayed"></div>
                 <div class="js-end-screen-vote-time"></div>
                 <form action='/' method="post">
-                    <button type="submit">Fertig</button>
+                    <button class="button-click" type="submit">Fertig</button>
                 </form>
             </div>
         </div>

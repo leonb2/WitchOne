@@ -163,11 +163,9 @@ socket.on('sendExampleQuestion', function (data) {
 
 var startVoteButtonContainer = document.querySelector(".js-game-button-start-vote-container");
 var startVoteButton = document.querySelector(".js-game-button-start-vote");
-var voteStartTime;
 startVoteButton.addEventListener('click', function () {
     data = {'password': password};
     socket.emit('startVote', data);
-    voteStartTime = gameLength - intervalValue;
 });
 
 var voteButton = document.querySelector(".js-game-button-vote");
@@ -277,7 +275,10 @@ socket.on('assignRole', function (data) {
     roleDiv.innerHTML += data.role;
 });
 
+var voteStartTime;
 socket.on('voteStarted', function () {
+    voteStartTime = gameLength - intervalValue;
+    
     startVoteButtonContainer.innerHTML = "Abstimmung gestartet!";
     voteButton.classList.remove("game-button-vote-disabled");
     voteButton.disabled = false;
@@ -294,8 +295,6 @@ var voteStartDiv = document.querySelector(".js-end-screen-vote-time");
 socket.on('gameFinished', function (data) {
     clearInterval(interval);
     
-    endScreenDiv.classList.remove("not-visible");
-    
     if (data.witchCaught) {
         resultDiv.innerHTML = "Die Hexe wurde gefangen!";
     }
@@ -304,11 +303,15 @@ socket.on('gameFinished', function (data) {
     }
     
     witchDiv.innerHTML = "Die Hexe war " + data.witchName;
-    if (rightVote == true) {
-        guessDiv.innerHTML = "Du hast richtig getippt!";
-    }
-    else if (rightVote == false) {
-        guessDiv.innerHTML = "Du hast falsch getippt!";
+    
+    if (rightVote != null) {
+        guessDiv.classList.remove("not-displayed");
+        if (rightVote == true) {
+            guessDiv.innerHTML = "Du hast richtig getippt!";
+        }
+        else if (rightVote == false) {
+            guessDiv.innerHTML = "Du hast falsch getippt!";
+        }
     }
       
     if (voteStartTime) {   
@@ -319,6 +322,7 @@ socket.on('gameFinished', function (data) {
     else {
         voteStartDiv.innerHTML = "Es wurde keine Abstimmung gestartet!";
     }
+    endScreenDiv.classList.remove("not-visible");
     
     var won = false;
     if (isWitch) {
