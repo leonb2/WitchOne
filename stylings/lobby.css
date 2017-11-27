@@ -1,9 +1,3 @@
-body {
-    @import url(http://fonts.googleapis.com/css?family=Open+Sans);
-    font-family: Calibri Light, Calibri, 'Open Sans', sans-serif;
-    background: #242436;
-}
-
 /*  LOBBY-SEITE */
 .lobby-content {
     text-align: center;
@@ -79,7 +73,7 @@ body {
     border-radius: 5px; 
 }
 /* Start-Button: noch NICHT benutzbar */
-.lobby-button-start-disabled {
+.lobby-button-start:disabled {
     background-color: #242436; /* Hintergrundfarbe */ 
     border-color: #2D2D44; /* Hintergrundfarbe etwas heller */
     color: #2D2D44; /* Hintergrundfarbe etwas heller */
@@ -98,7 +92,6 @@ body {
 }
 
 .lobby-ready-counter {
-    font-family: Calibri Light;
     color: #228CDB;
     margin: 1.5rem;
     font-size: 1.7rem;

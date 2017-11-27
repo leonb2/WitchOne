@@ -122,7 +122,6 @@ socket.on('refreshNicknames', function (data) {
 function refreshReady (readyCount) {
     readyCounter.innerHTML = readyCount + "/" + playerCount;
     startButton.disabled = true;
-    startButton.classList.add("lobby-button-start-disabled");
 } 
 
 var readyCounter = document.querySelector(".js-lobby-ready-counter");
@@ -140,7 +139,6 @@ socket.on('refresh', function (data) {
 socket.on('everyoneReady', function () {
     if (admin) {
         startButton.disabled = false;
-        startButton.classList.remove("lobby-button-start-disabled");
     }
 });
 

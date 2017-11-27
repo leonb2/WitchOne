@@ -21,18 +21,38 @@
     color: #5DA7CB;
 }
 
+.button-click:hover:active {
+    cursor: pointer;
+}
+
+
 .button-click:active {
     color: #5DA7CB;
     background-color: #9999E430;
     border-color: #9595B1;
 }
 
-.button-click-disabled {
-    background-color: #9999E430;
+.button-click:disabled {
+    background-color: #9999E400;
     border-color: #9999E450;
     color: #9999E450;
 }
 
 .button-toggle {
-    
+    color: #EEEEFE;
+    font-size: 1rem;
+    background-color: #9999E450;
+    width: 16rem;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    border-color: #EEEEFE;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px; 
+    box-sizing: content-box;
+    transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.button-toggle:hover {
+    color: white;
 }

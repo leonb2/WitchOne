@@ -10,53 +10,60 @@
                 background: #242436;
             }
         </style>
+        
+        <link rel="stylesheet" type="text/css" href="main.css">
         <link rel="stylesheet" type="text/css" href="home.css">
         <link rel="stylesheet" type="text/css" href="buttons.css">
     </head>
     
     <body>
-        <div class="home-welcome-text">Seid gegrüßt, <%= username %>!</div>
-        <form action="/joinLobbyPost" method="post">
-            <input class="home-password-input" type="text" name="lobbyPassword" maxlength="4" placeholder="Lobby-Code eingeben" required/>
-            <button class="button-click" type="submit">Lobby beitreten</button>
-        </form>
-        <form action="/createLobby" method="get">
-            <div><button class="button-click" type="submit">Lobby erstellen</button></div>
-        </form>
-        
-        <div class="home-statistics-container">
-            <div class="home-statistics">
-                <div>Letzten 3 Spielernamen:</div>
-                <div><% for (let i = 0; i < lastThreeNames.length; i++) {
-                if (i < lastThreeNames.length-1) { %>
-                    <%= lastThreeNames[i] %> ,
-                <% } else { %>
-                    <%= lastThreeNames[i] %>
-                <% }
-                } %>
+        <div class="home-container">
+            <div class="home-welcome-text">Sei gegrüßt, <%= username %>!</div>
+            <div class="home-form-container">
+                <form class="join-lobby-form" action="/joinLobbyPost" method="post">
+                    <input class="js-home-input-lobby" type="text" name="lobbyPassword" maxlength="4" placeholder="Lobby-Code eingeben" required/>
+                    <button class="js-home-button-join button-click" type="submit" disabled>Lobby beitreten</button>
+                </form>
+                <form action="/createLobby" method="get">
+                    <button class="button-click" type="submit">Lobby erstellen</button>
+                </form>
+            </div>
+
+            <div class="home-statistics-container">
+                <div class="home-statistics">
+                    <div>Letzten 3 Spielernamen:</div>
+                    <div><% for (let i = 0; i < lastThreeNames.length; i++) {
+                    if (i < lastThreeNames.length-1) { %>
+                        <%= lastThreeNames[i] %> ,
+                    <% } else { %>
+                        <%= lastThreeNames[i] %>
+                    <% }
+                    } %>
+                    </div>
+                </div>
+                <div class="home-statistics">
+                    <div>Spielzähler:</div>
+                    <div> <%= gameCount %></div>
+                </div>
+                <div class="home-statistics">
+                    <div>Tipprichtigkeit:</div>
+                    <div><%= correctGuesses %>%</div>
+                </div>
+                <div class="home-statistics">
+                    <div>Siege: </div>
+                    <div><%= winCount %></div>
+                </div>
+                <div class="home-statistics">
+                    <div>Hexenzähler:</div>
+                    <div><%= witchCount %></div>
                 </div>
             </div>
-            <div class="home-statistics">
-                <div>Spielzähler:</div>
-                <div> <%= gameCount %></div>
-            </div>
-            <div class="home-statistics">
-                <div>Tipprichtigkeit:</div>
-                <div><%= correctGuesses %>%</div>
-            </div>
-            <div class="home-statistics">
-                <div>Siege: </div>
-                <div><%= winCount %></div>
-            </div>
-            <div class="home-statistics">
-                <div>Hexenzähler:</div>
-                <div><%= witchCount %></div>
-            </div>
+
+            <form action="/logoutPost" method="post">
+                <button class="home-button-logout button-click" type="submit">Abmelden</button>
+            </form>
         </div>
         
-        <form action="/logoutPost" method="post">
-            <button class="home-button-logout button-click" type="submit">Abmelden</button>
-        </form>
-        
+        <script defer src="lobbyJoinButton.js"></script>
     </body>
 </html>

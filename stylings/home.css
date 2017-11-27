@@ -1,7 +1,9 @@
-body {
-    @import url(http://fonts.googleapis.com/css?family=Open+Sans);
-    font-family: Calibri Light, Calibri, 'Open Sans', sans-serif;
-    text-align: center;
+.home-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 100vh;
 }
 
 .home-welcome-text {
@@ -9,18 +11,48 @@ body {
     font-size: 2rem;
     font-weight: bold;
 }
-.home-password-input {
-    padding: 1rem;
-    text-align: center;
+
+.join-lobby-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.join-lobby-form input {
     color: #5DA7CB;
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: bold;
-    margin-bottom: 1.5rem;
-    width: 17.9rem;
-    
+    text-align: center;
+    background: none;
+    padding: 1rem 0.5rem;
+    width: 16rem;
+    margin-bottom: 2rem;
+    border: #EEEEFE;
     border-width: 1px;
     border-style: solid;
-    border-radius: 5px; 
+    border-radius: 5px;
+}
+
+.join-lobby-form input::placeholder {
+    color: #9595B1;
+}
+
+.join-lobby-form input::-webkit-input-placeholder {
+    color: #9595B1;
+}
+
+.join-lobby-form input::-moz-placeholder {
+    color: #9595B1;
+}
+
+.join-lobby-form input::-ms-input-placeholder {
+    color: #9595B1;
+}
+
+.join-lobby-form input:-moz-placeholder {
+    color: #9595B1;
+    text-align: center;
 }
 
 .home-button-logout {
@@ -35,8 +67,9 @@ body {
     justify-content: space-evenly;
     align-items: center;
     color: #EEEEFE;
-    font-size: 1.5rem;
-    width: 28rem;
+    font-size: 1rem;
+    /*width: 28rem;*/
+    width: 30rem;
     height: 14rem;
     margin: 2rem auto;
     border-top: 1px solid #EEEEFE;
@@ -51,4 +84,8 @@ body {
 
 .home-statistics div:nth-child(1) {
     font-weight: bold;
+}
+
+.home-statistics div:nth-child(2) {
+    color: #9999E4;
 }

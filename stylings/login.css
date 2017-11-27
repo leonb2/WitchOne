@@ -1,18 +1,3 @@
-body {
-    @import url(http://fonts.googleapis.com/css?family=Open+Sans);
-    font-family: Calibri Light, Calibri, 'Open Sans', sans-serif;
-    color: #9999E4;
-    white-space: nowrap;
-}
-
-h1, h2, h3, h4 {
-    margin: 0;
-}
-
-*:focus {
-    outline:none !important
-}
-
 .logo {
     margin: -8rem 0 -5rem 0;
     pointer-events: none;
@@ -43,7 +28,7 @@ h1, h2, h3, h4 {
 
 .login-form input {
     font-size: 1rem;
-    color: #9999E4;
+    color: #5DA7CB;
     width: 16rem;
     margin: 0.5rem;
     padding: 0.5rem;
@@ -82,6 +67,7 @@ h1, h2, h3, h4 {
 .login-explanation-container {
     padding-left: 6rem;
     border-left: 1px solid #EEEEFE;
+    color: #9999E4;
 }
 
 .login-explanation-container h1, h2 {
