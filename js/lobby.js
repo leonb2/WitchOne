@@ -65,11 +65,11 @@ readyButton.disabled = true;
 readyButton.addEventListener('click', function () {
     if (ready) {
         ready = false;
-        readyButton.classList.remove("lobby-button-ready-active");
+        readyButton.classList.remove("button-toggle-enabled");
     } 
     else {
         ready = true;
-        readyButton.classList.add("lobby-button-ready-active");
+        readyButton.classList.add("button-toggle-enabled");
     }
     var data = {'lobbyIndex': lobbyIndex, 'ready' : ready};
     socket.emit('playerReady', data);
