@@ -23,6 +23,12 @@ h1, h2, h3, h4 {
     outline:none !important
 }
 
+@media only screen and (max-device-width: 420px) {
+    html {
+        font-size: 175%;
+    }
+}
+
 /*
 color: #82204A bordeaux
 
@@ -31,5 +37,5 @@ color: #9999E4; text
 color: #5DA7CB second text
 color: #EEEEFE; highlight
 color: #9595B1; placeholder
-background: #9999E450; button
+background: rgba(153, 153, 228, 0.33); button (old: #9999E450)
 */

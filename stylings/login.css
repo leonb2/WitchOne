@@ -84,10 +84,6 @@
 }
 
 @media only screen and (max-device-width: 420px) {
-    html {
-        font-size: 175%;
-    }
-    
     .login-container {
         flex-direction: column;
         margin: 5rem 0;
