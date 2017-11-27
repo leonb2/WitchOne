@@ -25,14 +25,14 @@
         <div class="js-lobby-content lobby-content">
             <div class="js-lobby-password lobby-password"><%= lobbyPassword %></div>
             <div class="js-lobby-nickname-list lobby-nickname-list"></div>
-            <input class="js-lobby-nickname lobby-nickname" type="text" name="username" placeholder="Nickname">
-            <br>
-            <button class="js-lobby-button-ready button-toggle" type="button">BEREIT</button>
-            <br>
-            <button class="js-lobby-button-start button-click" disabled>SPIEL STARTEN</button>
+            <div class="lobby-button-container">
+                <input class="js-lobby-nickname lobby-nickname" type="text" name="username" placeholder="Nickname">
+                <button class="js-lobby-button-ready button-toggle" type="button">Bereit</button>
+                <button class="js-lobby-button-start button-click" disabled>Spiel starten</button>
+            </div>
             <div class="js-lobby-ready-counter lobby-ready-counter">0/0</div>
             <form action="/leaveLobby" method="get">
-                <button class="lobby-button-leave" type="submit">Lobby verlassen</button>
+                <button class="button-click button-click-dark" type="submit">Lobby verlassen</button>
             </form>
         </div>
         

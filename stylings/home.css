@@ -55,11 +55,6 @@
     text-align: center;
 }
 
-.home-button-logout {
-    background-color: #9999E430 !important;
-    background: #2D2D44 !important;
-}
-
 /* STATISTIKEN */
 .home-statistics-container {
     display: flex;
