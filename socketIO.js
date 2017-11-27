@@ -243,6 +243,16 @@ exports.initialize = function (server, roomDeleteCallback, updateUserStatisticCa
                 room.votedIDsAmount[index]++;
             } 
             
+            // Check if player voted correctly
+            let newData;
+            if (userID == room.witchID) {
+                newData = {'rightVote' : true};
+            }
+            else {
+                newData = {'rightVote' : false};
+            }
+            socket.emit('rightVote', newData);
+            
             // Check if everyone voted
             let voteCount = 0;
             for (let i = 0; i < room.votedIDsAmount.length; i++) {
@@ -262,7 +272,6 @@ exports.initialize = function (server, roomDeleteCallback, updateUserStatisticCa
                     }
                 }
                 
-                let newData;
                 let witchName = room.users[room.userIDs.indexOf(room.witchID)];
                 if (room.votedIDsAmount.length > 1) {
                     if (room.votedIDsAmount[room.votedIDsAmount.length-1] > room.votedIDsAmount[room.votedIDsAmount.length-2]) {
