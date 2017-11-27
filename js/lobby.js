@@ -249,7 +249,7 @@ socket.on('gameStarted', function (data) {
     if (!isWitch) {
         for (var i = 0; i < data.users.length; i++) {
             if (data.users[i] != lastName) {
-                checklistDiv.innerHTML += "<button class='js-game-button-checklist game-button game-button-checklist' buttontype='button'>"+data.users[i]+"</button>";
+                checklistDiv.innerHTML += "<button class='js-game-button-checklist button-toggle' buttontype='button'>"+data.users[i]+"</button>";
             }
         }
 
@@ -267,7 +267,7 @@ socket.on('gameStarted', function (data) {
 
 socket.on('sendPossiblePlaces', function (data) {
     for (var i = 0; i < data.places.length; i++) {
-            checklistDiv.innerHTML += "<button class='js-game-button-checklist game-button game-button-checklist' buttontype='button'>"+data.places[i]+"</button>";        
+            checklistDiv.innerHTML += "<button class='js-game-button-checklist button-toggle' buttontype='button'>"+data.places[i]+"</button>";        
     }
     checklistButtons = document.querySelectorAll(".js-game-button-checklist");
     setupChecklistButtons();
@@ -339,12 +339,12 @@ function setupChecklistButtons () {
     for (var i = 0; i < checklistButtons.length; i++) {
         checklistButtons[i].addEventListener('click', function (event) {
             if (!voted) {
-                if (!event.target.classList.contains("game-button-checklist-active")) {
-                    event.target.classList.add("game-button-checklist-active");
+                if (!event.target.classList.contains("button-toggle-enabled")) {
+                    event.target.classList.add("button-toggle-enabled");
                     activeChecklistButtons.push(event.target.innerHTML);
                 }
                 else {
-                    event.target.classList.remove("game-button-checklist-active");
+                    event.target.classList.remove("button-toggle-enabled");
 
                     var index = activeChecklistButtons.indexOf(event.target.innerHTML);                  
                     activeChecklistButtons.splice(index, 1);
