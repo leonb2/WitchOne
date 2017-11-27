@@ -147,3 +147,30 @@ input[type=range]::-ms-track {
   background: #EEEEFE;
   border-radius: 1px;
 }
+
+@media only screen and (max-device-width: 420px) {
+    .create-lobby-form {
+        justify-content: space-around;
+    }
+    
+    .game-length-slider {
+        width: 15rem;
+    }
+    
+    .create-lobby-form input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 3rem;
+        width: 3rem;
+        background: #5DA7CB;
+        border-radius: 50%;
+        cursor: pointer;
+        margin-top: -1.2rem;
+    }
+    
+    input[type=range]::-webkit-slider-runnable-track {
+        height: 0.75rem;
+        cursor: pointer;
+        background: #EEEEFE;
+        border-radius: 1px;
+    }
+}
