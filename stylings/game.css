@@ -1,21 +1,25 @@
 .not-displayed {
-    display: none;
-    pointer-events: none;
+    display: none !important;
+    pointer-events: none !important;
 }
 
 .not-visible {
-    opacity: 0;
-    pointer-events: none;
+    opacity: 0 !important;
+    pointer-events: none !important;
 }
 
 /* GAME-SEITE */
 
 .game-content {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-evenly; */
+    align-items: center;
+    min-height: 100vh;
 }
 
 .game-name {
-    color: #228CDB;
+    color: #5DA7CB;
     font-weight: auto;
     font-size: 2.5rem;
     font-weight: bold;
@@ -31,73 +35,28 @@
 }
 
 .game-role {
-    color: whitesmoke;
-    margin: 2rem;
-    font-size: 1.5rem;
+    color: #EEEEFE;
+    font-weight: auto;
+    margin: 2.5rem;
+    font-size: 2rem;
 }
 
 .game-timer {
-    color: #228CDB;
+    color: #5DA7CB;
     font-weight: auto;
     font-size: 2.5rem;
     font-weight: bold;
     margin: 3rem;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
     padding: 0.5rem;
 }
-
 .game-order {
-    color: whitesmoke;
-    margin: 1.5rem;
-    font-size: 1.5rem;
-}
-
-/* Auswahl der Spieler */
-.game-checklist {
-    color: whitesmoke;
-    margin: 1.5rem;
-}
-
-/* "Beispielfrage anfordern" */
-.game-button-question {
-    background-color: #3B3B58;
-    font-size: 1rem;
-    font-weight: lighter;
-    width: 20rem;
-    margin: 1.5rem;
-    padding: 0.5rem;
-    color: white;
-    background: #9999E450;
-    border-color: darkgrey;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 5px; 
-}
-.game-button-question:hover {
-    color: #228CDB;
-    border-color: #9999E4;
-    background-color: #3B3B58;
-    transition: color 0.1s ease, border-color 0.1s ease;
-}
-
-/* "Abstimmung starten" */
-.game-button-start-vote {
-    background-color: #3B3B58;
-    font-size: 1rem;
-    font-weight: lighter;
-    width: 20rem;
-    margin: 0.5rem;
-    padding: 0.5rem;
-    color: white;
-    background: #2D2D44;
-    border-color: #9999E450;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 5px; 
-}
-.game-button-start-vote:hover {
-    color: #9999E4;
-    border-color: #9999E4;
-    transition: color 0.1s ease, border-color 0.1s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #EEEEFE;
+    font-size: 1.75rem;
 }
 
 /* "Stimme abgeben" */
@@ -108,7 +67,7 @@
     width: 20rem;
     margin: 0.5rem;
     padding: 0.5rem;
-    color: white;
+    color: #EEEEFE;
     background: #2D2D44;
     border-color: #9999E450;
     border-width: 1px;
