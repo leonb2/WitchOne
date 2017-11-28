@@ -205,9 +205,12 @@ socket.on('rightVote', function (data) {
 });
 
 var gameLength;
+var place;
 socket.on('gameStarted', function (data) {
     
     var newData = {'lobbyIndex': lobbyIndex};
+    place = data.place;
+    
     // Am I the witch?
     if (ownId === data.witchID) {
         isWitch = true;
@@ -217,7 +220,7 @@ socket.on('gameStarted', function (data) {
     }
     else {     
         socket.emit('getRole', newData);
-        placeDiv.innerHTML = data.place;
+        placeDiv.innerHTML = place;
     }
     
     // Change content
@@ -279,7 +282,8 @@ var voteStartTime;
 socket.on('voteStarted', function () {
     voteStartTime = gameLength - intervalValue;
     
-    startVoteButtonContainer.innerHTML = "Abstimmung gestartet!";
+    startVoteButton.innerHTML = "Abstimmung gestartet!";
+    startVoteButton.disabled = true;
     voteButton.classList.remove("game-button-vote-disabled");
     voteButton.disabled = false;
     
@@ -291,6 +295,7 @@ socket.on('voteStarted', function () {
 var resultDiv = document.querySelector(".js-end-screen-result");
 var witchDiv = document.querySelector(".js-end-screen-witch");
 var guessDiv = document.querySelector(".js-end-screen-right-guess");
+var endPlaceDiv = document.querySelector(".js-end-screen-place");
 var voteStartDiv = document.querySelector(".js-end-screen-vote-time");
 socket.on('gameFinished', function (data) {
     clearInterval(interval);
@@ -313,6 +318,8 @@ socket.on('gameFinished', function (data) {
             guessDiv.innerHTML = "Du hast falsch getippt!";
         }
     }
+    
+    endPlaceDiv.innerHTML = "Der Ort war " + place + ".";
       
     if (voteStartTime) {   
         var minutes = Math.floor(voteStartTime/60);
