@@ -2,6 +2,7 @@ var socket = io();
 
 var lobbyContentDiv = document.querySelector(".js-lobby-content");
 var gameContentDiv = document.querySelector(".js-game-content");
+var infoOverlayDiv = document.querySelector(".js-info-overlay");
 var endScreenDiv = document.querySelector(".js-end-screen");
 
 var password = document.querySelector(".js-lobby-password").innerHTML;
@@ -153,12 +154,22 @@ var checklistDiv = document.querySelector(".js-game-checklist");
 var checklistButtons;
 var activeChecklistButtons = [];
 
+var infoOverlayInfoDiv = document.querySelector(".js-info-overlay-info");
+function showInfoOverlay (info) {
+    infoOverlayDiv.classList.remove("not-visible");
+    infoOverlayInfoDiv.innerHTML = info;
+}
+var infoOverlayButton = document.querySelector(".js-info-overlay-button");
+infoOverlayButton.addEventListener('click', function () {
+    infoOverlayDiv.classList.add("not-visible");
+});
+
 var questionButton = document.querySelector(".js-game-button-question");
 questionButton.addEventListener('click', function () {
     socket.emit('getExampleQuestion');
     });
 socket.on('sendExampleQuestion', function (data) {
-        alert(data.question);
+    showInfoOverlay(data.question);
 });
 
 var startVoteButtonContainer = document.querySelector(".js-game-button-start-vote-container");
@@ -182,7 +193,7 @@ voteButton.addEventListener('click', function () {
                 'vote': activeChecklistButtons[0]
             };
         
-        if (!isWitch) {      
+        if (!isWitch) {
             voteButton.innerHTML = "Abgestimmt!";         
             socket.emit('voted', data);
         }
@@ -193,10 +204,10 @@ voteButton.addEventListener('click', function () {
     }
     else {
         if (isWitch) {
-            alert("Bitte einen einzigen Ort auswählen.");
+            showInfoOverlay("Bitte einen einzigen Ort auswählen!");
         }
         else {
-            alert("Bitte einen einzigen Spieler auswählen zum Anschuldigen.")
+            showInfoOverlay("Bitte einen einzigen Spieler auswählen zum Anschuldigen.");
         }
     }
 });
