@@ -20,6 +20,11 @@
     align-items: center;
 }
 
+.join-lobby-info {
+    color: #EEEEFE;
+    font-size: 1.5rem;
+}
+
 .join-lobby-form input {
     color: #5DA7CB;
     font-size: 1.25rem;
@@ -28,7 +33,7 @@
     background: none;
     padding: 1rem 0.5rem;
     width: 16rem;
-    margin-bottom: 2rem;
+    margin: 1rem 0 2rem 0;
     border: #EEEEFE;
     border-width: 2px;
     border-style: solid;

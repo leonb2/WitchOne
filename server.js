@@ -146,7 +146,14 @@ app.get('/', (request, response) => {
         let correctGuesses = request.session.user.correctGuesses;
         let correctPercentage = Math.round(correctGuesses/gameCount*100).toFixed(2);
         
+        let info = "";
+        if (request.session.joinLobbyFail) {
+            info = "Lobby nicht gefunden!";
+            request.session.joinLobbyFail = null;
+        }
+        
         response.render('home', {
+            'info': info,
             'username' : request.session.user.username,
             'lastThreeNames': request.session.user.lastThreeNames,
             'gameCount': gameCount,
@@ -161,6 +168,7 @@ app.get('/', (request, response) => {
 app.post('/', (request, response) => {
     database.collection(DB_USERS).findOne({'username': request.session.user.username}, (err, result) => {
         response.render('home', {
+            'info': "",
             'username' : result.username,
             'lastThreeNames': result.lastThreeNames,
             'gameCount': result.gameCount,
@@ -379,6 +387,7 @@ app.post('/joinLobbyPost', (request, response) => {
     }
     
     // If the room was not found
+    request.session.joinLobbyFail = true;
     response.redirect('/');
 });
 

@@ -307,7 +307,7 @@ socket.on('gameFinished', function (data) {
         resultDiv.innerHTML = "Die Hexe ist entkommen!";
     }
     
-    witchDiv.innerHTML = "Die Hexe war " + data.witchName;
+    witchDiv.innerHTML = "Die Hexe war " + data.witchName + ".";
     
     if (rightVote != null) {
         guessDiv.classList.remove("not-displayed");

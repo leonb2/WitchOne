@@ -21,6 +21,7 @@
             <div class="home-welcome-text">Sei gegrüßt, <%= username %>!</div>
             <div class="home-form-container">
                 <form class="join-lobby-form" action="/joinLobbyPost" method="post">
+                    <div class="join-lobby-info"><%= info %></div>
                     <input class="js-home-input-lobby" type="text" name="lobbyPassword" maxlength="4" placeholder="Lobby-Code eingeben" required/>
                     <button class="js-home-button-join button-click" type="submit" disabled>Lobby beitreten</button>
                 </form>

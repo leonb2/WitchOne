@@ -22,8 +22,8 @@
                 <div class="logo">
                     <img src="../img/logo.png">
                 </div>
-                <div class="login-info"><%= info %></div>
                 <form class="login-form" action="/loginPost" method="post">
+                    <div class="login-info"><%= info %></div>
                     <input type="text" value="<%= usernameValue %>" name="username" placeholder="Nutzername" required/>
                     <input type="password" name="password" placeholder="Passwort" required/>
                     <button class="button-click" type="submit">Anmelden</button>
