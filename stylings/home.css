@@ -10,6 +10,7 @@
     color: #EEEEFE;
     font-size: 2rem;
     font-weight: bold;
+    margin: 3rem;
 }
 
 .join-lobby-form {
@@ -21,7 +22,7 @@
 
 .join-lobby-form input {
     color: #5DA7CB;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: bold;
     text-align: center;
     background: none;
@@ -29,7 +30,7 @@
     width: 16rem;
     margin-bottom: 2rem;
     border: #EEEEFE;
-    border-width: 1px;
+    border-width: 2px;
     border-style: solid;
     border-radius: 5px;
 }
