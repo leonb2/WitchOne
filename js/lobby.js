@@ -20,7 +20,7 @@ socket.on('joinLobbySuccessful', function (data) {
     lastName = data.thisName;
     refreshNicknames(data.users);
     readyCounter.innerHTML = data.readyCount + "/" + data.users.length;
-    nicknameField.placeholder = data.thisName;
+    nicknameField.placeholder = "Spielername";
 });
 
 socket.on('joinLobbyFail', function () {
