@@ -23,12 +23,14 @@ const passwordHash = require('password-hash');
 
 app.set('view engine', 'ejs');
 
+const fs = require('fs');
+
 // --- Set up TingoDB ---
 const DB_USERS = "users";
 const DB_PLACESANDROLES = "placesAndRoles";
 const DB_EXAMPLEQUESTIONS = "exampleQuestions";
 
-require('fs').mkdir(__dirname + '/tingodb', (err) => {});
+fs.mkdir(__dirname + '/tingodb', (err) => {});
 const db = require('tingodb')().Db;
 const database = new db(__dirname + '/tingodb', {});
 const ObjectID = require('tingodb')().ObjectID;
@@ -36,6 +38,8 @@ const ObjectID = require('tingodb')().ObjectID;
 const server = app.listen(port, () => {
    console.log(`Server started and is listening to ${port}`);
 });
+
+const databaseContent = require(__dirname + '/js/databaseContent.js');
 
 const socketScript = require(__dirname + '/socketIO.js');
 function ioRoomDeleteCallback(i) {
@@ -86,11 +90,24 @@ database.collection(DB_EXAMPLEQUESTIONS).find().toArray((err, result) => {
     }
 });
 
-app.get('/databases', (request, response) => {
-   response.render('databases'); 
+app.get('/databases', (request, response) => {    
+    data = databaseContent.getData();
+
+    database.collection(DB_PLACESANDROLES).insert(data[0], (err, result) => {
+        if (err) {
+            return console.log("Error while saving the places to the database!");
+        }
+        database.collection(DB_EXAMPLEQUESTIONS).insert(data[1], (err, result) => {
+            if (err) {
+                return console.log("Error while saving the questions to the database!");
+            }
+            response.redirect('/');
+        });
+    });
+    // response.render('databases'); 
 });
 
-app.post('/placePost', (request, response) => {
+/*app.post('/placePost', (request, response) => {
     let place = request.body.place;
     let rawRoles = request.body.roles;
     let roles = rawRoles.split(/\r?\n/);
@@ -114,7 +131,7 @@ app.post('/questionPost', (request, response) => {
         }
     });
     response.redirect('/databases');
-});
+});*/
 
 // Called when the user comes to the website
 app.get('/', (request, response) => {

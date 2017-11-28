@@ -184,11 +184,11 @@ exports.initialize = function (server, roomDeleteCallback, updateUserStatisticCa
             let index = 0;
             let random;
             let role;
-            while (index != -1) {
-                random = Math.floor(Math.random() * placesAndRoles[room.placeIndex].roles.length);
-                
+            do {
+                random = Math.floor(Math.random() * placesAndRoles[room.placeIndex].roles.length);           
                 index = room.usedRoleIndices.indexOf(random);
             }
+            while (index != -1 && room.usedRoleIndices.length < placesAndRoles[room.placeIndex].roles.length);
             room.usedRoleIndices.push(random);
             role = placesAndRoles[room.placeIndex].roles[random];
             
