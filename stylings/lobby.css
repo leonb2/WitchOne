@@ -42,9 +42,7 @@
     padding: 1rem 0.5rem;
     width: 16rem;
     margin-bottom: 2rem;
-    border: #EEEEFE;
-    border-width: 1px;
-    border-style: solid;
+    border: 1px solid #EEEEFE;
     border-radius: 5px;
 }
 
@@ -67,37 +65,6 @@
 .lobby-nickname:-moz-placeholder {
     color: #9595B1;
     text-align: center;
-}
-
-/* Bereit-Button */
-.lobby-button-ready {
-    background-color: #3B3B58;
-    font-size: 1rem;
-    font-weight: lighter;
-    width: 20rem;
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-    padding: 0.5rem;
-    color: white;
-    background: #9999E450;
-    border-color: darkgray;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 5px; 
-}
-
-.lobby-button-ready:hover {
-    color: #228CDB;
-    border-color: #9999E4;
-    background-color: #3B3B58;
-    transition: color 0.1s ease, border-color 0.1s ease;
-}
-
-/* Bereit-Button: bereits aktiviert */
-.lobby-button-ready-active {
-    background-color: #242436; /* Hintergrundfarbe */
-    border-color: #2D2D44; /* Hintergrundfarbe etwas heller */
-    color: #2D2D44; 
 }
 
 .lobby-ready-counter {

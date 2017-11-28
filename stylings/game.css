@@ -139,7 +139,7 @@
 
 .end-screen {
     background-color: #242436;
-    min-width: 50rem;
+    min-width: 60vw;
     height: auto;
     border: 1px solid #EEEEFE;
     border-radius: 10px;
@@ -153,7 +153,7 @@
 .end-screen div {
     color: #EEEEFE;
     font-size: 1.5rem;
-    margin: 2rem 0;
+    margin: 2rem;
 }
 
 .end-screen form {
