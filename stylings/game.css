@@ -13,7 +13,7 @@
 .game-content {
     display: flex;
     flex-direction: column;
-    /* justify-content: space-evenly; */
+    justify-content: space-evenly;
     align-items: center;
     min-height: 100vh;
 }
@@ -23,22 +23,19 @@
     font-weight: auto;
     font-size: 2.5rem;
     font-weight: bold;
-    margin: 3rem;
     padding: 0.5rem;
 }
 
 .game-place {
-    color: #82204A;
-    margin: 1.5rem;
+    color: rgba(153, 153, 228, 0.33);
+    /*color: #82204A;*/
     font-size: 3rem;
-    font-weight:bold;
+    font-weight: bold;
 }
 
 .game-role {
     color: #EEEEFE;
     font-weight: auto;
-    margin-top: 2.5rem;
-    margin-bottom: 1rem;
     font-size: 2rem;
 }
 
@@ -47,7 +44,6 @@
     font-weight: auto;
     font-size: 2.5rem;
     font-weight: bold;
-    margin: 3rem;
     border-top: 1px solid white;
     border-bottom: 1px solid white;
     padding: 0.5rem;
@@ -56,6 +52,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     color: #EEEEFE;
     font-size: 1.75rem;
 }
@@ -64,7 +61,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    width: 41rem;
+    max-width: 41rem;
 }
 
 .end-screen-container {
@@ -83,6 +80,7 @@
 .end-screen {
     background-color: #242436;
     min-width: 60vw;
+    max-width: 80vw;
     height: auto;
     border: 1px solid #EEEEFE;
     border-radius: 10px;
@@ -101,4 +99,23 @@
 
 .end-screen form {
     margin: 2rem 0;
+}
+
+@media only screen and (max-device-width: 420px) {
+    .game-content {
+        justify-content: space-around;
+    }
+    
+    .game-place {
+        height: 0;
+    }
+    
+    .game-checklist {
+        max-width: 20.3rem;
+    }
+    
+    .end-screen div:nth-child(4) {
+        text-align: center;
+        white-space: normal;
+    }
 }
