@@ -60,28 +60,11 @@
     font-size: 1.75rem;
 }
 
-/* "Stimme abgeben" */
-.game-button-vote {
-    background-color: #3B3B58;
-    font-size: 1rem;
-    font-weight: lighter;
-    width: 20rem;
-    margin: 0.5rem;
-    padding: 0.5rem;
-    color: #EEEEFE;
-    background: #2D2D44;
-    border-color: #9999E450;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 5px; 
-}
-.game-button-vote:hover {
-    color: #9999E4;
-    border-color: #9999E4;
-    transition: color 0.1s ease, border-color 0.1s ease;
-}
-.game-button-vote-disabled {
-    
+.game-checklist {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 41rem;
 }
 
 .end-screen-container {
