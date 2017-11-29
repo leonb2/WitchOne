@@ -73,25 +73,34 @@
     padding-left: 6rem;
     border-left: 1px solid #EEEEFE;
     color: #9999E4;
+    font-weight: bold;
+    margin: 2rem;
 }
 
-.login-explanation-container h1, h2 {
+.login-explanation-container h1 {
+    color: #EEEEFE;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+.login-explanation-container h2 {
+    color: #9595B1;
+    font-size: 1.75rem;
     margin-bottom: 1.5rem;
 }
 
-.login-explanation-container h3, h4 {
-    margin: 0.5rem 0;
+.login-explanation-container h3 {
     color: #EEEEFE;
+    font-size: 1.5rem;
 }
 
 .login-explanation-list {
-    margin-left: 1rem;
+ 
 }
 
 @media only screen and (max-device-width: 420px) {
     .login-container {
         flex-direction: column;
-        margin: 5rem 0;
+        /*margin: 5rem 0;*/
     }
     
     .login-form-container {
