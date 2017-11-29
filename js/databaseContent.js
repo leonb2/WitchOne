@@ -202,27 +202,27 @@ const places = [
             "Küchenmeister",
             "Wasserholer",
             "Feuermacher",
-            "Bratspieﬂdreher",
+            "Bratspießdreher",
             "Küchenknabe"
         ]
     }
 ]
 
 const questions = [
-    { 'question' : "Zu welcher Tageszeit ist man hier?"},
-    { 'question' : "Ist dies ein öffentlicher/privater Ort?"},
-    { 'question' : "Ist es hier warm/kalt?"},
-    { 'question' : "Wie ist der Altersdurchschnitt hier?"},
-    { 'question' : "Sind hier viele Menschen?"},
-    { 'question' : "Bist du freiwillig/beruflich hier?"},
-    { 'question' : "Welche Farben kommen hier vor?"},
-    { 'question' : "Gibt es hier Essen?"},
-    { 'question' : "Wie ist das Essen hier?"},
-    { 'question' : "Ist dieser Ort fest an einem Ort?"},
-    { 'question' : "Wie ist der Geruch hier?"},
-    { 'question' : "Riecht es hier un- angenehm?"},
-    { 'question' : "Riecht es hier un- angenehm?"},
-    { 'question' : "Wie laut ist es hier im Durchschnitt?"},
-    { 'question' : "Wie ist die Stimmung hier?"},
-    { 'question' : "Herrscht hier gute Stimmung?"}
+    { 'question' : "Zu welcher Tageszeit befindest du dich hier?"},
+    { 'question' : "Ist dieser Ort öffentlich oder privat?"},
+    { 'question' : "Wie hoch ist die Durchschnittstemperatur?"},
+    { 'question' : "Wie hoch ist der Altersdurchschnitt?"},
+    { 'question' : "Wie viele Menschen halten sich hier im Druchschnitt auf?"},
+    { 'question' : "Bist du privat oder beruflich hier?"},
+    { 'question' : "Welche auffälligen Farben gibt es an diesem Ort?"},
+    { 'question' : "Kannst du hier Essen und Trinken erwerben?"},
+    { 'question' : "Ist der gesellschaftliche Stand gehoben oder eher gering?"},
+    { 'question' : "Ist dieser Ort fest oder beweglich?"},
+    { 'question' : "Gibt es an diesem Ort einen auffälligen Geruch?"},
+    { 'question' : "Wie ist der gesundheitliche Zustand der Menschen an diesem Ort?"},
+    { 'question' : "Was für Tiere halten sich hier auf?"},
+    { 'question' : "Wie hoch ist der Lautstärkepegel? Ist es eher ruhig oder laut?"},
+    { 'question' : "Ist die Stimmung ausgelassen oder ernst?"},
+    { 'question' : "Ist es lebensbedrohlich an diesem Ort?"}
 ]
