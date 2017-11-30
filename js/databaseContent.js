@@ -10,8 +10,8 @@ const places = [
             "Priester",
             "Gläubiger",
             "Bischoff",
-            "Beichter",
-            "Asylsuchender"
+            "ein Beichter",
+            "ein Asylsuchender"
         ]
     },  
     {
@@ -22,22 +22,22 @@ const places = [
             "Schreiber",
             "Brauer",
             "Gärtner",
-            "Küchenmeister",
-            "Novize"
+            "der Küchenmeister",
+            "ein Novize"
         ]
     },    
     {
         'name': "Taverne",
         'roles': [
             "Wirt",
-            "Wache",
+            "die Wache",
             "Soldat",
-            "Säufer",
+            "ein Säufer",
             "Ritter",
-            "Schankmaid",
-            "Meuchler",
+            "die Schankmaid",
+            "ein Meuchler",
             "Schausteller",
-            "Küchenknabe"
+            "der Küchenknabe"
         ]
     },    
     {
@@ -47,37 +47,37 @@ const places = [
             "Vasall",
             "Fahnenträger",
             "Bogenschütze",
-            "Heerführer",
-            "König",
+            "der Heerführer",
+            "der König",
             "Belagerungsspezialist",
             "Ritter",
             "Söldner",
-            "Desateur",
-            "Verwundeter"        
+            "ein Desateur",
+            "ein Verwundeter"        
         ]
     },    
     {
         'name': "Thronsaal",
         'roles': [
-            "Bittsteller",
-            "Wache",
-            "Bediensteter",
+            "ein Bittsteller",
+            "die Wache",
+            "ein Bediensteter",
             "Hofnarr",
             "Mundschenk",
             "Leibwächter",
             "Berater",
-            "König",
+            "der König",
             "Ritter",
-            "Thronfolger"
+            "der Thronfolger"
         ]
     },    
     {
         'name': "Stallungen",
         'roles': [
-            "Knecht",
-            "Reiter",
+            "der Knecht",
+            "ein Reiter",
             "Ritter",
-            "Stallmeister",
+            "der Stallmeister",
             "Hufschmied",
             "Sattler",
             "Riemer",
@@ -87,12 +87,12 @@ const places = [
     {
         'name': "Kriegsschiff",
         'roles': [
-            "Kriegsherr",
+            "der Kriegsherr",
             "Krieger",
-            "Meuterer",
+            "ein Meuterer",
             "Ruderer",
-            "Seekranker",
-            "Tunichtgut"
+            "ein Seekranker",
+            "ein Tunichtgut"
         ]
     },
     {
@@ -114,9 +114,9 @@ const places = [
         'roles': [
             "Zöllner",
             "Händler",
-            "Wache",
-            "Bettler",
-            "Reisender",
+            "die Wache",
+            "ein Bettler",
+            "ein Reisender",
             "Schausteller"
         ]
     },    
@@ -126,18 +126,18 @@ const places = [
             "Bauer",
             "Händler",
             "Magd",
-            "Lehnsherr",
-            "Knecht",
-            "Sohn",
-            "Tochter"
+            "der Lehnsherr",
+            "der Knecht",
+            "der Sohn des Bauern",
+            "die Tochter des Bauern"
         ]
     },
     {
         'name': "Schmiede",
         'roles': [
-            "Schmied",
-            "Geselle",
-            "Knabe",
+            "der Schmied",
+            "der Geselle",
+            "ein Knabe",
             "Ritter",
             "Soldat",
             "Söldner",
@@ -164,11 +164,11 @@ const places = [
             "Händler",
             "Schmied",
             "Herold",
-            "Bettler",
-            "Taschendieb",
-            "Hehler",
+            "ein Bettler",
+            "ein Taschendieb",
+            "ein Hehler",
             "Marktschreier",
-            "Wache",
+            "eine Wache",
             "Metzger",
             "Schneider",
             "Töpfer",
@@ -179,30 +179,30 @@ const places = [
     {
         'name': "Lazarett",
         'roles': [
-            "Medicus",
-            "Verletzter",
+            "der Medicus",
+            "ein Verletzter",
             "Quacksalber",
-            "Geistiger",
-            "Gehilfe"
+            "ein Geistlicher",
+            "ein Gehilfe"
         ]
     },      
     {
         'name': "Siechenhaus",
         'roles': [
-            "Kranker",
+            "ein Kranker",
             "Bader",
-            "Verletzter",
-            "Gehilfe",
-            "Geistiger",
-            "Findelkind"
+            "ein Verletzter",
+            "ein Gehilfe",
+            "ein Geistlicher",
+            "ein Findelkind"
         ]
     },      {
         'name': "Hofküche",
         'roles': [
-            "Küchenmeister",
-            "Wasserholer",
-            "Feuermacher",
-            "Bratspießdreher",
+            "der Küchenmeister",
+            "der Wasserholer",
+            "der Feuermacher",
+            "der Bratspießdreher",
             "Küchenknabe"
         ]
     }
