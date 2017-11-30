@@ -122,7 +122,7 @@ exports.initialize = function (server, roomDeleteCallback, updateUserStatisticCa
 
             io.to(room.password).emit('refreshReady', readyCount);
             
-            if (readyCount == room.users.length) {
+            if (readyCount == room.users.length && readyCount >= 3) {
                 io.to(room.password).emit('everyoneReady');
             }
         });
