@@ -4,6 +4,8 @@
     justify-content: space-around;
     align-items: center;
     min-height: 98vh;
+    min-width: 40rem;
+    margin: 0 auto;
 }
 
 .home-welcome-text {
@@ -85,4 +87,10 @@
 
 .home-statistics div:nth-child(2) {
     color: #9999E4;
+}
+
+@media only screen and (max-device-width: 420px) {
+    .home-container {
+        min-width: 0;
+    }
 }
