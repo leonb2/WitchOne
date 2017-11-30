@@ -144,7 +144,8 @@ app.get('/', (request, response) => {
     else {
         let gameCount = request.session.user.gameCount;
         let correctGuesses = request.session.user.correctGuesses;
-        let correctPercentage = Math.round(correctGuesses/gameCount*100).toFixed(2);
+        let correctPercentage = gameCount > 0 ?
+        Math.round(correctGuesses/gameCount*100).toFixed(2): 0;
         
         let info = "";
         if (request.session.joinLobbyFail) {
@@ -393,8 +394,7 @@ app.post('/joinLobbyPost', (request, response) => {
 
 // Called after the user wanted to join a lobby and if the lobby was found
 app.get('/lobby', (request, response) => {
-    if (request.session.authenticated && request.session.room) {
-        
+    if (request.session.authenticated && request.session.room) {    
         let room = request.session.room;
         request.session.room = null;
         socketScript.pushRequest(request);
