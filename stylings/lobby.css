@@ -1,10 +1,9 @@
-/*  LOBBY-SEITE */
 .lobby-content {
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
-    min-height: 100vh;
+    min-height: 98vh;
 }
 
 .lobby-password {
@@ -16,7 +15,6 @@
     padding: 0.5rem;
 }
 
-/* NAMENSLISTE DER SPIELER */
 .lobby-nickname-list {    
     color: #EEEEFE;
     font-size: 1.75rem;
@@ -32,7 +30,6 @@
     align-items: center;
 }
 
-/* EINGABEFELD SPIELERNAME */
 .lobby-nickname {
     color: #5DA7CB;
     font-size: 1.5rem;
@@ -71,10 +68,4 @@
     color: #5DA7CB;
     font-size: 1.75rem;
     font-weight: bold;
-}
-
-@media only screen and (max-device-width: 420px) {
-    .lobby-content {
-        justify-content: space-around;
-    }
 }

@@ -8,14 +8,12 @@
     pointer-events: none !important;
 }
 
-/* GAME-SEITE */
-
 .game-content {
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
-    min-height: 100vh;
+    min-height: 98vh;
 }
 
 .game-name {
@@ -23,12 +21,10 @@
     font-weight: auto;
     font-size: 2.5rem;
     font-weight: bold;
-    padding: 0.5rem;
 }
 
 .game-place {
     color: rgba(153, 153, 228, 0.33);
-    /*color: #82204A;*/
     font-size: 3rem;
     font-weight: bold;
 }
@@ -102,10 +98,6 @@
 }
 
 @media only screen and (max-device-width: 420px) {
-    .game-content {
-        justify-content: space-around;
-    }
-    
     .game-place {
         height: 0;
     }

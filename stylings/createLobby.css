@@ -1,32 +1,38 @@
 .create-lobby-form {
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
-    min-height: 50vh;
-    margin-top: 4rem;
+    min-height: 70vh;
 }
 
-.password-text {
+.create-lobby-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.create-lobby-text {
     color: #EEEEFE;
     font-size: 1.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
+    text-align: center;
 }
 
-.created-password {
+.create-lobby-password {
     color: #9999E4;
     font-weight: bold;
     font-size: 3rem;
-    margin-bottom: 2rem;
     border-top: 1px solid white;
     border-bottom: 1px solid white;
     padding: 0.5rem;
 }
+
 .game-length-text {
     color: #EEEEFE;
     font-size: 1.5rem;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .game-length-slider {
@@ -35,44 +41,18 @@
 
 .game-length-number {
     color: #5DA7CB;
+    font-weight: bold;
+    font-size: 2rem;
+    text-align: center;
     width: 2rem;
     border-bottom: 1px solid white;
     padding: 0rem 1rem 0rem 1rem;
-    font-weight: bold;
-    font-size: 2rem;
-    margin-bottom: 2rem;
 }
 
-.game-length-number div {
-    text-align: center;
-}
-
-.create-lobby-button {
-    font-size: 1.5rem;
-    width: 20rem;
-    margin: 0.5rem;
-    padding: 0.5rem;
-    color: #EEEEFE;
-    background: #9999E450;
-    border-color: #EEEEFE;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 5px;
-}
-.create-lobby-button:hover {
-    color: #228CDB;
-    border-color: #9999E4;
-    background-color: #3B3B58;
-    transition: color 0.1s ease, border-color 0.1s ease;
-}
-
-/* SLIDER */
-
-/* Override standard stylings */
 .create-lobby-form input[type=range]  {
-    -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
-    /*width: 100%; /* Specific width is required for Firefox. */
-    background: transparent; /* Otherwise white in Chrome */
+    -webkit-appearance: none;
+    /*width: 100%;*/
+    background: transparent;
 }
 
 .create-lobby-form input[type=range]::-webkit-slider-thumb {
@@ -80,21 +60,18 @@
 }
 
 .create-lobby-form input[type=range]:focus {
-    outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+    outline: none;
 }
 
 .create-lobby-form input[type=range]::-ms-track {
     /*width: 100%;*/
     cursor: pointer;
 
-    /* Hides the slider so custom styles can be added */
     background: transparent; 
     border-color: transparent;
     color: transparent;
 }
 
-/* Style thumb */
-/* Special styling for WebKit/Blink */
 .create-lobby-form input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
     height: 1rem;
@@ -105,7 +82,6 @@
     margin-top: -.4rem;
 }
 
-/* All the same stuff for Firefox */
 .create-lobby-form input[type=range]::-moz-range-thumb {
     -webkit-appearance: none;
     height: 1rem;
@@ -116,7 +92,6 @@
     margin-top: -.4rem;
 }
 
-/* All the same stuff for IE */
 .create-lobby-form input[type=range]::-ms-thumb {
     -webkit-appearance: none;
     height: 1rem;
@@ -127,7 +102,6 @@
     margin-top: -.4rem;
 }
 
-/* Style track */
 input[type=range]::-webkit-slider-runnable-track {
   height: 0.25rem;
   cursor: pointer;
@@ -150,12 +124,9 @@ input[type=range]::-ms-track {
 }
 
 @media only screen and (max-device-width: 420px) {
-    .create-lobby-form {
-        justify-content: space-around;
-    }
-    
     .game-length-slider {
         width: 15rem;
+        margin: 2rem;
     }
     
     .create-lobby-form input[type=range]::-webkit-slider-thumb {
