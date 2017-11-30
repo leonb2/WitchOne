@@ -25,7 +25,10 @@ socket.on('joinLobbySuccessful', function (data) {
 });
 
 socket.on('joinLobbyFail', function () {
-    window.location.replace('/');
+    showInfoOverlay("Das Spiel ist bereits gestartet!");
+    infoOverlayButton.addEventListener('click', function () {
+        window.location.replace('/');
+    });
 });
 
 var nicknameField = document.querySelector(".js-lobby-nickname");
