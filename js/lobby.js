@@ -1,5 +1,7 @@
+// Initialize socket.io -> connects client
 var socket = io();
 
+// Get main divs
 var lobbyContentDiv = document.querySelector(".js-lobby-content");
 var gameContentDiv = document.querySelector(".js-game-content");
 var infoOverlayDiv = document.querySelector(".js-info-overlay");
@@ -16,6 +18,7 @@ socket.on('pushID', function (id) {
 
 var lobbyIndex;
 var nicknameList = document.querySelector(".js-lobby-nickname-list");
+// Called after a successful joining -> game not already running
 socket.on('joinLobbySuccessful', function (data) {
     lobbyIndex = data.lobbyIndex;
     lastName = data.thisName;
@@ -24,6 +27,7 @@ socket.on('joinLobbySuccessful', function (data) {
     nicknameField.placeholder = "Spielername";
 });
 
+// Called after a unsuccessful joining -> game already running
 socket.on('joinLobbyFail', function () {
     showInfoOverlay("Das Spiel ist bereits gestartet!");
     infoOverlayButton.addEventListener('click', function () {
@@ -32,6 +36,7 @@ socket.on('joinLobbyFail', function () {
 });
 
 var nicknameField = document.querySelector(".js-lobby-nickname");
+// Add event listener to the nickname field that enables/disables the ready button
 nicknameField.addEventListener('input', function () {
     if (nicknameField.value != "") {
         readyButton.disabled = false;
@@ -42,6 +47,7 @@ nicknameField.addEventListener('input', function () {
         readyButton.classList.add("lobby-button-ready-disabled");   
     }
 });
+// Add event listener that listens to the enter key
 nicknameField.addEventListener('keyup', function (event) {
     if (event.keyCode === 13) {
         nicknameField.blur();
@@ -49,6 +55,8 @@ nicknameField.addEventListener('keyup', function (event) {
 });
 
 var lastName;
+// Add event listener that checks if the player leaves the field
+// and then sends the event to update his name
 nicknameField.addEventListener("blur", function () {
     if (nicknameField.value != "" && nicknameField.value != lastName) {
         var name = nicknameField.value;
@@ -58,6 +66,7 @@ nicknameField.addEventListener("blur", function () {
         socket.emit('changeNickname', data);
     }
 });
+// Called if the wanted nickname is already used in the lobby
 socket.on('nameIsUsed', function (data) {
     lastName = data.name;
     nicknameField.value = lastName;
@@ -66,6 +75,8 @@ socket.on('nameIsUsed', function (data) {
 var readyButton = document.querySelector(".js-lobby-button-ready");
 var ready = false;
 readyButton.disabled = true;
+// Add event listener that toggles the ready button 
+// and sends the event to update the ready state of this player
 readyButton.addEventListener('click', function () {
     if (ready) {
         ready = false;
@@ -88,12 +99,14 @@ socket.on('resetReady', function () {
 })
 
 var startButton = document.querySelector(".js-lobby-button-start");
+// Add event listener that starts the game by sending the event
 startButton.addEventListener('click', function () { 
     data = {'lobbyIndex': lobbyIndex};
     socket.emit('startGame', data);
 });
 
 var admin = false;
+// Called when this player is the admin of the lobby
 socket.on('admin', function () {
     admin = true;
     startButton.classList.remove("not-displayed");
@@ -107,8 +120,7 @@ socket.on('assignNewAdmin', function (adminId) {
     }
 });
 
-// Refreshes the list of nicknames by devaring
-// and adding everyone again
+// Refreshes the list of nicknames by deleting and adding everyone again
 function refreshNicknames(nicknames) {
      nicknameList.innerHTML = "";
      for (var i = 0; i < nicknames.length; i++) {
@@ -118,6 +130,7 @@ function refreshNicknames(nicknames) {
 }
 
 var playerCount;
+// Called when one player changed his nickname
 socket.on('refreshNicknames', function (data) {
     playerCount = refreshNicknames(data.users);
 });
@@ -129,6 +142,7 @@ function refreshReady (readyCount) {
 } 
 
 var readyCounter = document.querySelector(".js-lobby-ready-counter");
+// Called when one player clicked the ready button
 socket.on('refreshReady', function (readyCount) {
     refreshReady(readyCount);
 });
@@ -148,6 +162,7 @@ socket.on('everyoneReady', function () {
 
 // ----- Game logic -----
 var isWitch = false;
+
 var nameDiv = document.querySelector(".js-game-name");
 var placeDiv = document.querySelector(".js-game-place");
 var roleDiv = document.querySelector(".js-game-role");
@@ -158,25 +173,30 @@ var checklistButtons;
 var activeChecklistButtons = [];
 
 var infoOverlayInfoDiv = document.querySelector(".js-info-overlay-info");
+// Displays the info overlay with the given string
 function showInfoOverlay (info) {
     infoOverlayDiv.classList.remove("not-visible");
     infoOverlayInfoDiv.innerHTML = info;
 }
 var infoOverlayButton = document.querySelector(".js-info-overlay-button");
+// Add event listener to the button that makes the info overlay invisible
 infoOverlayButton.addEventListener('click', function () {
     infoOverlayDiv.classList.add("not-visible");
 });
 
 var questionButton = document.querySelector(".js-game-button-question");
+// Add event listener to the button that sends the event to get an example question
 questionButton.addEventListener('click', function () {
     socket.emit('getExampleQuestion');
     });
+// Called right after the player requested a question
 socket.on('sendExampleQuestion', function (data) {
     showInfoOverlay(data.question);
 });
 
 var startVoteButtonContainer = document.querySelector(".js-game-button-start-vote-container");
 var startVoteButton = document.querySelector(".js-game-button-start-vote");
+// Add event listener to the button that starts the vote to find out who is the witch
 startVoteButton.addEventListener('click', function () {
     data = {'password': password};
     socket.emit('startVote', data);
@@ -185,6 +205,7 @@ startVoteButton.addEventListener('click', function () {
 var voteButton = document.querySelector(".js-game-button-vote");
 var voted = false;
 var rightVote;
+// Add event listener to the "send vote" button that will send the according event
 voteButton.addEventListener('click', function () {
     if (activeChecklistButtons.length == 1) {   
         voteButton.classList.add("game-button-vote-active");
@@ -214,12 +235,16 @@ voteButton.addEventListener('click', function () {
         }
     }
 });
+
+// Called when a non-witch player voted for the right witch
 socket.on('rightVote', function (data) {
    rightVote = data.rightVote; 
 });
 
 var gameLength;
 var place;
+
+// Called when the game starts and sets up all game information
 socket.on('gameStarted', function (data) {
     
     var newData = {'lobbyIndex': lobbyIndex};
@@ -280,6 +305,27 @@ socket.on('gameStarted', function (data) {
     gameLength = data.gameLength;
 });
 
+// Adds event listeners to all checklist buttons which contain all players or possible places
+function setupChecklistButtons () {
+    for (var i = 0; i < checklistButtons.length; i++) {
+        checklistButtons[i].addEventListener('click', function (event) {
+            if (!voted) {
+                if (!event.target.classList.contains("button-roles-enabled")) {
+                    event.target.classList.add("button-roles-enabled");
+                    activeChecklistButtons.push(event.target.innerHTML);
+                }
+                else {
+                    event.target.classList.remove("button-roles-enabled");
+
+                    var index = activeChecklistButtons.indexOf(event.target.innerHTML);                  
+                    activeChecklistButtons.splice(index, 1);
+                }
+            }
+        });
+    }
+}
+
+// Called when a player left a running game
 socket.on('gameAbort', function () {
     showInfoOverlay("Ein Spieler hat das Spiel verlassen. Es wird nun beendet!");
     infoOverlayButton.addEventListener('click', function () {
@@ -287,6 +333,7 @@ socket.on('gameAbort', function () {
     });
 });
 
+// Called after game start for the witch
 socket.on('sendPossiblePlaces', function (data) {
     for (var i = 0; i < data.places.length; i++) {
             checklistDiv.innerHTML += "<button class='js-game-button-checklist button-roles' buttontype='button'>"+data.places[i]+"</button>";        
@@ -295,11 +342,13 @@ socket.on('sendPossiblePlaces', function (data) {
     setupChecklistButtons();
 });
 
+// Called after game start for all non-witch players
 socket.on('assignRole', function (data) {
     roleDiv.innerHTML += data.role;
 });
 
 var voteStartTime;
+// Called after one player starts the vote to accuse players of being the witch
 socket.on('voteStarted', function () {
     voteStartTime = gameLength - intervalValue;
     
@@ -318,6 +367,8 @@ var witchDiv = document.querySelector(".js-end-screen-witch");
 var guessDiv = document.querySelector(".js-end-screen-right-guess");
 var endPlaceDiv = document.querySelector(".js-end-screen-place");
 var voteStartDiv = document.querySelector(".js-end-screen-vote-time");
+// Called when the game is done - time out, witch is correct, vote is done
+// Sets up end screen
 socket.on('gameFinished', function (data) {
     clearInterval(interval);
     
@@ -369,27 +420,9 @@ socket.on('gameFinished', function (data) {
     socket.emit('updateStatistics', newData);
 });
 
-function setupChecklistButtons () {
-    for (var i = 0; i < checklistButtons.length; i++) {
-        checklistButtons[i].addEventListener('click', function (event) {
-            if (!voted) {
-                if (!event.target.classList.contains("button-roles-enabled")) {
-                    event.target.classList.add("button-roles-enabled");
-                    activeChecklistButtons.push(event.target.innerHTML);
-                }
-                else {
-                    event.target.classList.remove("button-roles-enabled");
-
-                    var index = activeChecklistButtons.indexOf(event.target.innerHTML);                  
-                    activeChecklistButtons.splice(index, 1);
-                }
-            }
-        });
-    }
-}
-
 var interval;
 var intervalValue;
+// Starts a countdown that is shown on screen
 function timer (timeSec) {
     if (interval) {
         clearInterval(interval);
@@ -411,10 +444,12 @@ function timer (timeSec) {
     }, 1000);
 }
 
+// Converts all digits below 10 to have two digits -> 4 = 04
 function minTwoDigits (number) {
     return number < 10 ? number = "0" + number : number;
 }
 
+// Add event listener that will not let the players reload or leave the page like that
 window.addEventListener('beforeunload', function (event) {
     return event.returnValue = "Du wirst somit aus der Lobby entfernt. ";
 });

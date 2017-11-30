@@ -3,9 +3,12 @@ let placesAndRoles;
 let exampleQuestions;
 let request;
 
-exports.initialize = function (server, roomDeleteCallback, updateUserStatisticCallback) {
+exports.initialize = function (server, places, questions, roomDeleteCallback, updateUserStatisticCallback) {
     const socketio = require('socket.io');
     const io = socketio(server);
+    
+    placesAndRoles = places;
+    exampleQuestions = questions;
         
     /*
     Called when a user joins a lobby
@@ -359,14 +362,6 @@ exports.initialize = function (server, roomDeleteCallback, updateUserStatisticCa
 
 exports.addRoom = function (room) {
     rooms.push(room);
-}
-
-exports.pushPlaces = function (places) {
-    placesAndRoles = places;
-}
-
-exports.pushQuestions = function (questions) {
-    exampleQuestions = questions;
 }
 
 exports.pushRequest = function (req) {

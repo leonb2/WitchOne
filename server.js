@@ -27,8 +27,6 @@ const fs = require('fs');
 
 // --- Set up TingoDB ---
 const DB_USERS = "users";
-const DB_PLACESANDROLES = "placesAndRoles";
-const DB_EXAMPLEQUESTIONS = "exampleQuestions";
 
 fs.mkdir(__dirname + '/tingodb', (err) => {});
 const db = require('tingodb')().Db;
@@ -40,11 +38,16 @@ const server = app.listen(port, () => {
 });
 
 const databaseContent = require(__dirname + '/js/databaseContent.js');
+let data = databaseContent.getData();
 
 const socketScript = require(__dirname + '/socketIO.js');
+
+// Called in socketIO.js when a room is empty
 function ioRoomDeleteCallback(i) {
     rooms.splice(i, 1);
 }
+
+// Called in socketIO.js when a game was completed
 function updateUserStatisticCallback(request, data) {
     let user = request.session.user;
     
@@ -71,67 +74,9 @@ function updateUserStatisticCallback(request, data) {
     
     database.collection(DB_USERS).update({'username': user.username}, user);   
 }
-socketScript.initialize(server, ioRoomDeleteCallback, updateUserStatisticCallback);
+
+socketScript.initialize(server, data[0], data[1], ioRoomDeleteCallback, updateUserStatisticCallback);
 const rooms = [];
-
-let placesAndRoles;
-database.collection(DB_PLACESANDROLES).find().toArray((err, result) => {
-    if (result) {
-        placesAndRoles = result;
-        socketScript.pushPlaces(placesAndRoles);
-    }
-});
-
-let exampleQuestions;
-database.collection(DB_EXAMPLEQUESTIONS).find().toArray((err, result) => {
-    if (result) {
-        exampleQuestions = result;
-        socketScript.pushQuestions(exampleQuestions);
-    }
-});
-
-app.get('/databases', (request, response) => {    
-    data = databaseContent.getData();
-
-    database.collection(DB_PLACESANDROLES).insert(data[0], (err, result) => {
-        if (err) {
-            return console.log("Error while saving the places to the database!");
-        }
-        database.collection(DB_EXAMPLEQUESTIONS).insert(data[1], (err, result) => {
-            if (err) {
-                return console.log("Error while saving the questions to the database!");
-            }
-            response.redirect('/');
-        });
-    });
-    // response.render('databases'); 
-});
-
-/*app.post('/placePost', (request, response) => {
-    let place = request.body.place;
-    let rawRoles = request.body.roles;
-    let roles = rawRoles.split(/\r?\n/);
-    
-    let placeObj = {'name' : place, 'roles' : roles};
-    database.collection(DB_PLACESANDROLES).save(placeObj, (err, result) => {
-        if (err) {
-            return console.log("Error while saving the new place!");
-        }
-    });
-    response.redirect('/databases');
-});
-
-app.post('/questionPost', (request, response) => {
-    let question = request.body.question;
-    let questionObj = {'question' : question};
-    
-    database.collection(DB_EXAMPLEQUESTIONS).save(questionObj, (err, result) => {
-        if (err) {
-            return console.log("Error while saving the new question!");
-        }
-    });
-    response.redirect('/databases');
-});*/
 
 // Called when the user comes to the website
 app.get('/', (request, response) => {
@@ -229,6 +174,7 @@ app.post('/loginPost', (request, response) => {
     });
 });
 
+// Called when the user clicks the button logout
 app.post('/logoutPost', (request, response) => {
     request.session.destroy();
     response.redirect('/');
@@ -258,41 +204,55 @@ app.post('/registerPost', (request, response) => {
         'username' : username
     }, (err, result) => {   
         // If the username is still free
-        if (!result) {   
-            if (password === confirmPassword) {  
-                // Hash password
-                let hash = passwordHash.generate(password);
+        if (!result) {         
+            database.collection(DB_USERS).findOne({
+                'email' : email
+            }, (err, result) => {
+                // If email is free too
+                if (!result) {
+                    if (password === confirmPassword) {  
+                    // Hash password
+                    let hash = passwordHash.generate(password);
 
-                // Add user to database
-                let user = {
-                    'username': username,
-                    'password': hash,
-                    'email': email,
-                    'lastThreeNames': [],
-                    'gameCount': 0,
-                    'correctGuesses': 0,
-                    'winCount': 0,
-                    'witchCount': 0
-                };
-                database.collection(DB_USERS).save(user, (err, result) => {
-                    if (err) {
-                        return console.log("Error while saving the user!"); 
+                    // Add user to database
+                    let user = {
+                        'username': username,
+                        'password': hash,
+                        'email': email,
+                        'lastThreeNames': [],
+                        'gameCount': 0,
+                        'correctGuesses': 0,
+                        'winCount': 0,
+                        'witchCount': 0
+                    };
+                    database.collection(DB_USERS).save(user, (err, result) => {
+                        if (err) {
+                            return console.log("Error while saving the user!"); 
+                        }
+                    });
+
+                    // Login user as well
+                    request.session.user = user;
+                    request.session.authenticated = true;     
+
+                    response.redirect('/');
                     }
-                });
-                
-                // Login user as well
-                request.session.user = user;
-                request.session.authenticated = true;     
-
-                response.redirect('/');
-            }
-            // = If both passwords were not equal
-            else {
-                response.render('register', {
-                    'info' : "Passwörter stimmen nicht überein!",
-                    'usernameValue' : username
-                }); 
-            }          
+                    // = If both passwords were not equal
+                    else {
+                        response.render('register', {
+                            'info' : "Passwörter stimmen nicht überein!",
+                            'usernameValue' : username
+                        }); 
+                    }          
+                }
+                // = If the email is already used
+                else {
+                    response.render('register', {
+                        'info' : "Email wird bereits verwendet!",
+                        'usernameValue' : ""
+                    }); 
+                }
+            });
         }
         // = If the username is already used
         else {
@@ -394,6 +354,7 @@ app.post('/joinLobbyPost', (request, response) => {
 
 // Called after the user wanted to join a lobby and if the lobby was found
 app.get('/lobby', (request, response) => {
+    // If the user is logged in and can join a room
     if (request.session.authenticated && request.session.room) {    
         let room = request.session.room;
         request.session.room = null;
@@ -414,6 +375,7 @@ app.get('/leaveLobby', (request, response) => {
     response.redirect('/');
 });
 
+// Called when a URL is called that is not implemented
 app.use((request, response, next) => {
   response.status(404).render('error');
 })
