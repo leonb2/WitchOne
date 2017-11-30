@@ -280,7 +280,7 @@ socket.on('gameStarted', function (data) {
     gameLength = data.gameLength;
 });
 
-socket.on('gameAbort', () => {
+socket.on('gameAbort', function () {
     showInfoOverlay("Ein Spieler hat das Spiel verlassen. Es wird nun beendet!");
     infoOverlayButton.addEventListener('click', function () {
         window.location.replace('/');

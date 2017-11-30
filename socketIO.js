@@ -316,8 +316,8 @@ exports.initialize = function (server, roomDeleteCallback, updateUserStatisticCa
                         // If the game is not running already
                         if (room.witchID == null) {
                         
-                            let users = room;
-                            let userIDs = room;
+                            let users = room.users;
+                            let userIDs = room.userIDs;
 
                             users.splice(j, 1);
                             userIDs.splice(j, 1);
