@@ -277,6 +277,13 @@ socket.on('gameStarted', function (data) {
     gameLength = data.gameLength;
 });
 
+socket.on('gameAbort', () => {
+    showInfoOverlay("Ein Spieler hat das Spiel verlassen. Es wird nun beendet!");
+    infoOverlayButton.addEventListener('click', function () {
+        window.location.replace('/');
+    });
+});
+
 socket.on('sendPossiblePlaces', function (data) {
     for (var i = 0; i < data.places.length; i++) {
             checklistDiv.innerHTML += "<button class='js-game-button-checklist button-roles' buttontype='button'>"+data.places[i]+"</button>";        
@@ -320,6 +327,18 @@ socket.on('gameFinished', function (data) {
     
     witchDiv.innerHTML = "Die Hexe war " + data.witchName + ".";
     
+    var won = false;
+    if (isWitch) {
+        rightVote = false;
+        if (!data.witchCaught) {
+            won = true;
+            rightVote = true;
+        }
+    }
+    else if (data.witchCaught) {
+        won = true;
+    }
+    
     if (rightVote != null) {
         guessDiv.classList.remove("not-displayed");
         if (rightVote == true) {
@@ -342,16 +361,6 @@ socket.on('gameFinished', function (data) {
     }
     endScreenDiv.classList.remove("not-visible");
     
-    var won = false;
-    if (isWitch) {
-        rightVote = true;
-        if (!data.witchCaught) {
-            won = true;
-        }
-    }
-    else if (data.witchCaught) {
-        won = true;
-    }
     var newData = {'name': lastName, 'rightVote': rightVote, 'won': won, 'isWitch': isWitch};
     
     socket.emit('updateStatistics', newData);

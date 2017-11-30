@@ -304,41 +304,51 @@ exports.initialize = function (server, roomDeleteCallback, updateUserStatisticCa
             /*
             Look if the player that disconnected was in a room and if so remove the player from that room.
             Also check if the admin left and if so assign a new one.
+            If the game was already running it will be stopped
             */
             for (let i = 0; i < rooms.length; i++) {
                 for (let j = 0; j < rooms[i].userIDs.length; j++) {
                     if (rooms[i].userIDs[j] === socket.id) {
-
                         let index = i;
-                        let password = rooms[i].password;
-                        let users = rooms[i].users;
-                        let userIDs = rooms[i].userIDs;
-
-                        users.splice(j, 1);
-                        userIDs.splice(j, 1);
+                        let room = rooms[index];
+                        let password = room.password;
                         
-                        rooms[i].usersReady = 0;
+                        // If the game is not running already
+                        if (room.witchID == null) {
                         
-                        if (users.length > 0) {
-                            rooms[i].users = users;
-                            rooms[i].userIDs = userIDs;
+                            let users = room;
+                            let userIDs = room;
 
-                            io.to(password).emit('refreshNicknames', users);
-                            
-                            io.to(password).emit('resetReady');
-   
-                            // = If the admin just left
-                            if (socket.id === rooms[i].adminID) {
-                                let adminID = userIDs[0];
-                                rooms[i].adminID = adminID;
-                                io.to(password).emit('assignNewAdmin', adminID);
+                            users.splice(j, 1);
+                            userIDs.splice(j, 1);
+
+                            rooms[i].usersReady = 0;
+
+                            if (users.length > 0) {
+                                rooms[i].users = users;
+                                rooms[i].userIDs = userIDs;
+
+                                io.to(password).emit('refreshNicknames', users);
+
+                                io.to(password).emit('resetReady');
+
+                                // = If the admin just left
+                                if (socket.id === rooms[i].adminID) {
+                                    let adminID = userIDs[0];
+                                    rooms[i].adminID = adminID;
+                                    io.to(password).emit('assignNewAdmin', adminID);
+                                }
                             }
+                            else {
+                                rooms.splice(i, 1);
+                                roomDeleteCallback(i);
+                            }
+                            break;
                         }
                         else {
-                            rooms.splice(i, 1);
-                            roomDeleteCallback(i);
+                            io.to(password).emit('gameAbort'); 
+                            break;
                         }
-                        break;          
                     }
                 }
             }
