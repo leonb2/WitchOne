@@ -413,3 +413,7 @@ app.get('/leaveLobby', (request, response) => {
     request.session.room = null;
     response.redirect('/');
 });
+
+app.use((request, response, next) => {
+  response.status(404).render('error');
+})

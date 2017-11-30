@@ -1,0 +1,14 @@
+.error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 98vh;
+}
+
+h1 {
+    color: #EEEEFE;
+    font-size: 2rem;
+    border-top: 2px solid #EEEEFE;
+    border-bottom: 2px solid #EEEEFE;
+    padding: 2rem;
+}
