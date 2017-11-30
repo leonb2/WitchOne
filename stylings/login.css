@@ -9,19 +9,26 @@
 
 .login-container, .login-container-register {
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
     min-height: 98vh;
 }
 
-.login-form-container {
+.login-container-register {
+     flex-direction: column;
+}
+
+.login-form-container, .login-form-container-register {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
     min-height: 35rem;
     margin-bottom: 25vh;
+}
+
+.login-form-container-register {
+    min-height: 0;
 }
 
 .login-form {
@@ -81,7 +88,7 @@
     margin: 3rem 0rem;
 }
 
-.login-explanation-container h1 {
+h1 {
     color: #EEEEFE;
     font-size: 2rem;
     margin-bottom: 1.5rem;

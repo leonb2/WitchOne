@@ -18,8 +18,9 @@
     
     <body>
         <div class="login-container-register">
-            <div class="login-form-container">
-                <div><%= info %></div>
+            <h1>Registrierung</h1>
+            <div class="login-form-container-register">
+                <div class="login-info"><%= info %></div>
                 <form class="login-form" action="/registerPost" method="post">
                     <input type="text" value="<%= usernameValue %>" name="username" placeholder="Nutzername" required/>
                     <input type="password" name="password" placeholder="Passwort" required/>
